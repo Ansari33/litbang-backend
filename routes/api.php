@@ -1,0 +1,336 @@
+<?php
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Helpers\MessageConstant;
+use App\Http\Controllers\APIController;
+
+
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group. Enjoy building your API!
+|
+*/
+
+$api = app('Dingo\Api\Routing\Router');
+
+/*
+|--------------------------------------------------------------------------
+| Pengguna
+|--------------------------------------------------------------------------
+*/
+
+$api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
+	/*
+	|--------------------------------------------------------------------------
+	| Auth
+	|--------------------------------------------------------------------------
+	*/
+	$api->group(['prefix' => 'auth'], function ($api) {
+		// $api->POST('login',  'AuthController@login');
+		// $api->GET('logout',  'AuthController@logout');
+		$api->POST('login',  'Pengguna\PenggunaController@login');
+		$api->POST('refresh',  'Pengguna\PenggunaController@refreshToken');
+		$api->GET('logout',  'AuthController@logout');
+		//$api->GET('refresh',  'AuthController@refresh')->middleware('auth:api');
+		$api->GET('user', 'AuthController@me')->middleware('auth:api');
+		$api->GET('need', function (){
+			return APIController::respondUnauthorized('Need Login');
+		} )->name('need-login');
+        $api->GET('check', function (){
+            $response['status'] = true;
+            $response['status_code'] = 200;
+            $response['message'] = 'Ok';
+            return $response;
+        } )->name('need-login')->middleware('auth:api');
+	});
+
+	/*
+	|--------------------------------------------------------------------------
+	| Dashboard
+	|--------------------------------------------------------------------------
+	*/
+
+	$api->group(['prefix' => 'dashboard'], function ($api) {
+		$api->GET('/', 'Dashboard\DashboardController@list');
+		$api->POST('request', 'Dashboard\DashboardController@getDataPerRequest')->middleware('auth:api');
+		$api->GET('beban-per-minggu', 'Dashboard\DashboardController@bebanDanLainPerMinggu')->middleware('auth:api');
+		$api->GET('beban-per-bulan', 'Dashboard\DashboardController@bebanDanLainPerBulan')->middleware('auth:api');
+        $api->GET('check', function (){
+            $response['status'] = true;
+            $response['status_code'] = 200;
+            $response['message'] = 'Ok';
+            return $response;
+        } )->middleware('auth:api');
+	});
+
+	/*
+	|--------------------------------------------------------------------------
+	| Laporan
+	|--------------------------------------------------------------------------
+	*/
+
+	$api->group(['prefix' => 'laporan'], function ($api) {
+		//$api->GET('/', 'Dashboard\DashboardController@list')->middleware('auth:api');
+		$api->get('neraca', 'Accounting\LaporanController@getNeraca')->middleware('auth:api');
+		$api->post('data', 'Accounting\LaporanController@dataLaporan')->middleware('auth:api');
+		$api->get('neraca-per-minggu', 'Accounting\LaporanController@getNeracaPerMinggu')->middleware('auth:api');
+		$api->get('neraca-per-bulan', 'Accounting\LaporanController@getNeracaPerBulan')->middleware('auth:api');
+		$api->post('neraca-per-tanggal', 'Accounting\LaporanController@getNeracaPerTanggal')->middleware('auth:api');
+		$api->POST('get', 'Accounting\LaporanController@getLaporan')->middleware('auth:api');
+		$api->get('laba-rugi', 'Accounting\LaporanController@getLabaRugi')->middleware('auth:api');
+		$api->get('laba-rugi-per-minggu', 'Accounting\LaporanController@getLabaRugiPerMinggu')->middleware('auth:api');
+		$api->get('laba-rugi-per-bulan', 'Accounting\LaporanController@getLabaRugiPerBulan')->middleware('auth:api');
+		$api->post('laba-rugi-per-tanggal', 'Accounting\LaporanController@getLabaRugiPerTanggal')->middleware('auth:api');
+		// $api->GET('beban-per-minggu', 'Dashboard\DashboardController@bebanDanLainPerMinggu')->middleware('auth:api');
+		// $api->GET('beban-per-bulan', 'Dashboard\DashboardController@bebanDanLainPerBulan')->middleware('auth:api');
+
+        ## Penjualan
+		$api->get('penjualan', 'Accounting\LaporanController@getLaporanPenjualan')->middleware('auth:api');
+		$api->post('penjualan-per-pelanggan', 'Accounting\LaporanController@getLaporanPenjualanPerPelanggan')->middleware('auth:api');
+		$api->post('penjualan-per-pelanggan-rinci', 'Accounting\LaporanController@getLaporanPenjualanPerPelangganRinci')->middleware('auth:api');
+		$api->post('penjualan-per-barang', 'Accounting\LaporanController@getLaporanPenjualanPerBarang')->middleware('auth:api');
+        $api->post('penjualan-per-barang-rinci', 'Accounting\LaporanController@getLaporanPenjualanPerBarangRinci')->middleware('auth:api');
+        $api->post('penjualan-per-barang-advance', 'Accounting\LaporanController@getLaporanPenjualanPerBarangAdvance')->middleware('auth:api');
+
+		## Pembelian
+		$api->post('pembelian-per-pemasok', 'Accounting\LaporanController@pembelianPerPemasok')->middleware('auth:api');
+        $api->post('pembelian-per-pemasok-rinci', 'Accounting\LaporanController@pembelianPerPemasokRinci')->middleware('auth:api');
+		$api->post('pembelian-per-barang', 'Accounting\LaporanController@pembelianPerBarang')->middleware('auth:api');
+        $api->post('pembelian-per-barang-rinci', 'Accounting\LaporanController@pembelianPerBarangRinci')->middleware('auth:api');
+		$api->post('pembelian-uang-muka', 'Accounting\LaporanController@uangMukaPembelian')->middleware('auth:api');
+
+		## Arus Kas
+		$api->get('arus-kas', 'Accounting\LaporanController@getArusKas')->middleware('auth:api');
+
+	});
+
+
+	/*
+	|--------------------------------------------------------------------------
+	| Pengguna
+	|--------------------------------------------------------------------------
+	*/
+	$api->group(['prefix' => 'pengguna'], function ($api) {
+		$api->GET('list','Pengguna\PenggunaController@list')->middleware('auth:api');
+		$api->group(['prefix' => 'get'], function ($api) {
+			$api->POST('id','Pengguna\PenggunaController@getById')->middleware('auth:api');
+		});
+		$api->POST('create','Pengguna\PenggunaController@create')->middleware('auth:api');
+		$api->POST('update','Pengguna\PenggunaController@update')->middleware('auth:api');
+		$api->POST('update-akses','Pengguna\PenggunaController@updateAkses')->middleware('auth:api');
+		$api->POST('update-password','Pengguna\PenggunaController@updatePassword')->middleware('auth:api');
+		$api->POST('delete','Pengguna\PenggunaController@delete')->middleware('auth:api');
+		$api->POST('route-check','Pengguna\PenggunaController@routeAvailableCheck')->middleware('auth:api');
+	});
+
+	/*
+	|--------------------------------------------------------------------------
+	| Pengguna - Group Pengguna
+	|--------------------------------------------------------------------------
+	*/
+	$api->group(['prefix' => 'group-pengguna'], function ($api) {
+		$api->GET('list','Pengguna\GroupPenggunaController@list')->middleware('auth:api');
+		$api->group(['prefix' => 'get'], function ($api) {
+			$api->POST('id','Pengguna\GroupPenggunaController@getById')->middleware('auth:api');
+		});
+		$api->POST('create','Pengguna\GroupPenggunaController@create')->middleware('auth:api');
+		$api->POST('update','Pengguna\GroupPenggunaController@update')->middleware('auth:api');
+		$api->POST('delete','Pengguna\GroupPenggunaController@delete')->middleware('auth:api');
+
+	});
+
+	/*
+	|--------------------------------------------------------------------------
+	| Pengaturan - Menu
+	|--------------------------------------------------------------------------
+	*/
+	$api->group(['prefix' => 'menu'], function ($api) {
+		$api->GET('list','Pengaturan\MenuController@list');
+		$api->group(['prefix' => 'get'], function ($api) {
+			$api->POST('id','Pengaturan\MenuController@getById')->middleware('auth:api');
+			$api->POST('pengguna','Pengaturan\MenuController@getByPengguna')->middleware('auth:api');
+		});
+
+		$api->POST('add','Pengaturan\MenuController@add')->middleware('auth:api');
+		$api->POST('update','Pengaturan\MenuController@update')->middleware('auth:api');
+		$api->POST('delete','Pengaturan\MenuController@delete')->middleware('auth:api');
+
+	});
+
+	/*
+	|--------------------------------------------------------------------------
+	| Pengaturan - Menu
+	|--------------------------------------------------------------------------
+	*/
+	$api->group(['prefix' => 'preferensi'], function ($api) {
+		$api->GET('list','Pengaturan\PreferensiPerusahaanController@list')->middleware('auth:api');
+		$api->POST('update','Pengaturan\PreferensiPerusahaanController@update')->middleware('auth:api');
+		$api->GET('akun-barang-jasa','Pengaturan\PreferensiPerusahaanController@akunTerpakai')->middleware('auth:api');
+		$api->GET('reset','Pengaturan\PreferensiPerusahaanController@resetTransaksi')->middleware('auth:api');
+	});
+
+	/*
+	|--------------------------------------------------------------------------
+	| Pengaturan - Routes
+	|--------------------------------------------------------------------------
+	*/
+	$api->group(['prefix' => 'routes'], function ($api) {
+		$api->GET('list','Pengaturan\RoutesController@list')->middleware('auth:api');
+		$api->GET('report','Pengaturan\RoutesController@displayReport')->middleware('auth:api');
+		$api->GET('tree','Pengaturan\RoutesController@tree')->middleware('auth:api');
+		$api->group(['prefix' => 'get'], function ($api) {
+			$api->POST('id','Pengaturan\RoutesController@getById')->middleware('auth:api');
+			$api->POST('by-pengguna','Pengaturan\RoutesController@getByPengguna')->middleware('auth:api');
+		});
+		$api->POST('create','Pengaturan\RoutesController@create')->middleware('auth:api');
+		$api->POST('update','Pengaturan\RoutesController@update')->middleware('auth:api');
+		$api->POST('delete','Pengaturan\RoutesController@delete')->middleware('auth:api');
+	});
+
+	/*
+	|--------------------------------------------------------------------------
+	| Pengaturan - Aktivitas Log
+	|--------------------------------------------------------------------------
+	*/
+	$api->group(['prefix' => 'aktivitas-log'], function ($api) {
+		$api->GET('list','Pengaturan\AktivitasLogController@list')->middleware('auth:api');
+		$api->group(['prefix' => 'get'], function ($api) {
+			$api->POST('id','Pengaturan\AktivitasLogController@getById')->middleware('auth:api');
+		});
+		$api->POST('delete','Pengaturan\AktivitasLogController@delete')->middleware('auth:api');
+	});
+
+	/*
+	|--------------------------------------------------------------------------
+	| Pengaturan - Penomoran
+	|--------------------------------------------------------------------------
+	*/
+	$api->group(['prefix' => 'penomoran'], function ($api) {
+		$api->GET('list','Pengaturan\PenomoranController@list')->middleware('auth:api');
+		$api->group(['prefix' => 'get'], function ($api) {
+			$api->POST('id','Pengaturan\PenomoranController@getById')->middleware('auth:api');
+		});
+		$api->POST('create','Pengaturan\PenomoranController@create')->middleware('auth:api');
+		$api->POST('update','Pengaturan\PenomoranController@update')->middleware('auth:api');
+		$api->POST('delete','Pengaturan\PenomoranController@delete')->middleware('auth:api');
+	});
+
+    /*
+    |--------------------------------------------------------------------------
+    | Pengaturan - DB Backup
+    |--------------------------------------------------------------------------
+    */
+    $api->group(['prefix' => 'backup-db'], function ($api) {
+        $api->GET('list','Pengaturan\BackupDbController@list')->middleware('auth:api');
+        $api->POST('start','Pengaturan\BackupDbController@start')->middleware('auth:api');
+    });
+
+	/*
+	|--------------------------------------------------------------------------
+	| Perusahaan - Departemen
+	|--------------------------------------------------------------------------
+	*/
+	$api->group(['prefix' => 'departement'], function ($api) {
+		$api->GET('list','Perusahaan\DepartemenController@list')->middleware('auth:api');
+		$api->group(['prefix' => 'get'], function ($api) {
+			$api->POST('id','Perusahaan\DepartemenController@getById')->middleware('auth:api');
+			$api->POST('activity','Perusahaan\DepartemenController@getActivity')->middleware('auth:api');
+		});
+		$api->POST('create','Perusahaan\DepartemenController@create')->middleware('auth:api');
+		$api->POST('update','Perusahaan\DepartemenController@update')->middleware('auth:api');
+		$api->POST('delete','Perusahaan\DepartemenController@delete')->middleware('auth:api');
+	});
+
+
+	/*
+ |--------------------------------------------------------------------------
+ | Pembelian - Permintaan Pembelian
+ |--------------------------------------------------------------------------
+ */
+	$api->group(['prefix' => 'permintaan-pembelian'], function ($api) {
+		$api->group(['prefix' => 'list'], function ($api) {
+			$api->GET('/','Pembelian\PermintaanPembelianController@list')->middleware('auth:api');
+            $api->GET('/datatable','Pembelian\PermintaanPembelianController@listWithDatatable')->middleware('auth:api');
+			$api->POST('/per-tanggal','Pembelian\PermintaanPembelianController@listByTanggal')->middleware('auth:api');
+            $api->POST('/per-tanggal-datatable','Pembelian\PermintaanPembelianController@listByTanggalWithDatatable')->middleware('auth:api');
+			$api->POST('/','Pembelian\PermintaanPembelianController@list_by')->middleware('auth:api');
+			$api->POST('/temp','Pembelian\PermintaanPembelianController@temp')->middleware('auth:api');
+			$api->POST('/belum-selesai','Pembelian\PermintaanPembelianController@permintaanPembelianBelumSelesai')->middleware('auth:api');
+			$api->POST('/belum-selesai-detail','Pembelian\PermintaanPembelianController@permintaanPembelianBelumSelesaiDetail')->middleware('auth:api');
+		});
+		$api->group(['prefix' => 'get'], function ($api) {
+			$api->POST('id','Pembelian\PermintaanPembelianController@getById')->middleware('auth:api');
+			$api->POST('pemasok','Pembelian\PermintaanPembelianController@getByPemasok')->middleware('auth:api');
+			$api->POST('activity','Pembelian\PermintaanPembelianController@getActivity')->middleware('auth:api');
+            $api->GET('numbering','Pembelian\PermintaanPembelianController@getNumbering')->middleware('auth:api');
+		});
+		$api->group(['prefix' => 'listBy'], function ($api) {
+			$api->POST('pemasok','Pembelian\PermintaanPembelianController@getByPemasok')->middleware('auth:api');
+		});
+		$api->POST('create','Pembelian\PermintaanPembelianController@create')->middleware('auth:api');
+		$api->POST('update','Pembelian\PermintaanPembelianController@update')->middleware('auth:api');
+		$api->POST('delete','Pembelian\PermintaanPembelianController@delete')->middleware('auth:api');
+
+	});
+
+    /*
+    |--------------------------------------------------------------------------
+    | Kelitbangan
+    |--------------------------------------------------------------------------
+    */
+    $api->group(['prefix' => 'kelitbangan'], function ($api) {
+        $api->group(['prefix' => 'list'], function ($api) {
+            $api->GET('/','Litbang\KelitbanganController@list')->middleware('auth:api');
+            $api->GET('/datatable','Litbang\KelitbanganController@listWithDatatable')->middleware('auth:api');
+        });
+        $api->group(['prefix' => 'get'], function ($api) {
+            $api->POST('id','Litbang\KelitbanganController@getById')->middleware('auth:api');
+         });
+        $api->POST('create','Litbang\KelitbanganController@create')->middleware('auth:api');
+        $api->POST('update','Litbang\KelitbanganController@update')->middleware('auth:api');
+        $api->POST('delete','Litbang\KelitbanganController@delete')->middleware('auth:api');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Inovasi
+    |--------------------------------------------------------------------------
+    */
+    $api->group(['prefix' => 'inovasi'], function ($api) {
+        $api->group(['prefix' => 'list'], function ($api) {
+            $api->GET('/','Litbang\InovasiController@list')->middleware('auth:api');
+            $api->GET('/datatable','Litbang\InovasiController@listWithDatatable')->middleware('auth:api');
+        });
+        $api->group(['prefix' => 'get'], function ($api) {
+            $api->POST('id','Litbang\InovasiController@getById')->middleware('auth:api');
+        });
+        $api->POST('create','Litbang\InovasiController@create')->middleware('auth:api');
+        $api->POST('update','Litbang\InovasiController@update')->middleware('auth:api');
+        $api->POST('delete','Litbang\InovasiController@delete')->middleware('auth:api');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Instansi
+    |--------------------------------------------------------------------------
+    */
+    $api->group(['prefix' => 'instansi'], function ($api) {
+        $api->group(['prefix' => 'list'], function ($api) {
+            $api->GET('/','Litbang\InstansiController@list')->middleware('auth:api');
+            $api->GET('/datatable','Litbang\InstansiController@listWithDatatable')->middleware('auth:api');
+        });
+        $api->group(['prefix' => 'get'], function ($api) {
+            $api->POST('id','Litbang\InstansiController@getById')->middleware('auth:api');
+        });
+        $api->POST('create','Litbang\InstansiController@create')->middleware('auth:api');
+        $api->POST('update','Litbang\InstansiController@update')->middleware('auth:api');
+        $api->POST('delete','Litbang\InstansiController@delete')->middleware('auth:api');
+    });
+
+});
