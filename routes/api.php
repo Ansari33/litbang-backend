@@ -322,7 +322,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
     */
     $api->group(['prefix' => 'instansi'], function ($api) {
         $api->group(['prefix' => 'list'], function ($api) {
-            $api->GET('/','Litbang\InstansiController@list')->middleware('auth:api');
+            $api->GET('/','Litbang\InstansiController@list');
             $api->GET('/datatable','Litbang\InstansiController@listWithDatatable')->middleware('auth:api');
         });
         $api->group(['prefix' => 'get'], function ($api) {
@@ -359,6 +359,42 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
     $api->group(['prefix' => 'berita'], function ($api) {
         $api->group(['prefix' => 'list'], function ($api) {
             $api->GET('/','Litbang\BeritaController@list')->middleware('auth:api');
+            $api->GET('/datatable','Litbang\BeritaController@listWithDatatable')->middleware('auth:api');
+        });
+        $api->group(['prefix' => 'get'], function ($api) {
+            $api->POST('id','Litbang\BeritaController@getById')->middleware('auth:api');
+        });
+        $api->POST('create','Litbang\BeritaController@create')->middleware('auth:api');
+        $api->POST('update','Litbang\BeritaController@update')->middleware('auth:api');
+        $api->POST('delete','Litbang\BeritaController@delete')->middleware('auth:api');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Usulan Penelitian
+    |--------------------------------------------------------------------------
+    */
+    $api->group(['prefix' => 'usulan-penelitian'], function ($api) {
+        $api->group(['prefix' => 'list'], function ($api) {
+            $api->GET('/','Litbang\UsulanPenelitianController@list');
+            $api->GET('/datatable','Litbang\UsulanPenelitianController@listWithDatatable')->middleware('auth:api');
+        });
+        $api->group(['prefix' => 'get'], function ($api) {
+            $api->POST('id','Litbang\UsulanPenelitianController@getById')->middleware('auth:api');
+        });
+        $api->POST('create','Litbang\UsulanPenelitianController@create')->middleware('auth:api');
+        $api->POST('update','Litbang\UsulanPenelitianController@update')->middleware('auth:api');
+        $api->POST('delete','Litbang\UsulanPenelitianController@delete')->middleware('auth:api');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Usulan Inovasi
+    |--------------------------------------------------------------------------
+    */
+    $api->group(['prefix' => 'usulan-inovasi'], function ($api) {
+        $api->group(['prefix' => 'list'], function ($api) {
+            $api->GET('/','Litbang\BeritaController@list');
             $api->GET('/datatable','Litbang\BeritaController@listWithDatatable')->middleware('auth:api');
         });
         $api->group(['prefix' => 'get'], function ($api) {

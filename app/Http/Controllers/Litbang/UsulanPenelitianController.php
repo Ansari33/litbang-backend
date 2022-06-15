@@ -29,11 +29,13 @@ class UsulanPenelitianController extends APIController
     public function list(Request $request)
     {
         $relations = [
-            'instansi_data'
+//            'instansi_data'
         ];
-        return $this->UsulanPenelitianRepository
+         $result = $this->UsulanPenelitianRepository
             ->relation($relations)
             ->get();
+        return $this->respond($result);
+
 
         return $datatable = datatables()->of($this->UsulanPenelitianRepository
             ->relation($relations)
@@ -203,10 +205,15 @@ class UsulanPenelitianController extends APIController
 
             $result = $this->UsulanPenelitianRepository->create(
                 [
-                    'nama'    =>  $request->nama,
-                    'tanggal' => $request->tanggal,
-                    'waktu'   => $request->waktu,
-                    'tempat'  =>  $request->tempat,
+                'nomor'          => $request->nomor,
+                'tanggal'        => $request->tanggal,
+                'usulan'         => $request->usulan,
+                'pengusul'       => $request->pengusul,
+                'latar_belakang' => $request->latar_belakang,
+                'tujuan'         => $request->tujuan,
+                'status'         => $request->status,
+                'instansi'       => $request->instansi,
+                'email'          => $request->email
                 ]
             );
             if ($result->count()) {

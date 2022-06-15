@@ -93,31 +93,31 @@ class MessageConstant
 
     /*
     |--------------------------------------------------------------------------
-    | Us
+    | Usulan Penelitian
     |--------------------------------------------------------------------------
     */
-    const AGENDA_CREATE_SUCCESS_MSG = 'Agenda berhasil dibuat !';
-    const AGENDA_CREATE_FAILED_MSG = "Agenda tidak dapat dibuat, silakan hubungi administrator !";
-    const AGENDA_GET_FAILED_MSG = "Agenda tidak ditemukan";
-    const AGENDA_UPDATE_REQUEST_FAILED_MSG = "Agenda tidak dapat diambil, harap hubungi administrator !";
-    const AGENDA_UPDATE_SUCCESS_MSG = 'Agenda berhasil diperbarui !';
-    const AGENDA_UPDATE_FAILED_MSG = "Agenda tidak dapat diperbarui silakan hubungi administrator !";
-    const AGENDA_DELETE_SUCCESS_MSG = 'Agenda berhasil dihapus !';
-    const AGENDA_DELETE_FAILED_MSG = "Agenda tidak dapat dihapus, harap hubungi administrator !";
+    const USULAN_PENELITIAN_CREATE_SUCCESS_MSG = 'Usulan Penelitian berhasil dibuat !';
+    const USULAN_PENELITIAN_CREATE_FAILED_MSG = "Usulan Penelitian tidak dapat dibuat, silakan hubungi administrator !";
+    const USULAN_PENELITIAN_GET_FAILED_MSG = "Usulan Penelitian tidak ditemukan";
+    const USULAN_PENELITIAN_UPDATE_REQUEST_FAILED_MSG = "Usulan Penelitian tidak dapat diambil, harap hubungi administrator !";
+    const USULAN_PENELITIAN_UPDATE_SUCCESS_MSG = 'Usulan Penelitian berhasil diperbarui !';
+    const USULAN_PENELITIAN_UPDATE_FAILED_MSG = "Usulan Penelitian tidak dapat diperbarui silakan hubungi administrator !";
+    const USULAN_PENELITIAN_DELETE_SUCCESS_MSG = 'Usulan Penelitian berhasil dihapus !';
+    const USULAN_PENELITIAN_DELETE_FAILED_MSG = "Usulan Penelitian tidak dapat dihapus, harap hubungi administrator !";
 
     /*
     |--------------------------------------------------------------------------
-    | Berita
+    | Usulan Inovasi
     |--------------------------------------------------------------------------
     */
-    const BERITA_CREATE_SUCCESS_MSG = 'Berita berhasil dibuat !';
-    const BERITA_CREATE_FAILED_MSG = "Berita tidak dapat dibuat, silakan hubungi administrator !";
-    const BERITA_GET_FAILED_MSG = "Berita tidak ditemukan";
-    const BERITA_UPDATE_REQUEST_FAILED_MSG = "Berita tidak dapat diambil, harap hubungi administrator !";
-    const BERITA_UPDATE_SUCCESS_MSG = 'Berita berhasil diperbarui !';
-    const BERITA_UPDATE_FAILED_MSG = "Berita tidak dapat diperbarui silakan hubungi administrator !";
-    const BERITA_DELETE_SUCCESS_MSG = 'Berita berhasil dihapus !';
-    const BERITA_DELETE_FAILED_MSG = "Berita tidak dapat dihapus, harap hubungi administrator !";
+    const USULAN_INOVASI_CREATE_SUCCESS_MSG = 'Usulan Inovasi berhasil dibuat !';
+    const USULAN_INOVASI_CREATE_FAILED_MSG = "Usulan Inovasi tidak dapat dibuat, silakan hubungi administrator !";
+    const USULAN_INOVASI_GET_FAILED_MSG = "Usulan Inovasi tidak ditemukan";
+    const USULAN_INOVASI_UPDATE_REQUEST_FAILED_MSG = "Usulan Inovasi tidak dapat diambil, harap hubungi administrator !";
+    const USULAN_INOVASI_UPDATE_SUCCESS_MSG = 'Usulan Inovasi berhasil diperbarui !';
+    const USULAN_INOVASI_UPDATE_FAILED_MSG = "Usulan Inovasi tidak dapat diperbarui silakan hubungi administrator !";
+    const USULAN_INOVASI_DELETE_SUCCESS_MSG = 'Usulan Inovasi berhasil dihapus !';
+    const USULAN_INOVASI_DELETE_FAILED_MSG = "Usulan Inovasi tidak dapat dihapus, harap hubungi administrator !";
 
 
 
