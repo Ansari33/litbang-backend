@@ -9,12 +9,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Auth;
 use App\Helpers\ModelsConstant;
 
-class Inovasi extends Model
+class Berita extends Model
 {
     use LogsActivity;
     use SoftDeletes;
 
-    protected $table = 'inovasi';
+    protected $table = 'berita';
     protected $dates = ['deleted_at'];
     protected $guarded = [];
     protected $hidden = ['created_at','created_by','updated_at', 'updated_by', 'deleted_at','deleted_by'];
@@ -23,7 +23,7 @@ class Inovasi extends Model
     // protected static $ignoreChangedAttributes = ['created_at','created_by','updated_at', 'updated_by', 'deleted_at','deleted_by'];
     protected static $logOnlyDirty = false;
     protected static $submitEmptyLogs = true;
-    protected static $logName = 'Kelitbangan';
+    protected static $logName = 'Agenda';
 
     protected static function boot() {
         parent::boot();
@@ -39,17 +39,17 @@ class Inovasi extends Model
         });
 
         static::deleting(function($model) {
-            $model->pelaksana->each->delete();
+//            $model->pelaksana->each->delete();
 //            $user = Auth::user();
 //            $model->deleted_by = $user->id;
 //            $model->save();
         });
     }
 
-    public function instansi_data() {
-        return $this->belongsTo('App\Models\Litbang\Instansi','instansi','id');
-    }
-    public function pelaksana() {
-        return $this->hasMany('App\Models\Litbang\PelaksanaInovasi','inovasi_id','id');
-    }
+//    public function instansi_data() {
+//        return $this->belongsTo('App\Models\Litbang\Instansi','instansi','id');
+//    }
+//    public function pelaksana() {
+//        return $this->hasMany('App\Models\Litbang\PelaksanaInovasi','inovasi_id','id');
+//    }
 }

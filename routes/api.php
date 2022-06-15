@@ -333,4 +333,40 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         $api->POST('delete','Litbang\InstansiController@delete')->middleware('auth:api');
     });
 
+    /*
+    |--------------------------------------------------------------------------
+    | Agenda
+    |--------------------------------------------------------------------------
+    */
+    $api->group(['prefix' => 'agenda'], function ($api) {
+        $api->group(['prefix' => 'list'], function ($api) {
+            $api->GET('/','Litbang\AgendaController@list')->middleware('auth:api');
+            $api->GET('/datatable','Litbang\AgendaController@listWithDatatable')->middleware('auth:api');
+        });
+        $api->group(['prefix' => 'get'], function ($api) {
+            $api->POST('id','Litbang\AgendaController@getById')->middleware('auth:api');
+        });
+        $api->POST('create','Litbang\AgendaController@create')->middleware('auth:api');
+        $api->POST('update','Litbang\AgendaController@update')->middleware('auth:api');
+        $api->POST('delete','Litbang\AgendaController@delete')->middleware('auth:api');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Berita
+    |--------------------------------------------------------------------------
+    */
+    $api->group(['prefix' => 'berita'], function ($api) {
+        $api->group(['prefix' => 'list'], function ($api) {
+            $api->GET('/','Litbang\BeritaController@list')->middleware('auth:api');
+            $api->GET('/datatable','Litbang\BeritaController@listWithDatatable')->middleware('auth:api');
+        });
+        $api->group(['prefix' => 'get'], function ($api) {
+            $api->POST('id','Litbang\BeritaController@getById')->middleware('auth:api');
+        });
+        $api->POST('create','Litbang\BeritaController@create')->middleware('auth:api');
+        $api->POST('update','Litbang\BeritaController@update')->middleware('auth:api');
+        $api->POST('delete','Litbang\BeritaController@delete')->middleware('auth:api');
+    });
+
 });

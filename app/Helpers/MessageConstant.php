@@ -62,5 +62,63 @@ class MessageConstant
     const INSTANSI_DELETE_SUCCESS_MSG = 'Instansi berhasil dihapus !';
     const INSTANSI_DELETE_FAILED_MSG = "Instansi tidak dapat dihapus, harap hubungi administrator !";
 
+    /*
+    |--------------------------------------------------------------------------
+    | Agenda
+    |--------------------------------------------------------------------------
+    */
+    const AGENDA_CREATE_SUCCESS_MSG = 'Agenda berhasil dibuat !';
+    const AGENDA_CREATE_FAILED_MSG = "Agenda tidak dapat dibuat, silakan hubungi administrator !";
+    const AGENDA_GET_FAILED_MSG = "Agenda tidak ditemukan";
+    const AGENDA_UPDATE_REQUEST_FAILED_MSG = "Agenda tidak dapat diambil, harap hubungi administrator !";
+    const AGENDA_UPDATE_SUCCESS_MSG = 'Agenda berhasil diperbarui !';
+    const AGENDA_UPDATE_FAILED_MSG = "Agenda tidak dapat diperbarui silakan hubungi administrator !";
+    const AGENDA_DELETE_SUCCESS_MSG = 'Agenda berhasil dihapus !';
+    const AGENDA_DELETE_FAILED_MSG = "Agenda tidak dapat dihapus, harap hubungi administrator !";
+
+    /*
+    |--------------------------------------------------------------------------
+    | Berita
+    |--------------------------------------------------------------------------
+    */
+    const BERITA_CREATE_SUCCESS_MSG = 'Berita berhasil dibuat !';
+    const BERITA_CREATE_FAILED_MSG = "Berita tidak dapat dibuat, silakan hubungi administrator !";
+    const BERITA_GET_FAILED_MSG = "Berita tidak ditemukan";
+    const BERITA_UPDATE_REQUEST_FAILED_MSG = "Berita tidak dapat diambil, harap hubungi administrator !";
+    const BERITA_UPDATE_SUCCESS_MSG = 'Berita berhasil diperbarui !';
+    const BERITA_UPDATE_FAILED_MSG = "Berita tidak dapat diperbarui silakan hubungi administrator !";
+    const BERITA_DELETE_SUCCESS_MSG = 'Berita berhasil dihapus !';
+    const BERITA_DELETE_FAILED_MSG = "Berita tidak dapat dihapus, harap hubungi administrator !";
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Us
+    |--------------------------------------------------------------------------
+    */
+    const AGENDA_CREATE_SUCCESS_MSG = 'Agenda berhasil dibuat !';
+    const AGENDA_CREATE_FAILED_MSG = "Agenda tidak dapat dibuat, silakan hubungi administrator !";
+    const AGENDA_GET_FAILED_MSG = "Agenda tidak ditemukan";
+    const AGENDA_UPDATE_REQUEST_FAILED_MSG = "Agenda tidak dapat diambil, harap hubungi administrator !";
+    const AGENDA_UPDATE_SUCCESS_MSG = 'Agenda berhasil diperbarui !';
+    const AGENDA_UPDATE_FAILED_MSG = "Agenda tidak dapat diperbarui silakan hubungi administrator !";
+    const AGENDA_DELETE_SUCCESS_MSG = 'Agenda berhasil dihapus !';
+    const AGENDA_DELETE_FAILED_MSG = "Agenda tidak dapat dihapus, harap hubungi administrator !";
+
+    /*
+    |--------------------------------------------------------------------------
+    | Berita
+    |--------------------------------------------------------------------------
+    */
+    const BERITA_CREATE_SUCCESS_MSG = 'Berita berhasil dibuat !';
+    const BERITA_CREATE_FAILED_MSG = "Berita tidak dapat dibuat, silakan hubungi administrator !";
+    const BERITA_GET_FAILED_MSG = "Berita tidak ditemukan";
+    const BERITA_UPDATE_REQUEST_FAILED_MSG = "Berita tidak dapat diambil, harap hubungi administrator !";
+    const BERITA_UPDATE_SUCCESS_MSG = 'Berita berhasil diperbarui !';
+    const BERITA_UPDATE_FAILED_MSG = "Berita tidak dapat diperbarui silakan hubungi administrator !";
+    const BERITA_DELETE_SUCCESS_MSG = 'Berita berhasil dihapus !';
+    const BERITA_DELETE_FAILED_MSG = "Berita tidak dapat dihapus, harap hubungi administrator !";
+
+
 
 }

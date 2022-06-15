@@ -128,7 +128,25 @@ class RepoBindingServiceProvider extends ServiceProvider
             return $repository;
         });
 
+        $app->bind('\App\Repositories\Contracts\Litbang\AgendaInterface', function () {
+            $repository = new \App\Repositories\Litbang\AgendaRepository(new \App\Models\Litbang\Agenda);
+            return $repository;
+        });
 
+        $app->bind('\App\Repositories\Contracts\Litbang\BeritaInterface', function () {
+            $repository = new \App\Repositories\Litbang\BeritaRepository(new \App\Models\Litbang\Berita);
+            return $repository;
+        });
+
+        $app->bind('\App\Repositories\Contracts\Litbang\UsulanPenelitianInterface', function () {
+            $repository = new \App\Repositories\Litbang\UsulanPenelitianRepository(new \App\Models\Litbang\UsulanPenelitian);
+            return $repository;
+        });
+
+        $app->bind('\App\Repositories\Contracts\Litbang\UsulanInovasiInterface', function () {
+            $repository = new \App\Repositories\Litbang\UsulanInovasiRepository(new \App\Models\Litbang\UsulanInovasi);
+            return $repository;
+        });
 
         $app->bind('\App\Repositories\Contracts\Pengguna\PenggunaInterface', function () {
             $repository = new \App\Repositories\Pengguna\PenggunaRepository(new \App\Models\Pengguna\Pengguna);
