@@ -199,7 +199,7 @@ class KelitbanganController extends APIController
         if ($validator->fails()) {
             return $this->respondWithValidationErrors($validator->errors()->all(), MessageConstant::VALIDATION_FAILED_MSG);
         } else {
-            DB::beginTransaction;
+            DB::beginTransaction();
             $result = $this->KelitbanganRepository->create(
                 [
                     'nomor' =>  $request->nomor,
@@ -281,5 +281,10 @@ class KelitbanganController extends APIController
         } else {
             return $this->respondNotFound(MessageConstant::KELITBANGAN_DELETE_FAILED_MSG);
         }
+    }
+
+    public function terkini(){
+        $result = $this->KelitbanganRepository->limit(4)->get();
+        return $this->respond($result);
     }
 }

@@ -292,4 +292,10 @@ class InovasiController extends APIController
             return $this->respondNotFound(MessageConstant::INOVASI_DELETE_FAILED_MSG);
         }
     }
+
+    public function terkini()
+    {
+        $result = $this->InovasiRepository->with(['instansi_data'])->limit(3)->get();
+        return $this->respond($result);
+    }
 }

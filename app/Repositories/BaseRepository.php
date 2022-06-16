@@ -195,6 +195,11 @@ class BaseRepository
         return $this->model->withTrashed();
     }
 
+    public function limit($limit)
+    {
+        return $this->model->limit($limit);
+    }
+
 
 	/**
 	 * We can receive a single id, or an array of ids

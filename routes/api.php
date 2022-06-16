@@ -295,6 +295,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         $api->POST('create','Litbang\KelitbanganController@create')->middleware('auth:api');
         $api->POST('update','Litbang\KelitbanganController@update')->middleware('auth:api');
         $api->POST('delete','Litbang\KelitbanganController@delete')->middleware('auth:api');
+        $api->GET('terkini','Litbang\KelitbanganController@terkini');
     });
 
     /*
@@ -308,11 +309,12 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
             $api->GET('/datatable','Litbang\InovasiController@listWithDatatable')->middleware('auth:api');
         });
         $api->group(['prefix' => 'get'], function ($api) {
-            $api->POST('id','Litbang\InovasiController@getById')->middleware('auth:api');
+            $api->POST('id','Litbang\InovasiController@getById');
         });
         $api->POST('create','Litbang\InovasiController@create')->middleware('auth:api');
         $api->POST('update','Litbang\InovasiController@update')->middleware('auth:api');
         $api->POST('delete','Litbang\InovasiController@delete')->middleware('auth:api');
+        $api->GET('terkini','Litbang\InovasiController@terkini');
     });
 
     /*
