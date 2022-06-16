@@ -384,7 +384,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         $api->group(['prefix' => 'get'], function ($api) {
             $api->POST('id','Litbang\UsulanPenelitianController@getById')->middleware('auth:api');
         });
-        $api->POST('create','Litbang\UsulanPenelitianController@create')->middleware('auth:api');
+        $api->POST('create','Litbang\UsulanPenelitianController@create');
         $api->POST('update','Litbang\UsulanPenelitianController@update')->middleware('auth:api');
         $api->POST('delete','Litbang\UsulanPenelitianController@delete')->middleware('auth:api');
     });
@@ -402,7 +402,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         $api->group(['prefix' => 'get'], function ($api) {
             $api->POST('id','Litbang\BeritaController@getById')->middleware('auth:api');
         });
-        $api->POST('create','Litbang\BeritaController@create')->middleware('auth:api');
+        $api->POST('create','Litbang\BeritaController@create');
         $api->POST('update','Litbang\BeritaController@update')->middleware('auth:api');
         $api->POST('delete','Litbang\BeritaController@delete')->middleware('auth:api');
     });
