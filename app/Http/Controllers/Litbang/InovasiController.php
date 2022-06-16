@@ -29,11 +29,13 @@ class InovasiController extends APIController
     public function list(Request $request)
     {
         $relations = [
-            'instansi_data'
+            'instansi_data',
+            'pelaksana'
         ];
-        return $this->InovasiRepository
+        $result = $this->InovasiRepository
             ->relation($relations)
             ->get();
+        return $this->respond($result);
 
         return $datatable = datatables()->of($this->InovasiRepository
             ->relation($relations)

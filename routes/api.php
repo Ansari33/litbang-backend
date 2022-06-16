@@ -286,7 +286,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
     */
     $api->group(['prefix' => 'kelitbangan'], function ($api) {
         $api->group(['prefix' => 'list'], function ($api) {
-            $api->GET('/','Litbang\KelitbanganController@list')->middleware('auth:api');
+            $api->GET('/','Litbang\KelitbanganController@list');
             $api->GET('/datatable','Litbang\KelitbanganController@listWithDatatable')->middleware('auth:api');
         });
         $api->group(['prefix' => 'get'], function ($api) {
@@ -305,7 +305,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
     */
     $api->group(['prefix' => 'inovasi'], function ($api) {
         $api->group(['prefix' => 'list'], function ($api) {
-            $api->GET('/','Litbang\InovasiController@list')->middleware('auth:api');
+            $api->GET('/','Litbang\InovasiController@list');
             $api->GET('/datatable','Litbang\InovasiController@listWithDatatable')->middleware('auth:api');
         });
         $api->group(['prefix' => 'get'], function ($api) {
