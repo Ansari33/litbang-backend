@@ -290,7 +290,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
             $api->GET('/datatable','Litbang\KelitbanganController@listWithDatatable')->middleware('auth:api');
         });
         $api->group(['prefix' => 'get'], function ($api) {
-            $api->POST('id','Litbang\KelitbanganController@getById')->middleware('auth:api');
+            $api->POST('id','Litbang\KelitbanganController@getById')    ;
          });
         $api->POST('create','Litbang\KelitbanganController@create')->middleware('auth:api');
         $api->POST('update','Litbang\KelitbanganController@update')->middleware('auth:api');
