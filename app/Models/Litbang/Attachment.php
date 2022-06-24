@@ -9,12 +9,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Auth;
 use App\Helpers\ModelsConstant;
 
-class Inovasi extends Model
+class Attachment extends Model
 {
-    use LogsActivity;
+   // use LogsActivity;
     use SoftDeletes;
 
-    protected $table = 'inovasi';
+    protected $table = 'attachment';
     protected $dates = ['deleted_at'];
     protected $guarded = [];
     protected $hidden = ['created_at','created_by','updated_at', 'updated_by', 'deleted_at','deleted_by'];
@@ -39,21 +39,18 @@ class Inovasi extends Model
         });
 
         static::deleting(function($model) {
-            $model->pelaksana->each->delete();
-            $model->attachment->each->delete();
+               $model->pelaksana->each->delete();
 //            $user = Auth::user();
 //            $model->deleted_by = $user->id;
 //            $model->save();
         });
     }
 
-    public function instansi_data() {
-        return $this->belongsTo('App\Models\Litbang\Instansi','instansi','id');
+    public function kelitbangan_data() {
+        return $this->belongsTo('App\Models\Litbang\Kelitbangan','kelitbangan_id','id');
     }
-    public function pelaksana() {
-        return $this->hasMany('App\Models\Litbang\PelaksanaInovasi','inovasi_id','id');
+    public function inovasi_data() {
+        return $this->belongsTo('App\Models\Litbang\Inovasi','inovasi_id','id');
     }
-    public function attachment() {
-        return $this->hasMany('App\Models\Litbang\Attachment','inovasi_id','id');
-    }
+
 }

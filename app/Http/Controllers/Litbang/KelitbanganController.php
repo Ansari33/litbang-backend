@@ -17,12 +17,14 @@ class KelitbanganController extends APIController
 {
     private $KelitabanganRepository;
     private $PelaksanaKelitbanganRepository;
+    private $AttachmentRepository;
     //private $PenggunaRepository;
 
     public function initialize()
     {
         $this->KelitbanganRepository = \App::make('\App\Repositories\Contracts\Litbang\KelitbanganInterface');
         $this->PelaksanaKelitbanganRepository = \App::make('\App\Repositories\Contracts\Litbang\PelaksanaKelitbanganInterface');
+        $this->AttachmentRepository = \App::make('\App\Repositories\Contracts\Litbang\AttachmentInterface');
        // $this->PenggunaRepository = \App::make('\App\Repositories\Contracts\Pengguna\AkunInterface');
     }
 
@@ -129,7 +131,7 @@ class KelitbanganController extends APIController
 
     public function getById(Request $request)
     {
-        $result = $this->KelitbanganRepository->with(['pelaksana'])->find($request->id);
+        $result = $this->KelitbanganRepository->with(['pelaksana','attachment'])->find($request->id);
         if ($result) {
             return $this->respond($result);
         } else {
@@ -226,6 +228,15 @@ class KelitbanganController extends APIController
                 }else{
                     return $this->respondInternalError($rr= null,'Pelaksana Dibutuhkan!');
                 }
+                if (count($request->attachment) > 0){
+                    foreach ($request->attachment as $item => $att) {
+                        $this->AttachmentRepository->create([
+                            'kelitbangan_id' => $result->id,
+                            'nama'       => $att['nama'],
+                            'url'        => $att['url']
+                        ]);
+                    }
+                }
                 DB::commit();
                 return $this->respondCreated($result, MessageConstant::KELITBANGAN_CREATE_SUCCESS_MSG);
             } else {
@@ -244,6 +255,9 @@ class KelitbanganController extends APIController
         } else {
             DB::beginTransaction();
             $deletePelaksana = $this->PelaksanaKelitbanganRepository
+                ->where('kelitbangan_id',$request->id)
+                ->delete();
+            $deleteAttch = $this->AttachmentRepository
                 ->where('kelitbangan_id',$request->id)
                 ->delete();
             $result = $this->KelitbanganRepository
@@ -268,6 +282,15 @@ class KelitbanganController extends APIController
                     }
                 }else{
                     return $this->respondInternalError($rr= null,'Pelaksana Dibutuhkan!');
+                }
+                if (count($request->attachment) > 0){
+                    foreach ($request->attachment as $item => $att) {
+                        $this->AttachmentRepository->create([
+                            'kelitbangan_id' => $request->id,
+                            'nama'       => $att['nama'],
+                            'url'        => $att['url']
+                        ]);
+                    }
                 }
                 DB::commit();
                 return $this->respondCreated($result, MessageConstant::KELITBANGAN_UPDATE_SUCCESS_MSG);

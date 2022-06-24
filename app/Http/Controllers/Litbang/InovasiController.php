@@ -17,12 +17,14 @@ class InovasiController extends APIController
 {
     private $InovasiRepository;
     private $PelaksanaInovasiRepository;
+    private $AttachmentRepository;
     //private $PenggunaRepository;
 
     public function initialize()
     {
         $this->InovasiRepository = \App::make('\App\Repositories\Contracts\Litbang\InovasiInterface');
         $this->PelaksanaInovasiRepository = \App::make('\App\Repositories\Contracts\Litbang\PelaksanaInovasiInterface');
+        $this->AttachmentRepository = \App::make('\App\Repositories\Contracts\Litbang\AttachmentInterface');
        // $this->PenggunaRepository = \App::make('\App\Repositories\Contracts\Pengguna\AkunInterface');
     }
 
@@ -128,7 +130,7 @@ class InovasiController extends APIController
 
     public function getById(Request $request)
     {
-        $result = $this->InovasiRepository->with(['pelaksana'])->find($request->id);
+        $result = $this->InovasiRepository->with(['pelaksana','attachment'])->find($request->id);
         if ($result) {
             return $this->respond($result);
         } else {
@@ -230,6 +232,15 @@ class InovasiController extends APIController
                 }else{
                     return $this->respondInternalError($rr= null,'Pelaksana Dibutuhkan!');
                 }
+                if (count($request->attachment) > 0){
+                    foreach ($request->attachment as $item => $att) {
+                        $this->AttachmentRepository->create([
+                            'inovasi_id' => $result->id,
+                            'nama'       => $att['nama'],
+                            'url'        => $att['url']
+                        ]);
+                    }
+                }
                 DB::commit();
                 return $this->respondCreated($result, MessageConstant::INOVASI_CREATE_SUCCESS_MSG);
             } else {
@@ -248,6 +259,9 @@ class InovasiController extends APIController
         } else {
             DB::beginTransaction();
             $deletePelaksana = $this->PelaksanaInovasiRepository
+                ->where('inovasi_id',$request->id)
+                ->delete();
+            $deleteAttachment = $this->AttachmentRepository
                 ->where('inovasi_id',$request->id)
                 ->delete();
             $result = $this->InovasiRepository
@@ -276,6 +290,15 @@ class InovasiController extends APIController
                 }else{
                     return $this->respondInternalError($rr= null,'Pelaksana Dibutuhkan!');
                 }
+                if (count($request->attachment) > 0){
+                    foreach ($request->attachment as $item => $att) {
+                        $this->AttachmentRepository->create([
+                            'inovasi_id' => $request->id,
+                            'nama'       => $att['nama'],
+                            'url'        => $att['url']
+                        ]);
+                    }
+                }
                 DB::commit();
                 return $this->respondCreated($result, MessageConstant::INOVASI_UPDATE_SUCCESS_MSG);
             } else {
@@ -297,7 +320,10 @@ class InovasiController extends APIController
 
     public function terkini()
     {
-        $result = $this->InovasiRepository->with(['instansi_data'])->limit(3)->get();
+        $result = $this->InovasiRepository->with(['instansi_data','attachment'])
+            ->limit(3)
+            ->orderBy('created_at','desc')
+            ->get();
         return $this->respond($result);
     }
 }

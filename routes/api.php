@@ -342,7 +342,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
     */
     $api->group(['prefix' => 'agenda'], function ($api) {
         $api->group(['prefix' => 'list'], function ($api) {
-            $api->GET('/','Litbang\AgendaController@list')->middleware('auth:api');
+            $api->GET('/','Litbang\AgendaController@list');
             $api->GET('/datatable','Litbang\AgendaController@listWithDatatable')->middleware('auth:api');
         });
         $api->group(['prefix' => 'get'], function ($api) {
@@ -360,7 +360,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
     */
     $api->group(['prefix' => 'berita'], function ($api) {
         $api->group(['prefix' => 'list'], function ($api) {
-            $api->GET('/','Litbang\BeritaController@list')->middleware('auth:api');
+            $api->GET('/','Litbang\BeritaController@list');
             $api->GET('/datatable','Litbang\BeritaController@listWithDatatable')->middleware('auth:api');
         });
         $api->group(['prefix' => 'get'], function ($api) {
@@ -405,6 +405,27 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         $api->POST('create','Litbang\BeritaController@create');
         $api->POST('update','Litbang\BeritaController@update')->middleware('auth:api');
         $api->POST('delete','Litbang\BeritaController@delete')->middleware('auth:api');
+    });
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Attachment
+    |--------------------------------------------------------------------------
+    */
+    $api->group(['prefix' => 'attachment'], function ($api) {
+        $api->group(['prefix' => 'list'], function ($api) {
+            $api->GET('/','Litbang\BeritaController@list');
+            $api->GET('/datatable','Litbang\BeritaController@listWithDatatable')->middleware('auth:api');
+        });
+        $api->group(['prefix' => 'get'], function ($api) {
+            $api->POST('id','Litbang\BeritaController@getById')->middleware('auth:api');
+        });
+        $api->POST('create','Litbang\BeritaController@create');
+        $api->POST('update','Litbang\BeritaController@update')->middleware('auth:api');
+        $api->POST('delete','Litbang\BeritaController@delete')->middleware('auth:api');
+
+        $api->GET('/terkini','Litbang\AttachmentController@terkini');
     });
 
 });

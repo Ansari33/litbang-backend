@@ -148,6 +148,11 @@ class RepoBindingServiceProvider extends ServiceProvider
             return $repository;
         });
 
+        $app->bind('\App\Repositories\Contracts\Litbang\AttachmentInterface', function () {
+            $repository = new \App\Repositories\Litbang\AttachmentRepository(new \App\Models\Litbang\Attachment);
+            return $repository;
+        });
+
         $app->bind('\App\Repositories\Contracts\Pengguna\PenggunaInterface', function () {
             $repository = new \App\Repositories\Pengguna\PenggunaRepository(new \App\Models\Pengguna\Pengguna);
             return $repository;

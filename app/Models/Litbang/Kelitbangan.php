@@ -40,6 +40,7 @@ class Kelitbangan extends Model
 
         static::deleting(function($model) {
                $model->pelaksana->each->delete();
+               $model->attachment->each->delete();
 //            $user = Auth::user();
 //            $model->deleted_by = $user->id;
 //            $model->save();
@@ -52,5 +53,9 @@ class Kelitbangan extends Model
 
     public function pelaksana() {
         return $this->hasMany('App\Models\Litbang\PelaksanaKelitbangan','kelitbangan_id','id');
+    }
+
+    public function attachment() {
+        return $this->hasMany('App\Models\Litbang\Attachment','kelitbangan_id','id');
     }
 }

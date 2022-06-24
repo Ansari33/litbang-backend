@@ -13,30 +13,32 @@ use Spatie\Activitylog\Models\Activity;
 use Auth;
 use App\Repositories\MainRepository;
 
-class BeritaController extends APIController
+class AttachmentController extends APIController
 {
-    private $BeritaRepository;
-    private $PelaksanaBeritaRepository;
+    private $KelitabanganRepository;
+    private $PelaksanaKelitbanganRepository;
+    private $AttachmentRepository;
     //private $PenggunaRepository;
 
     public function initialize()
     {
-        $this->BeritaRepository = \App::make('\App\Repositories\Contracts\Litbang\BeritaInterface');
-        //$this->PelaksanaBeritaRepository = \App::make('\App\Repositories\Contracts\Litbang\PelaksanaInovasiInterface');
+        $this->KelitbanganRepository = \App::make('\App\Repositories\Contracts\Litbang\KelitbanganInterface');
+        $this->PelaksanaKelitbanganRepository = \App::make('\App\Repositories\Contracts\Litbang\PelaksanaKelitbanganInterface');
+        $this->AttachmentRepository = \App::make('\App\Repositories\Contracts\Litbang\AttachmentInterface');
        // $this->PenggunaRepository = \App::make('\App\Repositories\Contracts\Pengguna\AkunInterface');
     }
 
     public function list(Request $request)
     {
-        $relations = [
-        ];
-       // return $request->all();
-        $result = $this->BeritaRepository
-            ->relation($relations)
-            ->skip(10*$request->page)->take(10)->get();
+        $result = $this->KelitbanganRepository->with([
+            'lingkup_data',
+            'pelaksana'
+        ])->get();
         return $this->respond($result);
+        $relations = [
 
-        return $datatable = datatables()->of($this->BeritaRepository
+        ];
+        return $datatable = datatables()->of($this->KelitabanganRepository
             ->relation($relations)
             ->get())
             ->editColumn('tanggal', function ($list) {
@@ -72,23 +74,27 @@ class BeritaController extends APIController
 
             })
             ->toJson();
-        //$result = $this->KelitbanganRepository->all();
+        $result = $this->KelitbanganRepository->all();
         return $this->respond($result);
     }
 
     public function listWithDatatable(Request $request)
     {
         $relations = [
-
+            'lingkup_data'
         ];
-        return $datatable = datatables()->of($this->BeritaRepository
+//        return $this->KelitbanganRepository->relation($relations)
+//            ->get();
+        return $datatable = datatables()->of($this->KelitbanganRepository
             ->relation($relations)
             ->get())
 //            ->editColumn('tanggal', function ($list) {
 //                return '<span class="label  label-success label-inline " style="display: none"> '.Carbon::createFromFormat('Y-m-d',$list['tanggal'])->timestamp.' </span>'.Carbon::createFromFormat('Y-m-d',$list['tanggal'])->format('d M Y');
 //                // return Carbon::createFromFormat('Y-m-d',$list['tanggal'])->format('d/m/Y');
 //            })
-
+            ->editColumn('lingkup', function ($list) {
+                return $list['lingkup_data']['nama'];
+            })
             ->addColumn('action', function ($data) {
                 $btn_edit   =  '#';
                     //"add_content_tab('pembelian_faktur_pembelian','edit_data_".$data['id']."','pembelian/faktur-pembelian/edit/".$data['id']."', 'Edit Data', '".$data['nomor']."')";
@@ -103,13 +109,13 @@ class BeritaController extends APIController
                           <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
                               <ul class="navi flex-column navi-hover py-2">
                                   <li class="navi-item" onclick="'.$btn_edit.'">
-                                          <a href="/berita-edit/'.$data['id'].'" target="_blank" class="navi-link">
+                                          <a href="/kelitbangan-edit/'.$data['id'].'" target="_blank" class="navi-link">
                                                   <span class="navi-icon"><i class="flaticon2-edit"></i></span>
                                                   <span class="navi-text">Edit</span>
                                           </a>
                                   </li>
-                                  <li class="navi-item" onclick="deleteBerita('.$data['id'].')">
-                                          <a href="javascript:;" class="navi-link">
+                                  <li class="navi-item" onclick="deleteKelitbangan('.$data['id'].')">
+                                          <a href="#" class="navi-link">
                                                   <span class="navi-icon"><i class="flaticon2-trash"></i></span>
                                                   <span class="navi-text">Hapus</span>
                                           </a>
@@ -125,11 +131,11 @@ class BeritaController extends APIController
 
     public function getById(Request $request)
     {
-        $result = $this->BeritaRepository->with([])->find($request->id);
+        $result = $this->KelitbanganRepository->with(['pelaksana','attachment'])->find($request->id);
         if ($result) {
             return $this->respond($result);
         } else {
-            return $this->respondNotFound(MessageConstant::INOVASI_GET_FAILED_MSG);
+            return $this->respondNotFound(MessageConstant::KELITBANGAN_GET_FAILED_MSG);
         }
     }
 
@@ -196,34 +202,43 @@ class BeritaController extends APIController
     public function create(Request $request)
     {
 
-        $validator = $this->BeritaRepository->validate($request);
+        $validator = $this->KelitbanganRepository->validate($request);
         if ($validator->fails()) {
             return $this->respondWithValidationErrors($validator->errors()->all(), MessageConstant::VALIDATION_FAILED_MSG);
         } else {
             DB::beginTransaction();
-
-            $result = $this->BeritaRepository->create(
+            $result = $this->KelitbanganRepository->create(
                 [
-                    'judul'    =>  $request->judul,
+                    'nomor' =>  $request->nomor,
                     'tanggal' => $request->tanggal,
-                    'deskripsi'   => $request->deskripsi,
-//                    'tempat'  =>  $request->tempat,
+                    'judul'   => $request->judul,
+                    'lingkup' =>  $request->lingkup,
+                    'abstrak' => $request->abstrak,
+                    'tindak_lanjut'   => $request->tindak_lanjut,
                 ]
             );
             if ($result->count()) {
-//                return $this->respondInternalError($rr= null,$request->pelaksana);
-//                if (count($request->pelaksana) > 0){
-//                    foreach ($request->pelaksana as $item => $nama) {
-//                        $this->PelaksanaBeritaRepository->create([
-//                            'inovasi_id' => $result->id,
-//                            'nama'       => $nama,
-//                        ]);
-//                    }
-//                }else{
-//                    return $this->respondInternalError($rr= null,'Pelaksana Dibutuhkan!');
-//                }
+                if (count($request->pelaksana) > 0){
+                    foreach ($request->pelaksana as $item => $nama) {
+                        $this->PelaksanaKelitbanganRepository->create([
+                            'kelitbangan_id' => $result->id,
+                            'nama'       => $nama,
+                        ]);
+                    }
+                }else{
+                    return $this->respondInternalError($rr= null,'Pelaksana Dibutuhkan!');
+                }
+                if (count($request->attachment) > 0){
+                    foreach ($request->attachment as $item => $att) {
+                        $this->AttachmentRepository->create([
+                            'kelitbangan_id' => $result->id,
+                            'nama'       => $att['nama'],
+                            'url'        => $att['url']
+                        ]);
+                    }
+                }
                 DB::commit();
-                return $this->respondCreated($result, MessageConstant::BERITA_CREATE_SUCCESS_MSG);
+                return $this->respondCreated($result, MessageConstant::KELITBANGAN_CREATE_SUCCESS_MSG);
             } else {
                 DB::rollBack();
                 return $this->respondConflict();
@@ -233,38 +248,52 @@ class BeritaController extends APIController
 
     public function update(Request $request)
     {
-
-        $validator = $this->BeritaRepository->validateUpdate($request);
+        //return $request->all();
+        $validator = $this->KelitbanganRepository->validateUpdate($request);
         if ($validator->fails()) {
             return $this->respondWithValidationErrors($validator->errors()->all(), MessageConstant::VALIDATION_FAILED_MSG);
         } else {
             DB::beginTransaction();
-//            $deletePelaksana = $this->PelaksanaBeritaRepository
-//                ->where('inovasi_id',$request->id)
-//                ->delete();
-            $result = $this->BeritaRepository
+            $deletePelaksana = $this->PelaksanaKelitbanganRepository
+                ->where('kelitbangan_id',$request->id)
+                ->delete();
+            $deleteAttch = $this->AttachmentRepository
+                ->where('kelitbangan_id',$request->id)
+                ->delete();
+            $result = $this->KelitbanganRepository
                 ->where('id',$request->id)
                 ->update(
                     [
-                        'judul' =>  $request->judul,
+                        'nomor' =>  $request->nomor,
                         'tanggal' => $request->tanggal,
-                        'deskripsi'   => $request->deskripsi,
-//                        'tempat' =>  $request->tempat,
+                        'judul'   => $request->judul,
+                        'lingkup' =>  $request->lingkup,
+                        'abstrak' => $request->abstrak,
+                        'tindak_lanjut'   => $request->tindak_lanjut,
                     ]
                 );
             if ($result) {
-//                if (count($request->pelaksana) > 0){
-//                    foreach ($request->pelaksana as $item => $nama) {
-//                        $this->PelaksanaBeritaRepository->create([
-//                            'inovasi_id' => $request->id,
-//                            'nama'       => $nama,
-//                        ]);
-//                    }
-//                }else{
-//                    return $this->respondInternalError($rr= null,'Pelaksana Dibutuhkan!');
-//                }
+                if (count($request->pelaksana) > 0){
+                    foreach ($request->pelaksana as $item => $nama) {
+                        $this->PelaksanaKelitbanganRepository->create([
+                            'kelitbangan_id' => $request->id,
+                            'nama'       => $nama,
+                        ]);
+                    }
+                }else{
+                    return $this->respondInternalError($rr= null,'Pelaksana Dibutuhkan!');
+                }
+                if (count($request->attachment) > 0){
+                    foreach ($request->attachment as $item => $att) {
+                        $this->AttachmentRepository->create([
+                            'kelitbangan_id' => $request->id,
+                            'nama'       => $att['nama'],
+                            'url'        => $att['url']
+                        ]);
+                    }
+                }
                 DB::commit();
-                return $this->respondCreated($result, MessageConstant::BERITA_UPDATE_SUCCESS_MSG);
+                return $this->respondCreated($result, MessageConstant::KELITBANGAN_UPDATE_SUCCESS_MSG);
             } else {
                 DB::rollBack();
                 return $this->respondNotFound();
@@ -274,11 +303,17 @@ class BeritaController extends APIController
 
     public function delete(Request $request)
     {
-        $result = $this->BeritaRepository->delete($request->id);
+        $result = $this->KelitbanganRepository->delete($request->id);
         if ($result) {
-            return $this->respondOk(MessageConstant::BERITA_DELETE_SUCCESS_MSG);
+            return $this->respondOk(MessageConstant::KELITBANGAN_DELETE_SUCCESS_MSG);
         } else {
-            return $this->respondNotFound(MessageConstant::INOVASI_DELETE_FAILED_MSG);
+            return $this->respondNotFound(MessageConstant::KELITBANGAN_DELETE_FAILED_MSG);
         }
+    }
+
+    public function terkini(){
+        $result = $this->AttachmentRepository->limit(8)
+            ->orderBy('created_at','desc')->get();
+        return $this->respond($result);
     }
 }
