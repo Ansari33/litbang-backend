@@ -49,7 +49,7 @@ class Agenda extends Model
 //    public function instansi_data() {
 //        return $this->belongsTo('App\Models\Litbang\Instansi','instansi','id');
 //    }
-//    public function pelaksana() {
-//        return $this->hasMany('App\Models\Litbang\PelaksanaInovasi','inovasi_id','id');
-//    }
+    public function attachment() {
+        return $this->hasMany('App\Models\Litbang\Attachment','agenda_id','id');
+    }
 }

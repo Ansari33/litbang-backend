@@ -104,7 +104,7 @@ class UsulanPenelitianController extends APIController
                           <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
                               <ul class="navi flex-column navi-hover py-2">
                                   <li class="navi-item" onclick="'.$btn_edit.'">
-                                          <a href="/UsulanPenelitian-edit/'.$data['id'].'" target="_blank" class="navi-link">
+                                          <a href="/usulan-penelitian-edit/'.$data['id'].'" target="_blank" class="navi-link">
                                                   <span class="navi-icon"><i class="flaticon2-edit"></i></span>
                                                   <span class="navi-text">Edit</span>
                                           </a>
@@ -217,19 +217,17 @@ class UsulanPenelitianController extends APIController
                 ]
             );
             if ($result->count()) {
-//                return $this->respondInternalError($rr= null,$request->pelaksana);
-//                if (count($request->pelaksana) > 0){
-//                    foreach ($request->pelaksana as $item => $nama) {
-//                        $this->PelaksanaUsulanPenelitianRepository->create([
-//                            'inovasi_id' => $result->id,
-//                            'nama'       => $nama,
-//                        ]);
-//                    }
-//                }else{
-//                    return $this->respondInternalError($rr= null,'Pelaksana Dibutuhkan!');
-//                }
+                if (count($request->attachment) > 0){
+                    foreach ($request->attachment as $item => $att) {
+                        $this->AttachmentRepository->create([
+                            'usulan_penelitian_id' => $result->id,
+                            'nama'       => $att['nama'],
+                            'url'        => $att['url']
+                        ]);
+                    }
+                }
                 DB::commit();
-                return $this->respondCreated($result, MessageConstant::USULAN_PENELITIAN_CREATE_SUCCESS_MSG);
+                return $this->respondCreated($result, MessageConstant::USULAN_INOVASI_CREATE_SUCCESS_MSG);
             } else {
                 DB::rollBack();
                 return $this->respondConflict();
@@ -245,30 +243,31 @@ class UsulanPenelitianController extends APIController
             return $this->respondWithValidationErrors($validator->errors()->all(), MessageConstant::VALIDATION_FAILED_MSG);
         } else {
             DB::beginTransaction();
-//            $deletePelaksana = $this->PelaksanaUsulanPenelitianRepository
-//                ->where('inovasi_id',$request->id)
-//                ->delete();
             $result = $this->UsulanPenelitianRepository
                 ->where('id',$request->id)
                 ->update(
                     [
-                        'waktu' =>  $request->waktu,
-                        'tanggal' => $request->tanggal,
-                        'nama'   => $request->nama,
-                        'tempat' =>  $request->tempat,
+                        'nomor'          => $request->nomor,
+                        'tanggal'        => $request->tanggal,
+                        //'usulan'         => $request->usulan,
+                        //'pengusul'       => $request->pengusul,
+                        'latar_belakang' => $request->latar_belakang,
+                        'tujuan'         => $request->tujuan,
+                        'status'         => $request->status,
+                        'instansi'       => $request->instansi,
+                        'email'          => $request->email
                     ]
                 );
             if ($result) {
-//                if (count($request->pelaksana) > 0){
-//                    foreach ($request->pelaksana as $item => $nama) {
-//                        $this->PelaksanaUsulanPenelitianRepository->create([
-//                            'inovasi_id' => $request->id,
-//                            'nama'       => $nama,
-//                        ]);
-//                    }
-//                }else{
-//                    return $this->respondInternalError($rr= null,'Pelaksana Dibutuhkan!');
-//                }
+                if (count($request->attachment) > 0){
+                    foreach ($request->attachment as $item => $att) {
+                        $this->AttachmentRepository->create([
+                            'usulan_penelitian_id' => $result->id,
+                            'nama'       => $att['nama'],
+                            'url'        => $att['url']
+                        ]);
+                    }
+                }
                 DB::commit();
                 return $this->respondCreated($result, MessageConstant::USULAN_PENELITIAN_UPDATE_SUCCESS_MSG);
             } else {

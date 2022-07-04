@@ -86,7 +86,7 @@ class AgendaController extends APIController
 
     public function getById(Request $request)
     {
-        $result = $this->AgendaRepository->with([])->find($request->id);
+        $result = $this->AgendaRepository->with(['attachment'])->find($request->id);
         if ($result) {
             return $this->respond($result);
         } else {

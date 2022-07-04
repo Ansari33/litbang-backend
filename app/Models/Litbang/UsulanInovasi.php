@@ -46,8 +46,8 @@ class UsulanInovasi extends Model
         });
     }
 
-    public function lingkup_data() {
-        return $this->belongsTo('App\Models\Litbang\Instansi','lingkup','id');
+    public function instansi_data() {
+        return $this->belongsTo('App\Models\Litbang\Instansi','instansi','id');
     }
 
     public function pelaksana() {

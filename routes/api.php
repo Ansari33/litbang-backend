@@ -382,7 +382,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
             $api->GET('/datatable','Litbang\UsulanPenelitianController@listWithDatatable')->middleware('auth:api');
         });
         $api->group(['prefix' => 'get'], function ($api) {
-            $api->POST('id','Litbang\UsulanPenelitianController@getById')->middleware('auth:api');
+            $api->POST('id','Litbang\UsulanPenelitianController@getById');
         });
         $api->POST('create','Litbang\UsulanPenelitianController@create');
         $api->POST('update','Litbang\UsulanPenelitianController@update')->middleware('auth:api');
@@ -396,15 +396,16 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
     */
     $api->group(['prefix' => 'usulan-inovasi'], function ($api) {
         $api->group(['prefix' => 'list'], function ($api) {
-            $api->GET('/','Litbang\BeritaController@list');
-            $api->GET('/datatable','Litbang\BeritaController@listWithDatatable')->middleware('auth:api');
+            $api->GET('/','Litbang\UsulanInovasiController@list');
+            $api->GET('/datatable','Litbang\UsulanInovasiController@listWithDatatable')->middleware('auth:api');
         });
         $api->group(['prefix' => 'get'], function ($api) {
-            $api->POST('id','Litbang\BeritaController@getById')->middleware('auth:api');
+            $api->POST('id','Litbang\UsulanInovasiController@getById');
         });
-        $api->POST('create','Litbang\BeritaController@create');
-        $api->POST('update','Litbang\BeritaController@update')->middleware('auth:api');
-        $api->POST('delete','Litbang\BeritaController@delete')->middleware('auth:api');
+        $api->POST('create','Litbang\UsulanInovasiController@create');
+        $api->POST('update','Litbang\UsulanInovasiController@update')->middleware('auth:api');
+        $api->POST('delete','Litbang\UsulanInovasiController@delete')->middleware('auth:api');
+        $api->GET('terkini','Litbang\UsulanInovasiController@terkini');
     });
 
 

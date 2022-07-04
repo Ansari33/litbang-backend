@@ -31,9 +31,11 @@ class BeritaController extends APIController
         $relations = [
         ];
        // return $request->all();
-        $result = $this->BeritaRepository
+       $result = $this->BeritaRepository
             ->relation($relations)
-            ->skip(10*$request->page)->take(10)->get();
+            //->paginate(2);
+            //->skip(10*$request->page)->take(10)
+            ->get();
         return $this->respond($result);
 
         return $datatable = datatables()->of($this->BeritaRepository

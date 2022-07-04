@@ -31,54 +31,18 @@ class UsulanInovasiController extends APIController
         $relations = [
             'instansi_data'
         ];
-        return $this->UsulanInovasiRepository
+        $result = $this->UsulanInovasiRepository
             ->relation($relations)
             ->get();
 
-        return $datatable = datatables()->of($this->UsulanInovasiRepository
-            ->relation($relations)
-            ->get())
-            ->editColumn('tanggal', function ($list) {
-                return '<span class="label  label-success label-inline " style="display: none"> '.Carbon::createFromFormat('Y-m-d',$list['tanggal'])->timestamp.' </span>'.Carbon::createFromFormat('Y-m-d',$list['tanggal'])->format('d M Y');
-                // return Carbon::createFromFormat('Y-m-d',$list['tanggal'])->format('d/m/Y');
-            })
-            ->addColumn('action', function ($data) {
-                $btn_edit   = "add_content_tab('pembelian_faktur_pembelian','edit_data_".$data['id']."','pembelian/faktur-pembelian/edit/".$data['id']."', 'Edit Data', '".$data['nomor']."')";
-                $btn_delete = "destroy(".$data['id'].", '".$data['nomor']."','pembelian/faktur-pembelian','tbl_pembelian_faktur_pembelian')";
-                return '
-                      <div class="dropdown dropdown-inline">
-                          <a href="javascript:;" class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="dropdown">
-                              <i class="flaticon2-layers-1 text-muted"></i>
-                          </a>
-                          <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                              <ul class="navi flex-column navi-hover py-2">
-                                  <li class="navi-item" onclick="'.$btn_edit.'">
-                                          <a href="#" class="navi-link">
-                                                  <span class="navi-icon"><i class="flaticon2-edit"></i></span>
-                                                  <span class="navi-text">Edit</span>
-                                          </a>
-                                  </li>
-                                  <li class="navi-item" onclick="'.$btn_delete.'">
-                                          <a href="#" class="navi-link">
-                                                  <span class="navi-icon"><i class="flaticon2-trash"></i></span>
-                                                  <span class="navi-text">Hapus</span>
-                                          </a>
-                                  </li>
-                          </ul>
-                          </div>
-                      </div>
-                    ';
-
-            })
-            ->toJson();
-        //$result = $this->KelitbanganRepository->all();
         return $this->respond($result);
+
     }
 
     public function listWithDatatable(Request $request)
     {
         $relations = [
-
+            'instansi_data'
         ];
         return $datatable = datatables()->of($this->UsulanInovasiRepository
             ->relation($relations)
@@ -102,7 +66,7 @@ class UsulanInovasiController extends APIController
                           <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
                               <ul class="navi flex-column navi-hover py-2">
                                   <li class="navi-item" onclick="'.$btn_edit.'">
-                                          <a href="/UsulanInovasi-edit/'.$data['id'].'" target="_blank" class="navi-link">
+                                          <a href="/usulan-inovasi-edit/'.$data['id'].'" target="_blank" class="navi-link">
                                                   <span class="navi-icon"><i class="flaticon2-edit"></i></span>
                                                   <span class="navi-text">Edit</span>
                                           </a>
@@ -124,7 +88,7 @@ class UsulanInovasiController extends APIController
 
     public function getById(Request $request)
     {
-        $result = $this->UsulanInovasiRepository->with([])->find($request->id);
+        $result = $this->UsulanInovasiRepository->with(['instansi_data'])->find($request->id);
         if ($result) {
             return $this->respond($result);
         } else {
@@ -203,10 +167,15 @@ class UsulanInovasiController extends APIController
 
             $result = $this->UsulanInovasiRepository->create(
                 [
-                    'nama'    =>  $request->nama,
+                    'nomor'    =>  $request->nomor,
                     'tanggal' => $request->tanggal,
-                    'waktu'   => $request->waktu,
-                    'tempat'  =>  $request->tempat,
+                    'usulan'   => $request->usulan,
+                    'pengusul'  =>  $request->pengusul,
+                    'latar_belakang'    =>  $request->latar_belakang,
+                    'tujuan' => $request->tujuan,
+                    'status'   => $request->status,
+                    'instansi'  =>  $request->instansi,
+                    'nomor_kontak' => $request->nomor_kontak
                 ]
             );
             if ($result->count()) {
@@ -278,6 +247,16 @@ class UsulanInovasiController extends APIController
             return $this->respondOk(MessageConstant::USULAN_INOVASI_DELETE_SUCCESS_MSG);
         } else {
             return $this->respondNotFound(MessageConstant::INOVASI_DELETE_FAILED_MSG);
+        }
+    }
+
+    public function terkini()
+    {
+        $result = $this->UsulanInovasiRepository->limit(3)->get();
+        if ($result) {
+            return $this->respond($result);
+        } else {
+            return $this->respondNotFound(MessageConstant::USULAN_INOVASI_GET_FAILED_MSG);
         }
     }
 }
