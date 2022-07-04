@@ -227,7 +227,7 @@ class UsulanPenelitianController extends APIController
                     }
                 }
                 DB::commit();
-                return $this->respondCreated($result, MessageConstant::USULAN_INOVASI_CREATE_SUCCESS_MSG);
+                return $this->respondCreated($result, MessageConstant::USULAN_PENELITIAN_CREATE_SUCCESS_MSG);
             } else {
                 DB::rollBack();
                 return $this->respondConflict();
