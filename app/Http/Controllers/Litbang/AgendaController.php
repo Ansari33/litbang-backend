@@ -16,12 +16,14 @@ use App\Repositories\MainRepository;
 class AgendaController extends APIController
 {
     private $AgendaRepository;
+    private $AttachmentRepository;
     private $PelaksanaAgendaRepository;
     //private $PenggunaRepository;
 
     public function initialize()
     {
         $this->AgendaRepository = \App::make('\App\Repositories\Contracts\Litbang\AgendaInterface');
+        $this->AttachmentRepository = \App::make('\App\Repositories\Contracts\Litbang\AttachmentInterface');
         //$this->PelaksanaAgendaRepository = \App::make('\App\Repositories\Contracts\Litbang\PelaksanaInovasiInterface');
        // $this->PenggunaRepository = \App::make('\App\Repositories\Contracts\Pengguna\AkunInterface');
     }
@@ -173,14 +175,16 @@ class AgendaController extends APIController
             );
             if ($result->count()) {
 //                return $this->respondInternalError($rr= null,$request->pelaksana);
-//                if (count($request->pelaksana) > 0){
-//                    foreach ($request->pelaksana as $item => $nama) {
-//                        $this->PelaksanaAgendaRepository->create([
-//                            'inovasi_id' => $result->id,
-//                            'nama'       => $nama,
-//                        ]);
-//                    }
-//                }else{
+                if (count($request->attachment) > 0){
+                    foreach ($request->attachment as $item => $att) {
+                        $this->AttachmentRepository->create([
+                            'agenda_id' => $request->id,
+                            'nama'       => $att['nama'],
+                            'url'        => $att['url']
+                        ]);
+                    }
+                }
+                //else{
 //                    return $this->respondInternalError($rr= null,'Pelaksana Dibutuhkan!');
 //                }
                 DB::commit();
@@ -200,9 +204,9 @@ class AgendaController extends APIController
             return $this->respondWithValidationErrors($validator->errors()->all(), MessageConstant::VALIDATION_FAILED_MSG);
         } else {
             DB::beginTransaction();
-//            $deletePelaksana = $this->PelaksanaAgendaRepository
-//                ->where('inovasi_id',$request->id)
-//                ->delete();
+            $deleteAttachment = $this->AttachmentRepository
+                ->where('agenda_id',$request->id)
+                ->delete();
             $result = $this->AgendaRepository
                 ->where('id',$request->id)
                 ->update(
@@ -214,14 +218,16 @@ class AgendaController extends APIController
                     ]
                 );
             if ($result) {
-//                if (count($request->pelaksana) > 0){
-//                    foreach ($request->pelaksana as $item => $nama) {
-//                        $this->PelaksanaAgendaRepository->create([
-//                            'inovasi_id' => $request->id,
-//                            'nama'       => $nama,
-//                        ]);
-//                    }
-//                }else{
+                if (count($request->attachment) > 0){
+                    foreach ($request->attachment as $item => $att) {
+                        $this->AttachmentRepository->create([
+                            'agenda_id' => $request->id,
+                            'nama'       => $att['nama'],
+                            'url'        => $att['url']
+                        ]);
+                    }
+                }
+//else{
 //                    return $this->respondInternalError($rr= null,'Pelaksana Dibutuhkan!');
 //                }
                 DB::commit();
