@@ -39,17 +39,15 @@ class Berita extends Model
         });
 
         static::deleting(function($model) {
-//            $model->pelaksana->each->delete();
+           $model->attachment->each->delete();
 //            $user = Auth::user();
 //            $model->deleted_by = $user->id;
 //            $model->save();
         });
     }
 
-//    public function instansi_data() {
-//        return $this->belongsTo('App\Models\Litbang\Instansi','instansi','id');
-//    }
-//    public function pelaksana() {
-//        return $this->hasMany('App\Models\Litbang\PelaksanaInovasi','inovasi_id','id');
-//    }
+
+    public function attachment() {
+        return $this->hasMany('App\Models\Litbang\Attachment','berita_id','id');
+    }
 }

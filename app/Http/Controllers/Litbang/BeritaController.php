@@ -12,70 +12,31 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\Models\Activity;
 use Auth;
 use App\Repositories\MainRepository;
+use Illuminate\Support\Str;
 
 class BeritaController extends APIController
 {
     private $BeritaRepository;
-    private $PelaksanaBeritaRepository;
+    private $AttachmentRepository;
     //private $PenggunaRepository;
 
     public function initialize()
     {
         $this->BeritaRepository = \App::make('\App\Repositories\Contracts\Litbang\BeritaInterface');
-        //$this->PelaksanaBeritaRepository = \App::make('\App\Repositories\Contracts\Litbang\PelaksanaInovasiInterface');
-       // $this->PenggunaRepository = \App::make('\App\Repositories\Contracts\Pengguna\AkunInterface');
+        $this->AttachmentRepository = \App::make('\App\Repositories\Contracts\Litbang\AttachmentInterface');
     }
 
     public function list(Request $request)
     {
         $relations = [
+            'attachment'
         ];
-       // return $request->all();
        $result = $this->BeritaRepository
             ->relation($relations)
-            //->paginate(2);
-            //->skip(10*$request->page)->take(10)
             ->get();
+
         return $this->respond($result);
 
-        return $datatable = datatables()->of($this->BeritaRepository
-            ->relation($relations)
-            ->get())
-            ->editColumn('tanggal', function ($list) {
-                return '<span class="label  label-success label-inline " style="display: none"> '.Carbon::createFromFormat('Y-m-d',$list['tanggal'])->timestamp.' </span>'.Carbon::createFromFormat('Y-m-d',$list['tanggal'])->format('d M Y');
-                // return Carbon::createFromFormat('Y-m-d',$list['tanggal'])->format('d/m/Y');
-            })
-            ->addColumn('action', function ($data) {
-                $btn_edit   = "add_content_tab('pembelian_faktur_pembelian','edit_data_".$data['id']."','pembelian/faktur-pembelian/edit/".$data['id']."', 'Edit Data', '".$data['nomor']."')";
-                $btn_delete = "destroy(".$data['id'].", '".$data['nomor']."','pembelian/faktur-pembelian','tbl_pembelian_faktur_pembelian')";
-                return '
-                      <div class="dropdown dropdown-inline">
-                          <a href="javascript:;" class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="dropdown">
-                              <i class="flaticon2-layers-1 text-muted"></i>
-                          </a>
-                          <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                              <ul class="navi flex-column navi-hover py-2">
-                                  <li class="navi-item" onclick="'.$btn_edit.'">
-                                          <a href="#" class="navi-link">
-                                                  <span class="navi-icon"><i class="flaticon2-edit"></i></span>
-                                                  <span class="navi-text">Edit</span>
-                                          </a>
-                                  </li>
-                                  <li class="navi-item" onclick="'.$btn_delete.'">
-                                          <a href="#" class="navi-link">
-                                                  <span class="navi-icon"><i class="flaticon2-trash"></i></span>
-                                                  <span class="navi-text">Hapus</span>
-                                          </a>
-                                  </li>
-                          </ul>
-                          </div>
-                      </div>
-                    ';
-
-            })
-            ->toJson();
-        //$result = $this->KelitbanganRepository->all();
-        return $this->respond($result);
     }
 
     public function listWithDatatable(Request $request)
@@ -90,7 +51,10 @@ class BeritaController extends APIController
 //                return '<span class="label  label-success label-inline " style="display: none"> '.Carbon::createFromFormat('Y-m-d',$list['tanggal'])->timestamp.' </span>'.Carbon::createFromFormat('Y-m-d',$list['tanggal'])->format('d M Y');
 //                // return Carbon::createFromFormat('Y-m-d',$list['tanggal'])->format('d/m/Y');
 //            })
-
+            ->editColumn('deskripsi', function ($list) {
+               $text = ($list['deskripsi']);
+                return $text;
+            })
             ->addColumn('action', function ($data) {
                 $btn_edit   =  '#';
                     //"add_content_tab('pembelian_faktur_pembelian','edit_data_".$data['id']."','pembelian/faktur-pembelian/edit/".$data['id']."', 'Edit Data', '".$data['nomor']."')";
@@ -127,8 +91,10 @@ class BeritaController extends APIController
 
     public function getById(Request $request)
     {
-        $result = $this->BeritaRepository->with([])->find($request->id);
+        $result = $this->BeritaRepository->with(['attachment'])->find($request->id);
         if ($result) {
+            $result->before = $this->BeritaRepository->whereOpt('id','<',$request->id)->first();
+            $result->after  = $this->BeritaRepository->whereOpt('id','>',$result->id )->first();
             return $this->respond($result);
         } else {
             return $this->respondNotFound(MessageConstant::INOVASI_GET_FAILED_MSG);
@@ -209,21 +175,19 @@ class BeritaController extends APIController
                     'judul'    =>  $request->judul,
                     'tanggal' => $request->tanggal,
                     'deskripsi'   => $request->deskripsi,
-//                    'tempat'  =>  $request->tempat,
                 ]
             );
             if ($result->count()) {
-//                return $this->respondInternalError($rr= null,$request->pelaksana);
-//                if (count($request->pelaksana) > 0){
-//                    foreach ($request->pelaksana as $item => $nama) {
-//                        $this->PelaksanaBeritaRepository->create([
-//                            'inovasi_id' => $result->id,
-//                            'nama'       => $nama,
-//                        ]);
-//                    }
-//                }else{
-//                    return $this->respondInternalError($rr= null,'Pelaksana Dibutuhkan!');
-//                }
+
+                if (count($request->attachment) > 0){
+                    foreach ($request->attachment as $item => $it) {
+                        $this->AttachmentRepository->create([
+                            'berita_id' => $result->id,
+                            'nama'      => $it['nama'],
+                            'url'       => $it['url'],
+                        ]);
+                    }
+                }
                 DB::commit();
                 return $this->respondCreated($result, MessageConstant::BERITA_CREATE_SUCCESS_MSG);
             } else {
@@ -241,9 +205,9 @@ class BeritaController extends APIController
             return $this->respondWithValidationErrors($validator->errors()->all(), MessageConstant::VALIDATION_FAILED_MSG);
         } else {
             DB::beginTransaction();
-//            $deletePelaksana = $this->PelaksanaBeritaRepository
-//                ->where('inovasi_id',$request->id)
-//                ->delete();
+            $deleteAttachment = $this->AttachmentRepository
+                ->where('berita_id',$request->id)
+                ->delete();
             $result = $this->BeritaRepository
                 ->where('id',$request->id)
                 ->update(
@@ -251,20 +215,18 @@ class BeritaController extends APIController
                         'judul' =>  $request->judul,
                         'tanggal' => $request->tanggal,
                         'deskripsi'   => $request->deskripsi,
-//                        'tempat' =>  $request->tempat,
                     ]
                 );
             if ($result) {
-//                if (count($request->pelaksana) > 0){
-//                    foreach ($request->pelaksana as $item => $nama) {
-//                        $this->PelaksanaBeritaRepository->create([
-//                            'inovasi_id' => $request->id,
-//                            'nama'       => $nama,
-//                        ]);
-//                    }
-//                }else{
-//                    return $this->respondInternalError($rr= null,'Pelaksana Dibutuhkan!');
-//                }
+                if (count($request->attachment) > 0){
+                    foreach ($request->attachment as $item => $it) {
+                        $this->AttachmentRepository->create([
+                            'berita_id' => $request->id,
+                            'nama'      => $it['nama'],
+                            'url'       => $it['url'],
+                        ]);
+                    }
+                }
                 DB::commit();
                 return $this->respondCreated($result, MessageConstant::BERITA_UPDATE_SUCCESS_MSG);
             } else {

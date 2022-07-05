@@ -364,7 +364,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
             $api->GET('/datatable','Litbang\BeritaController@listWithDatatable')->middleware('auth:api');
         });
         $api->group(['prefix' => 'get'], function ($api) {
-            $api->POST('id','Litbang\BeritaController@getById')->middleware('auth:api');
+            $api->POST('id','Litbang\BeritaController@getById');
         });
         $api->POST('create','Litbang\BeritaController@create')->middleware('auth:api');
         $api->POST('update','Litbang\BeritaController@update')->middleware('auth:api');
