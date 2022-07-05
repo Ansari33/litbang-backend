@@ -245,4 +245,13 @@ class BeritaController extends APIController
             return $this->respondNotFound(MessageConstant::INOVASI_DELETE_FAILED_MSG);
         }
     }
+
+    public function terkini()
+    {
+        $result = $this->BeritaRepository->with(['attachment'])
+            ->limit(3)
+            ->orderBy('created_at','desc')
+            ->get();
+        return $this->respond($result);
+    }
 }
