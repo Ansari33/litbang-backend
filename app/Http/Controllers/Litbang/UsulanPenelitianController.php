@@ -17,13 +17,13 @@ class UsulanPenelitianController extends APIController
 {
     private $UsulanPenelitianRepository;
     private $PelaksanaUsulanPenelitianRepository;
-    //private $PenggunaRepository;
+    private $AttachmentRepository;
 
     public function initialize()
     {
         $this->UsulanPenelitianRepository = \App::make('\App\Repositories\Contracts\Litbang\UsulanPenelitianInterface');
         //$this->PelaksanaUsulanPenelitianRepository = \App::make('\App\Repositories\Contracts\Litbang\PelaksanaInovasiInterface');
-       // $this->PenggunaRepository = \App::make('\App\Repositories\Contracts\Pengguna\AkunInterface');
+        $this->AttachmentRepository = \App::make('\App\Repositories\Contracts\Litbang\AttachmentInterface');
     }
 
     public function list(Request $request)
@@ -222,7 +222,8 @@ class UsulanPenelitianController extends APIController
                         $this->AttachmentRepository->create([
                             'usulan_penelitian_id' => $result->id,
                             'nama'       => $att['nama'],
-                            'url'        => $att['url']
+                            'url'        => $att['url'],
+                            'tipe'       => $att['type']
                         ]);
                     }
                 }
@@ -264,7 +265,8 @@ class UsulanPenelitianController extends APIController
                         $this->AttachmentRepository->create([
                             'usulan_penelitian_id' => $result->id,
                             'nama'       => $att['nama'],
-                            'url'        => $att['url']
+                            'url'        => $att['url'],
+                            'tipe'       => $att['type']
                         ]);
                     }
                 }

@@ -17,13 +17,13 @@ class UsulanInovasiController extends APIController
 {
     private $UsulanInovasiRepository;
     private $PelaksanaUsulanInovasiRepository;
-    //private $PenggunaRepository;
+    private $AttachmentRepository;
 
     public function initialize()
     {
         $this->UsulanInovasiRepository = \App::make('\App\Repositories\Contracts\Litbang\UsulanInovasiInterface');
         //$this->PelaksanaUsulanInovasiRepository = \App::make('\App\Repositories\Contracts\Litbang\PelaksanaInovasiInterface');
-       // $this->PenggunaRepository = \App::make('\App\Repositories\Contracts\Pengguna\AkunInterface');
+        $this->AttachmentRepository = \App::make('\App\Repositories\Contracts\Litbang\AttachmentInterface');
     }
 
     public function list(Request $request)
@@ -173,23 +173,22 @@ class UsulanInovasiController extends APIController
                     'pengusul'  =>  $request->pengusul,
                     'latar_belakang'    =>  $request->latar_belakang,
                     'tujuan' => $request->tujuan,
-                    'status'   => $request->status,
+                    'status'   => 'Mengajukan',
                     'instansi'  =>  $request->instansi,
                     'nomor_kontak' => $request->nomor_kontak
                 ]
             );
             if ($result->count()) {
-//                return $this->respondInternalError($rr= null,$request->pelaksana);
-//                if (count($request->pelaksana) > 0){
-//                    foreach ($request->pelaksana as $item => $nama) {
-//                        $this->PelaksanaUsulanInovasiRepository->create([
-//                            'inovasi_id' => $result->id,
-//                            'nama'       => $nama,
-//                        ]);
-//                    }
-//                }else{
-//                    return $this->respondInternalError($rr= null,'Pelaksana Dibutuhkan!');
-//                }
+                if (count($request->attachment) > 0){
+                    foreach ($request->attachment as $item => $it) {
+                        $this->AttachmentRepository->create([
+                            'usulan_inovasi_id' => $result->id,
+                            'nama'      => $it['nama'],
+                            'url'       => $it['url'],
+                            'tipe'      => $it['type'],
+                        ]);
+                    }
+                }
                 DB::commit();
                 return $this->respondCreated($result, MessageConstant::USULAN_INOVASI_CREATE_SUCCESS_MSG);
             } else {
@@ -221,16 +220,16 @@ class UsulanInovasiController extends APIController
                     ]
                 );
             if ($result) {
-//                if (count($request->pelaksana) > 0){
-//                    foreach ($request->pelaksana as $item => $nama) {
-//                        $this->PelaksanaUsulanInovasiRepository->create([
-//                            'inovasi_id' => $request->id,
-//                            'nama'       => $nama,
-//                        ]);
-//                    }
-//                }else{
-//                    return $this->respondInternalError($rr= null,'Pelaksana Dibutuhkan!');
-//                }
+                if (count($request->attachment) > 0){
+                    foreach ($request->attachment as $item => $it) {
+                        $this->AttachmentRepository->create([
+                            'usulan_inovasi_id' => $request->id,
+                            'nama'      => $it['nama'],
+                            'url'       => $it['url'],
+                            'tipe'      => $it['type'],
+                        ]);
+                    }
+                }
                 DB::commit();
                 return $this->respondCreated($result, MessageConstant::USULAN_INOVASI_UPDATE_SUCCESS_MSG);
             } else {
