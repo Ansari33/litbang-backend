@@ -53,16 +53,16 @@ class Attachment extends Model
         return $this->belongsTo('App\Models\Litbang\Inovasi','inovasi_id','id');
     }
     public function agenda_data() {
-        return $this->belongsTo('App\Models\Litbang\Kelitbangan','agenda_id','id');
+        return $this->belongsTo('App\Models\Litbang\Agenda','agenda_id','id');
     }
     public function berita_data() {
-        return $this->belongsTo('App\Models\Litbang\Inovasi','berita_id','id');
+        return $this->belongsTo('App\Models\Litbang\Berita','berita_id','id');
     }
     public function usulan_penelitian_data() {
-        return $this->belongsTo('App\Models\Litbang\Kelitbangan','usulan_penelitian_id','id');
+        return $this->belongsTo('App\Models\Litbang\UsulanPenelitian','usulan_penelitian_id','id');
     }
     public function usulan_inovasi_data() {
-        return $this->belongsTo('App\Models\Litbang\Inovasi','usulan_inovasi_id','id');
+        return $this->belongsTo('App\Models\Litbang\UsulanInovasi','usulan_inovasi_id','id');
     }
 
 }
