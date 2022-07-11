@@ -428,6 +428,8 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         $api->POST('delete','Litbang\BeritaController@delete')->middleware('auth:api');
 
         $api->GET('/terkini','Litbang\AttachmentController@terkini');
+        $api->GET('/foto','Litbang\AttachmentController@getFoto');
+        $api->GET('/video','Litbang\AttachmentController@getVideo');
     });
 
 });
