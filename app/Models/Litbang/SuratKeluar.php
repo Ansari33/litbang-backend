@@ -9,12 +9,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Auth;
 use App\Helpers\ModelsConstant;
 
-class UsulanPenelitian extends Model
+class SuratKeluar extends Model
 {
     use LogsActivity;
     use SoftDeletes;
 
-    protected $table = 'usulan_penelitian';
+    protected $table = 'surat_keluar';
     protected $dates = ['deleted_at'];
     protected $guarded = [];
     protected $hidden = ['created_at','created_by','updated_at', 'updated_by', 'deleted_at','deleted_by'];
@@ -23,7 +23,7 @@ class UsulanPenelitian extends Model
     // protected static $ignoreChangedAttributes = ['created_at','created_by','updated_at', 'updated_by', 'deleted_at','deleted_by'];
     protected static $logOnlyDirty = false;
     protected static $submitEmptyLogs = true;
-    protected static $logName = 'Usulan Penelitian';
+    protected static $logName = 'Surat Keluar';
 
     protected static function boot() {
         parent::boot();
@@ -39,23 +39,10 @@ class UsulanPenelitian extends Model
         });
 
         static::deleting(function($model) {
-               $model->pelaksana->each->delete();
-            $model->attachment->each->delete();
 //            $user = Auth::user();
 //            $model->deleted_by = $user->id;
 //            $model->save();
         });
     }
 
-    public function lingkup_data() {
-        return $this->belongsTo('App\Models\Litbang\Instansi','instansi','id');
-    }
-
-    public function pelaksana() {
-        return $this->hasMany('App\Models\Litbang\PelaksanaKelitbangan','kelitbangan_id','id');
-    }
-
-    public function attachment() {
-        return $this->hasMany('App\Models\Litbang\Attachment','agenda_id','id');
-    }
 }

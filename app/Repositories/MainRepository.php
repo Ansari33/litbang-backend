@@ -673,7 +673,7 @@ class MainRepository extends BaseRepository
         ## Repo
 
         $prefix = '';
-        $PenomoranRepository = \App::make('\App\Repositories\Contracts\Pengaturan\PenomoranInterface');
+        $PenomoranRepository = \App::make('\App\Repositories\Contracts\Litbang\PenomoranInterface');
         $penomoran = $PenomoranRepository->where('modul',$data['modul'])->first();
         if($penomoran){
             $prefix = $penomoran->prefix;

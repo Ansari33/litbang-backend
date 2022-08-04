@@ -119,6 +119,7 @@ class MessageConstant
     const USULAN_INOVASI_DELETE_SUCCESS_MSG = 'Usulan Inovasi berhasil dihapus !';
     const USULAN_INOVASI_DELETE_FAILED_MSG = "Usulan Inovasi tidak dapat dihapus, harap hubungi administrator !";
 
+    const PENOMORAN_PENELITIAN = "Penelitian";
 
 
 }

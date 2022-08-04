@@ -158,6 +158,15 @@ class RepoBindingServiceProvider extends ServiceProvider
             return $repository;
         });
 
+        $app->bind('\App\Repositories\Contracts\Litbang\PenomoranInterface', function () {
+            $repository = new \App\Repositories\Litbang\PenomoranRepository(new \App\Models\Litbang\Penomoran );
+            return $repository;
+        });
+
+        $app->bind('\App\Repositories\Contracts\Litbang\SuratKeluarInterface', function () {
+            $repository = new \App\Repositories\Litbang\SuratKeluarRepository(new \App\Models\Litbang\SuratKeluar );
+            return $repository;
+        });
 
 	}
 }

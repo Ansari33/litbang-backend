@@ -12,18 +12,16 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\Models\Activity;
 use Auth;
 use App\Repositories\MainRepository;
+use Response;
 
-class UsulanPenelitianController extends APIController
+class SuratController extends APIController
 {
-    private $UsulanPenelitianRepository;
-    private $PelaksanaUsulanPenelitianRepository;
-    private $AttachmentRepository;
+    private $SuratKeluarRepositry;
+
 
     public function initialize()
     {
-        $this->UsulanPenelitianRepository = \App::make('\App\Repositories\Contracts\Litbang\UsulanPenelitianInterface');
-        //$this->PelaksanaUsulanPenelitianRepository = \App::make('\App\Repositories\Contracts\Litbang\PelaksanaInovasiInterface');
-        $this->AttachmentRepository = \App::make('\App\Repositories\Contracts\Litbang\AttachmentInterface');
+        $this->SuratKeluarRepositry = \App::make('\App\Repositories\Contracts\Litbang\SuratKeluarInterface');
     }
 
     public function list(Request $request)
@@ -86,10 +84,6 @@ class UsulanPenelitianController extends APIController
         return $datatable = datatables()->of($this->UsulanPenelitianRepository
             ->relation($relations)
             ->get())
-//            ->editColumn('tanggal', function ($list) {
-//                return '<span class="label  label-success label-inline " style="display: none"> '.Carbon::createFromFormat('Y-m-d',$list['tanggal'])->timestamp.' </span>'.Carbon::createFromFormat('Y-m-d',$list['tanggal'])->format('d M Y');
-//                // return Carbon::createFromFormat('Y-m-d',$list['tanggal'])->format('d/m/Y');
-//            })
             ->addColumn('instansi', function ($list) {
                 return $list['lingkup_data']['nama'];
             })
@@ -127,9 +121,57 @@ class UsulanPenelitianController extends APIController
             ->toJson();
     }
 
-    public function getById(Request $request)
+    public function listSuratKeluarWithDatatable(Request $request)
     {
-        $result = $this->UsulanPenelitianRepository->with([])->find($request->id);
+        $relations = [
+
+        ];
+        return $datatable = datatables()->of($this->SuratKeluarRepositry
+            ->relation($relations)
+            ->get())
+            ->editColumn('file_surat', function ($data) {
+                $asset = $data['surat_keluar'];
+                return '<a href="/open-file/'.$asset.'"><i class="flaticon2-file"></i></a>';
+            })
+            ->addColumn('action', function ($data) {
+                $btn_edit   =  '#';
+                //"add_content_tab('pembelian_faktur_pembelian','edit_data_".$data['id']."','pembelian/faktur-pembelian/edit/".$data['id']."', 'Edit Data', '".$data['nomor']."')";
+                $btn_delete = '#';
+                //"destroy(".$data['id'].", '".$data['nomor']."','pembelian/faktur-pembelian','tbl_pembelian_faktur_pembelian')";
+
+                return '
+                      <div class="dropdown dropdown-inline">
+                          <a href="javascript:;" class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="dropdown">
+                              <i class="flaticon2-layers-1 text-muted"></i>
+                          </a>
+                          <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                              <ul class="navi flex-column navi-hover py-2">
+                                  <li class="navi-item" onclick="'.$btn_edit.'">
+                                          <a href="/surat-keluar-edit/'.$data['id'].'" target="_blank" class="navi-link">
+                                                  <span class="navi-icon"><i class="flaticon2-edit"></i></span>
+                                                  <span class="navi-text">Edit</span>
+                                          </a>
+                                  </li>
+                                  <li class="navi-item" onclick="deleteSuratKeluar('.$data['id'].')">
+                                          <a href="javascript:;" class="navi-link">
+                                                  <span class="navi-icon"><i class="flaticon2-trash"></i></span>
+                                                  <span class="navi-text">Hapus</span>
+                                          </a>
+                                  </li>
+                          </ul>
+                          </div>
+                      </div>
+                    ';
+
+            })
+            ->rawColumns(['tanggal','file_surat','action'])
+            ->toJson();
+    }
+
+
+    public function getByIdSuratKeluar(Request $request)
+    {
+        $result = $this->SuratKeluarRepositry->with([])->find($request->id);
         if ($result) {
             return $this->respond($result);
         } else {
@@ -234,6 +276,37 @@ class UsulanPenelitianController extends APIController
                         ]);
                     }
                 }
+                DB::commit();
+                return $this->respondCreated($result, MessageConstant::USULAN_PENELITIAN_CREATE_SUCCESS_MSG);
+            } else {
+                DB::rollBack();
+                return $this->respondConflict();
+            }
+        }
+    }
+
+    public function createSuratKeluar(Request $request)
+    {
+
+        $validator = $this->SuratKeluarRepositry->validate($request);
+        if ($validator->fails()) {
+            return $this->respondWithValidationErrors($validator->errors()->all(), MessageConstant::VALIDATION_FAILED_MSG);
+        } else {
+            DB::beginTransaction();
+
+            $result = $this->SuratKeluarRepositry->create(
+                [
+                    'nomor_urut'           => $request->nomor_urut,#$this->getNumbering()['data'],
+                    'tanggal_surat'        => $request->tanggal_surat,
+                    'nomor_surat'          => $request->nomor_surat,
+                    'klasifikasi_surat_ID' => $request->klasifikasi,
+                    'surat_keluar'         => $request->surat_keluar,
+                    'tujuan'               => $request->tujuan,
+                    'isi_perihal_singkat'  => $request->isi_perihal_singkat,
+                ]
+            );
+            if ($result->count()) {
+
                 DB::commit();
                 return $this->respondCreated($result, MessageConstant::USULAN_PENELITIAN_CREATE_SUCCESS_MSG);
             } else {
