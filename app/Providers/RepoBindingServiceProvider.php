@@ -168,5 +168,10 @@ class RepoBindingServiceProvider extends ServiceProvider
             return $repository;
         });
 
+        $app->bind('\App\Repositories\Contracts\Litbang\SuratMasukInterface', function () {
+            $repository = new \App\Repositories\Litbang\SuratMasukRepository(new \App\Models\Litbang\SuratMasuk );
+            return $repository;
+        });
+
 	}
 }

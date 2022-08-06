@@ -403,11 +403,25 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
             $api->GET('/datatable','Litbang\SuratController@listSuratKeluarWithDatatable')->middleware('auth:api');
         });
         $api->group(['prefix' => 'get'], function ($api) {
-            $api->POST('id','Litbang\SuratController@getByIdSuratKeluar');
+            $api->POST('id','Litbang\SuratController@getByIdSuratKeluar')->middleware('auth:api');
         });
         $api->POST('create','Litbang\SuratController@createSuratKeluar')->middleware('auth:api');
-        $api->POST('update','Litbang\UsulanPenelitianController@update')->middleware('auth:api');
-        $api->POST('delete','Litbang\UsulanPenelitianController@delete')->middleware('auth:api');
+        $api->POST('update','Litbang\SuratController@updateSuratKeluar')->middleware('auth:api');
+        $api->POST('delete','Litbang\SuratController@deleteSuratKeluar')->middleware('auth:api');
+        $api->GET('numbering','Litbang\UsulanPenelitianController@getNumbering');
+
+    });
+    $api->group(['prefix' => 'surat-masuk'], function ($api) {
+        $api->group(['prefix' => 'list'], function ($api) {
+            $api->GET('/','Litbang\SuratKeluarController@list');
+            $api->GET('/datatable','Litbang\SuratController@listSuratMasukWithDatatable')->middleware('auth:api');
+        });
+        $api->group(['prefix' => 'get'], function ($api) {
+            $api->POST('id','Litbang\SuratController@getByIdSuratMasuk')->middleware('auth:api');
+        });
+        $api->POST('create','Litbang\SuratController@createSuratMasuk')->middleware('auth:api');
+        $api->POST('update','Litbang\SuratController@updateSuratMasuk')->middleware('auth:api');
+        $api->POST('delete','Litbang\SuratController@deleteSuratMasuk')->middleware('auth:api');
         $api->GET('numbering','Litbang\UsulanPenelitianController@getNumbering');
 
     });

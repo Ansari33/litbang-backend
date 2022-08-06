@@ -16,12 +16,15 @@ use Response;
 
 class SuratController extends APIController
 {
-    private $SuratKeluarRepositry;
+    private $SuratKeluarRepository;
+    private $SuratMasukRepository;
 
 
     public function initialize()
     {
-        $this->SuratKeluarRepositry = \App::make('\App\Repositories\Contracts\Litbang\SuratKeluarInterface');
+        $this->SuratKeluarRepository = \App::make('\App\Repositories\Contracts\Litbang\SuratKeluarInterface');
+        $this->SuratMasukRepository = \App::make('\App\Repositories\Contracts\Litbang\SuratMasukInterface');
+
     }
 
     public function list(Request $request)
@@ -126,11 +129,11 @@ class SuratController extends APIController
         $relations = [
 
         ];
-        return $datatable = datatables()->of($this->SuratKeluarRepositry
+        return $datatable = datatables()->of($this->SuratKeluarRepository
             ->relation($relations)
             ->get())
             ->editColumn('file_surat', function ($data) {
-                $asset = $data['surat_keluar'];
+                $asset = $data['nomor_urut'].'.pdf';
                 return '<a href="/open-file/'.$asset.'"><i class="flaticon2-file"></i></a>';
             })
             ->addColumn('action', function ($data) {
@@ -168,10 +171,56 @@ class SuratController extends APIController
             ->toJson();
     }
 
+    public function listSuratMasukWithDatatable(Request $request)
+    {
+        $relations = [
+
+        ];
+        return $datatable = datatables()->of($this->SuratMasukRepository
+            ->relation($relations)
+            ->get())
+            ->editColumn('file_surat', function ($data) {
+                $asset = $data['surat_masuk'];
+                return '<a href="/download-surat-masuk/'.$asset.'"><i class="flaticon2-file"></i></a>';
+            })
+            ->addColumn('action', function ($data) {
+                $btn_edit   =  '#';
+                //"add_content_tab('pembelian_faktur_pembelian','edit_data_".$data['id']."','pembelian/faktur-pembelian/edit/".$data['id']."', 'Edit Data', '".$data['nomor']."')";
+                $btn_delete = '#';
+                //"destroy(".$data['id'].", '".$data['nomor']."','pembelian/faktur-pembelian','tbl_pembelian_faktur_pembelian')";
+
+                return '
+                      <div class="dropdown dropdown-inline">
+                          <a href="javascript:;" class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="dropdown">
+                              <i class="flaticon2-layers-1 text-muted"></i>
+                          </a>
+                          <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                              <ul class="navi flex-column navi-hover py-2">
+                                  <li class="navi-item" onclick="'.$btn_edit.'">
+                                          <a href="/surat-masuk-edit/'.$data['id'].'" target="_blank" class="navi-link">
+                                                  <span class="navi-icon"><i class="flaticon2-edit"></i></span>
+                                                  <span class="navi-text">Edit</span>
+                                          </a>
+                                  </li>
+                                  <li class="navi-item" onclick="deleteSuratMasuk('.$data['id'].')">
+                                          <a href="javascript:;" class="navi-link">
+                                                  <span class="navi-icon"><i class="flaticon2-trash"></i></span>
+                                                  <span class="navi-text">Hapus</span>
+                                          </a>
+                                  </li>
+                          </ul>
+                          </div>
+                      </div>
+                    ';
+
+            })
+            ->rawColumns(['tanggal','file_surat','action'])
+            ->toJson();
+    }
 
     public function getByIdSuratKeluar(Request $request)
     {
-        $result = $this->SuratKeluarRepositry->with([])->find($request->id);
+        $result = $this->SuratKeluarRepository->with([])->find($request->id);
         if ($result) {
             return $this->respond($result);
         } else {
@@ -179,122 +228,26 @@ class SuratController extends APIController
         }
     }
 
-    public function getActivity(Request $request)
+    public function getByIdSuratMasuk(Request $request)
     {
-        $log_detail = [];
-        $result['log_detail'] = [];
-        $result = $this->DepartemenRepository->find($request->id);
-        $result['log'] = Activity::where('log_name','Departemen')
-            ->where('subject_id',$request->id)->orderBy('id','desc')->get();
-
-        $properti_baru = [];
-        $new_detail = [];
-        $log_detail_baru = [];
-        // return $result;
-        foreach ($result['log'] as $key => $value) {
-            $result['log'][$key]['oleh'] = $this->PenggunaRepository
-                ->find($result['log'][$key]['causer_id'])->full_name;
-            $properti_baru = [];
-            if ($value['description'] == 'updated') {
-                // Old Attributes
-                $properti_baru = [];
-
-                if (isset($result['log'][$key]['properties']['old']['kode'])) {
-                    $properti_baru['Kode'] = $result['log'][$key]['properties']['old']['kode'];
-                }
-                if (isset($result['log'][$key]['properties']['old']['keterangan'])) {
-                    $properti_baru['Keterangan']   = $result['log'][$key]['properties']['old']['keterangan'];
-                }
-
-                $result['log'][$key]['old'] = $properti_baru;
-                // End Old
-
-                // New Attributes
-
-                if (isset($result['log'][$key]['properties']['attributes']['kode'])) {
-                    $properti_baru['Kode'] = $result['log'][$key]['properties']['attributes']['kode'];
-                }
-                if (isset($result['log'][$key]['properties']['attributes']['keterangan'])) {
-                    $properti_baru['Keterangan']   = $result['log'][$key]['properties']['attributes']['keterangan'];
-                }
-
-                $result['log'][$key]['new'] = $properti_baru;
-                // End New
-
-            }else {
-
-                // New Attributes
-                $properti_baru = [];
-
-                $properti_baru['Kode'] = $result['log'][$key]['properties']['attributes']['kode'];
-                $properti_baru['Keterangan']   = $result['log'][$key]['properties']['attributes']['keterangan'];
-
-                $result['log'][$key]['new'] = $properti_baru;
-                // End New
-            }
-        }
-
-        $result['show_properties'] = ['Harga Jasa','kuantitas','Harga','Kode Pajak'];
-
-        return $this->respond($result);
-    }
-
-    public function create(Request $request)
-    {
-
-        $validator = $this->UsulanPenelitianRepository->validate($request);
-        if ($validator->fails()) {
-            return $this->respondWithValidationErrors($validator->errors()->all(), MessageConstant::VALIDATION_FAILED_MSG);
+        $result = $this->SuratMasukRepository->with([])->find($request->id);
+        if ($result) {
+            return $this->respond($result);
         } else {
-            DB::beginTransaction();
-
-            $result = $this->UsulanPenelitianRepository->create(
-                [
-                'nomor'          => $this->getNumbering()['data'],
-                'tanggal'        => $request->tanggal,
-                'usulan'         => $request->usulan,
-                'pengusul'       => $request->pengusul,
-                'latar_belakang' => $request->latar_belakang,
-                'tujuan'         => $request->tujuan,
-                'status'         => $request->status,
-                'instansi'       => $request->instansi,
-                'email'          => $request->email,
-                'lokasi'         => $request->lokasi,
-                'faktor_pendukung'       => $request->faktor_pendukung,
-                'faktor_penghambat'      => $request->faktor_penghambat,
-
-                ]
-            );
-            if ($result->count()) {
-                if (count($request->attachment) > 0){
-                    foreach ($request->attachment as $item => $att) {
-                        $this->AttachmentRepository->create([
-                            'usulan_penelitian_id' => $result->id,
-                            'nama'       => $att['nama'],
-                            'url'        => $att['url'],
-                            'tipe'       => $att['type']
-                        ]);
-                    }
-                }
-                DB::commit();
-                return $this->respondCreated($result, MessageConstant::USULAN_PENELITIAN_CREATE_SUCCESS_MSG);
-            } else {
-                DB::rollBack();
-                return $this->respondConflict();
-            }
+            return $this->respondNotFound(MessageConstant::INOVASI_GET_FAILED_MSG);
         }
     }
 
     public function createSuratKeluar(Request $request)
     {
 
-        $validator = $this->SuratKeluarRepositry->validate($request);
+        $validator = $this->SuratKeluarRepository->validate($request);
         if ($validator->fails()) {
             return $this->respondWithValidationErrors($validator->errors()->all(), MessageConstant::VALIDATION_FAILED_MSG);
         } else {
             DB::beginTransaction();
 
-            $result = $this->SuratKeluarRepositry->create(
+            $result = $this->SuratKeluarRepository->create(
                 [
                     'nomor_urut'           => $request->nomor_urut,#$this->getNumbering()['data'],
                     'tanggal_surat'        => $request->tanggal_surat,
@@ -316,44 +269,103 @@ class SuratController extends APIController
         }
     }
 
-    public function update(Request $request)
+    public function createSuratMasuk(Request $request)
     {
 
-        $validator = $this->UsulanPenelitianRepository->validateUpdate($request);
+        $validator = $this->SuratMasukRepository->validate($request);
         if ($validator->fails()) {
             return $this->respondWithValidationErrors($validator->errors()->all(), MessageConstant::VALIDATION_FAILED_MSG);
         } else {
             DB::beginTransaction();
-            $result = $this->UsulanPenelitianRepository
+
+            $result = $this->SuratMasukRepository->create(
+                [
+                    'nomor_urut'           => $request->nomor_urut,#$this->getNumbering()['data'],
+                    'tanggal_surat'        => $request->tanggal_surat,
+                    'nomor_surat'          => $request->nomor_surat,
+                    'klasifikasi_surat_id' => $request->klasifikasi,
+                    'surat_masuk'         => $request->surat_masuk,
+                    'tujuan'               => $request->tujuan,
+                    'isi_perihal_singkat'  => $request->isi_perihal_singkat,
+                    'tanggal_penerimaan' => $request->tanggal_penerimaan,
+                    'pengirim'         => $request->pengirim,
+                    'isi_disposisi'               => $request->isi_disposisi,
+                    'disposisi_kepada'  => $request->disposisi_kepada,
+                ]
+            );
+            if ($result->count()) {
+
+                DB::commit();
+                return $this->respondCreated($result, MessageConstant::USULAN_PENELITIAN_CREATE_SUCCESS_MSG);
+            } else {
+                DB::rollBack();
+                return $this->respondConflict();
+            }
+        }
+    }
+
+    public function updateSuratKeluar(Request $request)
+    {
+
+        $validator = $this->SuratKeluarRepository->validate($request);
+        if ($validator->fails()) {
+            return $this->respondWithValidationErrors($validator->errors()->all(), MessageConstant::VALIDATION_FAILED_MSG);
+        } else {
+            DB::beginTransaction();
+
+            $result = $this->SuratKeluarRepository
+                ->where('id',$request->id)
+                ->update(
+                [
+                    'nomor_urut'           => $request->nomor_urut,#$this->getNumbering()['data'],
+                    'tanggal_surat'        => $request->tanggal_surat,
+                    'nomor_surat'          => $request->nomor_surat,
+                    'klasifikasi_surat_ID' => $request->klasifikasi,
+                    'surat_keluar'         => $request->surat_keluar,
+                    'tujuan'               => $request->tujuan,
+                    'isi_perihal_singkat'  => $request->isi_perihal_singkat,
+                ]
+            );
+            if ($result) {
+
+                DB::commit();
+                return $this->respondCreated($result, MessageConstant::USULAN_PENELITIAN_CREATE_SUCCESS_MSG);
+            } else {
+                DB::rollBack();
+                return $this->respondConflict();
+            }
+        }
+    }
+
+    public function updateSuratMasuk(Request $request)
+    {
+
+        $validator = $this->SuratMasukRepository->validate($request);
+        if ($validator->fails()) {
+            return $this->respondWithValidationErrors($validator->errors()->all(), MessageConstant::VALIDATION_FAILED_MSG);
+        } else {
+            DB::beginTransaction();
+
+            $result = $this->SuratMasukRepository
                 ->where('id',$request->id)
                 ->update(
                     [
-                        'nomor'          => $request->nomor,
-                        'tanggal'        => $request->tanggal,
-                        'usulan'         => $request->usulan,
-                        'pengusul'       => $request->pengusul,
-                        'latar_belakang' => $request->latar_belakang,
-                        'faktor_pendukung'  => $request->faktor_pendukung,
-                        'faktor_penghambat' => $request->faktor_penghambat,
-                        'tujuan'         => $request->tujuan,
-                        'status'         => $request->status,
-                        'instansi'       => $request->instansi,
-                        'email'          => $request->email
+                        'nomor_urut'           => $request->nomor_urut,#$this->getNumbering()['data'],
+                        'tanggal_surat'        => $request->tanggal_surat,
+                        'nomor_surat'          => $request->nomor_surat,
+                        'klasifikasi_surat_id' => $request->klasifikasi,
+                        'surat_masuk'          => $request->surat_masuk,
+                        'tujuan'               => $request->tujuan,
+                        'isi_perihal_singkat'  => $request->isi_perihal_singkat,
+                        'pengirim'             => $request->pengirim,
+                        'tanggal_penerimaan'         => $request->tanggal_penerimaan,
+                        'isi_disposisi'               => $request->isi_disposisi,
+                        'disposisi_kepada'  => $request->disposisi_kepada,
                     ]
                 );
             if ($result) {
-                if (count($request->attachment) > 0){
-                    foreach ($request->attachment as $item => $att) {
-                        $this->AttachmentRepository->create([
-                            'usulan_penelitian_id' => $result->id,
-                            'nama'       => $att['nama'],
-                            'url'        => $att['url'],
-                            'tipe'       => $att['type']
-                        ]);
-                    }
-                }
                 DB::commit();
-                return $this->respondCreated($result, MessageConstant::USULAN_PENELITIAN_UPDATE_SUCCESS_MSG);
+                return $this->respondCreated($result, 'Surat Masuk Berhasil Diupdate!');
             } else {
                 DB::rollBack();
                 return $this->respondNotFound();
@@ -361,11 +373,21 @@ class SuratController extends APIController
         }
     }
 
-    public function delete(Request $request)
+    public function deleteSuratKeluar(Request $request)
     {
-        $result = $this->UsulanPenelitianRepository->delete($request->id);
+        $result = $this->SuratKeluarRepository->delete($request->id);
         if ($result) {
-            return $this->respondOk(MessageConstant::USULAN_PENELITIAN_DELETE_SUCCESS_MSG);
+            return $this->respondOk('Surat Berhasil Terhapus!');
+        } else {
+            return $this->respondNotFound(MessageConstant::INOVASI_DELETE_FAILED_MSG);
+        }
+    }
+
+    public function deleteSuratMasuk(Request $request)
+    {
+        $result = $this->SuratMasukRepository->delete($request->id);
+        if ($result) {
+            return $this->respondOk('Surat Berhasil Terhapus!');
         } else {
             return $this->respondNotFound(MessageConstant::INOVASI_DELETE_FAILED_MSG);
         }
