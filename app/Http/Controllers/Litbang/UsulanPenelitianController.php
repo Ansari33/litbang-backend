@@ -78,6 +78,19 @@ class UsulanPenelitianController extends APIController
         return $this->respond($result);
     }
 
+    public function listExternal(Request $request)
+    {
+        $relations = [
+//            'instansi_data'
+        ];
+        $result = $this->UsulanPenelitianRepository
+            ->relation($relations)
+            ->where('external',1)
+            ->get();
+        return $this->respond($result);
+
+    }
+
     public function listWithDatatable(Request $request)
     {
         $relations = [

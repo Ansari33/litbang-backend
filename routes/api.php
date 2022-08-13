@@ -380,6 +380,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
     $api->group(['prefix' => 'usulan-penelitian'], function ($api) {
         $api->group(['prefix' => 'list'], function ($api) {
             $api->GET('/','Litbang\UsulanPenelitianController@list');
+            $api->GET('/external','Litbang\UsulanPenelitianController@listExternal');
             $api->GET('/datatable','Litbang\UsulanPenelitianController@listWithDatatable')->middleware('auth:api');
         });
         $api->group(['prefix' => 'get'], function ($api) {
@@ -467,5 +468,46 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         $api->GET('/foto','Litbang\AttachmentController@getFoto');
         $api->GET('/video','Litbang\AttachmentController@getVideo');
     });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Regulasi
+    |--------------------------------------------------------------------------
+    */
+    $api->group(['prefix' => 'regulasi'], function ($api) {
+        $api->group(['prefix' => 'list'], function ($api) {
+            $api->GET('/','Litbang\RegulasiController@list');
+            $api->GET('/datatable','Litbang\RegulasiController@listWithDatatable')->middleware('auth:api');
+        });
+        $api->group(['prefix' => 'get'], function ($api) {
+            $api->POST('id','Litbang\RegulasiController@getById')->middleware('auth:api');
+        });
+        $api->POST('create','Litbang\RegulasiController@create');
+        $api->POST('update','Litbang\RegulasiController@update')->middleware('auth:api');
+        $api->POST('delete','Litbang\RegulasiController@delete')->middleware('auth:api');
+
+        $api->GET('/terkini','Litbang\RegulasiController@terkini');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Survey
+    |--------------------------------------------------------------------------
+    */
+    $api->group(['prefix' => 'survey'], function ($api) {
+        $api->group(['prefix' => 'list'], function ($api) {
+            $api->GET('/','Litbang\SurveyController@list');
+            $api->GET('/datatable','Litbang\SurveyController@listWithDatatable')->middleware('auth:api');
+        });
+        $api->group(['prefix' => 'get'], function ($api) {
+            $api->POST('id','Litbang\SurveyController@getById')->middleware('auth:api');
+        });
+        $api->POST('create','Litbang\SurveyController@create');
+        $api->POST('update','Litbang\SurveyController@update')->middleware('auth:api');
+        $api->POST('delete','Litbang\SurveyController@delete')->middleware('auth:api');
+
+        $api->GET('/terkini','Litbang\SurveyController@terkini');
+    });
+
 
 });

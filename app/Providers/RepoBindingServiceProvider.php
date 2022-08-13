@@ -173,5 +173,15 @@ class RepoBindingServiceProvider extends ServiceProvider
             return $repository;
         });
 
+        $app->bind('\App\Repositories\Contracts\Litbang\RegulasiInterface', function () {
+            $repository = new \App\Repositories\Litbang\RegulasiRepository(new \App\Models\Litbang\Regulasi );
+            return $repository;
+        });
+
+
+        $app->bind('\App\Repositories\Contracts\Litbang\SurveyInterface', function () {
+            $repository = new \App\Repositories\Litbang\SurveyRepository(new \App\Models\Litbang\Survey );
+            return $repository;
+        });
 	}
 }
