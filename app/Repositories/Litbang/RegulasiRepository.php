@@ -10,11 +10,10 @@ class RegulasiRepository extends BaseRepository
     public function validate($request)
     {
         $validator = Validator::make($request->only(
-            'nomor',
-            'judul',
-            'tanggal',
-            'lingkup',
-            'abstrak'
+            'nama',
+            'file',
+            'tanggal'
+
         //'judul'
         ), [
 
