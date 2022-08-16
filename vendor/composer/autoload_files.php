@@ -104,4 +104,5 @@ return array(
     '0b17741e1be8bc33be28693cd04d2893' => $vendorDir . '/koolreport/core/autoload.php',
     '72b1e3f4a2af9b30b3f137b3ec2057fc' => $vendorDir . '/spatie/laravel-activitylog/src/helpers.php',
     '0b47d6d4a00ca9112ba3953b49e7c9a4' => $vendorDir . '/yajra/laravel-datatables-oracle/src/helper.php',
+    'e45cfea11e5f327d4009ce1fae8fa9fc' => $vendorDir . '/shetabit/visitor/src/helpers.php',
 );
