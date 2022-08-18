@@ -81,7 +81,9 @@ class KelitbanganController extends APIController
     public function listWithDatatable(Request $request)
     {
         $relations = [
-            'lingkup_data'
+            'lingkup_data',
+            'documents',
+            'attachment'
         ];
 //        return $this->KelitbanganRepository->relation($relations)
 //            ->get();
@@ -94,6 +96,14 @@ class KelitbanganController extends APIController
 //            })
             ->editColumn('lingkup', function ($list) {
                 return $list['lingkup_data']['nama'];
+            })
+            ->addColumn('dokumen', function ($list) {
+                //return $list['documents'];
+                $docs = '';
+                foreach ($list['documents'] as $dc => $doc){
+                    $docs .= '<a href="/download-regulasi/'.$doc['nama'].'" style="color:inherit;">'.$doc['nama'].'</a>';
+                }
+                return $docs;
             })
             ->addColumn('action', function ($data) {
                 $btn_edit   =  '#';
@@ -126,6 +136,7 @@ class KelitbanganController extends APIController
                     ';
 
             })
+            ->rawColumns(['dokumen','action'])
             ->toJson();
     }
 
@@ -233,7 +244,8 @@ class KelitbanganController extends APIController
                         $this->AttachmentRepository->create([
                             'kelitbangan_id' => $result->id,
                             'nama'       => $att['nama'],
-                            'url'        => $att['url']
+                            'url'        => $att['url'],
+                            'tipe'       => $att['tipe']
                         ]);
                     }
                 }
@@ -288,7 +300,8 @@ class KelitbanganController extends APIController
                         $this->AttachmentRepository->create([
                             'kelitbangan_id' => $request->id,
                             'nama'       => $att['nama'],
-                            'url'        => $att['url']
+                            'url'        => $att['url'],
+                            'tipe'       => $att['tipe']
                         ]);
                     }
                 }

@@ -58,4 +58,12 @@ class Kelitbangan extends Model
     public function attachment() {
         return $this->hasMany('App\Models\Litbang\Attachment','kelitbangan_id','id');
     }
+
+    public function documents() {
+        return $this->hasMany('App\Models\Litbang\Attachment','kelitbangan_id','id')
+            ->where('tipe','!=','image')
+            ->where('tipe','!=','video');
+    }
+
+
 }
