@@ -232,8 +232,10 @@ class KelitbanganController extends APIController
                 if(isset($request->pelaksana)){
                     if ( is_string($request->pelaksana) ){
                         $pelaksana = json_decode($request->pelaksana);
+                    }else{
+                        $pelaksana = $request->pelaksana;
                     }
-                    foreach ($pelaksana = $request->pelaksana as $item => $nama) {
+                    foreach ($pelaksana as $item => $nama) {
                         $this->PelaksanaKelitbanganRepository->create([
                             'kelitbangan_id' => $result->id,
                             'nama'       => $nama,
