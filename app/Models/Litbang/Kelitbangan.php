@@ -39,8 +39,8 @@ class Kelitbangan extends Model
         });
 
         static::deleting(function($model) {
-               $model->pelaksana->each->delete();
-               $model->attachment->each->delete();
+               //$model->pelaksana->each->delete();
+               //$model->attachment->each->delete();
 //            $user = Auth::user();
 //            $model->deleted_by = $user->id;
 //            $model->save();

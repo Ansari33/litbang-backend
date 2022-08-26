@@ -322,8 +322,11 @@ class KelitbanganController extends APIController
 
     public function delete(Request $request)
     {
+
         $result = $this->KelitbanganRepository->delete($request->id);
         if ($result) {
+            $this->AttachmentRepository->where('kelitbangan_id',$request->id)->delete();
+            $this->PelaksanaKelitbanganRepository->where('kelitbangan_id',$request->id)->delete();
             return $this->respondOk(MessageConstant::KELITBANGAN_DELETE_SUCCESS_MSG);
         } else {
             return $this->respondNotFound(MessageConstant::KELITBANGAN_DELETE_FAILED_MSG);
