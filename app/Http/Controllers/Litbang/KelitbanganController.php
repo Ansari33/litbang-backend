@@ -229,13 +229,17 @@ class KelitbanganController extends APIController
                 ]
             );
             if ($result->count()) {
-                if (count($request->pelaksana) > 0){
-                    foreach ($request->pelaksana as $item => $nama) {
+                if(isset($request->pelaksana)){
+                    if ( is_string($request->pelaksana) ){
+                        $pelaksana = json_decode($request->pelaksana);
+                    }
+                    foreach ($pelaksana = $request->pelaksana as $item => $nama) {
                         $this->PelaksanaKelitbanganRepository->create([
                             'kelitbangan_id' => $result->id,
                             'nama'       => $nama,
                         ]);
                     }
+
                 }else{
                     return $this->respondInternalError($rr= null,'Pelaksana Dibutuhkan!');
                 }
