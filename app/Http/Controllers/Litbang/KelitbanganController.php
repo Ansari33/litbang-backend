@@ -297,6 +297,7 @@ class KelitbanganController extends APIController
                     }else{
                         $pelaksana = $request->pelaksana;
                     }
+                    return $this->respondInternalError($rr= null,$pelaksana);
                     foreach ($pelaksana as $item => $nama) {
                         $this->PelaksanaKelitbanganRepository->create([
                             'kelitbangan_id' => $request->id,
