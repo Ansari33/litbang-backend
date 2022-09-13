@@ -299,7 +299,7 @@ class KelitbanganController extends APIController
                     }
                     foreach ($pelaksana as $item => $nama) {
                         $this->PelaksanaKelitbanganRepository->create([
-                            'kelitbangan_id' => $result->id,
+                            'kelitbangan_id' => $request->id,
                             'nama'       => $nama,
                         ]);
                     }
