@@ -308,16 +308,16 @@ class KelitbanganController extends APIController
                 }else{
                     return $this->respondInternalError($rr= null,'Pelaksana Dibutuhkan!');
                 }
-                if (count($request->attachment) > 0){
-                    foreach ($request->attachment as $item => $att) {
-                        $this->AttachmentRepository->create([
-                            'kelitbangan_id' => $request->id,
-                            'nama'       => $att['nama'],
-                            'url'        => $att['url'],
-                            'tipe'       => $att['tipe']
-                        ]);
-                    }
-                }
+//                if (count($request->attachment) > 0){
+//                    foreach ($request->attachment as $item => $att) {
+//                        $this->AttachmentRepository->create([
+//                            'kelitbangan_id' => $request->id,
+//                            'nama'       => $att['nama'],
+//                            'url'        => $att['url'],
+//                            'tipe'       => $att['tipe']
+//                        ]);
+//                    }
+//                }
                 DB::commit();
                 return $this->respondCreated($result, MessageConstant::KELITBANGAN_UPDATE_SUCCESS_MSG);
             } else {
