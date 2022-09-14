@@ -32,7 +32,8 @@ class KelitbanganController extends APIController
     {
         $result = $this->KelitbanganRepository->with([
             'lingkup_data',
-            'pelaksana'
+            'pelaksana',
+            'attachment',
         ])->get();
         return $this->respond($result);
         $relations = [
