@@ -222,25 +222,34 @@ class InovasiController extends APIController
             );
             if ($result->count()) {
 //                return $this->respondInternalError($rr= null,$request->pelaksana);
-                if (count($request->pelaksana) > 0){
-                    foreach ($request->pelaksana as $item => $nama) {
-                        $this->PelaksanaInovasiRepository->create([
-                            'inovasi_id' => $result->id,
+                if(isset($request->pelaksana)){
+                    if ( is_string($request->pelaksana) ){
+                        $pelaksana = json_decode($request->pelaksana);
+                    }else{
+                        $pelaksana = $request->pelaksana;
+                    }
+                    foreach ($pelaksana as $item => $nama) {
+                        $this->PelaksanaKelitbanganRepository->create([
+                            'kelitbangan_id' => $result->id,
                             'nama'       => $nama,
                         ]);
                     }
+
                 }else{
                     return $this->respondInternalError($rr= null,'Pelaksana Dibutuhkan!');
                 }
-                if (count($request->attachment) > 0){
-                    foreach ($request->attachment as $item => $att) {
-                        $this->AttachmentRepository->create([
-                            'inovasi_id' => $result->id,
-                            'nama'       => $att['nama'],
-                            'url'        => $att['url']
-                        ]);
+                if(isset($request->attachment)){
+                    if (count($request->attachment) > 0){
+                        foreach ($request->attachment as $item => $att) {
+                            $this->AttachmentRepository->create([
+                                'inovasi_id' => $result->id,
+                                'nama'       => $att['nama'],
+                                'url'        => $att['url']
+                            ]);
+                        }
                     }
                 }
+
                 DB::commit();
                 return $this->respondCreated($result, MessageConstant::INOVASI_CREATE_SUCCESS_MSG);
             } else {
@@ -280,23 +289,31 @@ class InovasiController extends APIController
                     ]
                 );
             if ($result) {
-                if (count($request->pelaksana) > 0){
-                    foreach ($request->pelaksana as $item => $nama) {
-                        $this->PelaksanaInovasiRepository->create([
-                            'inovasi_id' => $request->id,
+                if(isset($request->pelaksana)){
+                    if ( is_string($request->pelaksana) ){
+                        $pelaksana = json_decode($request->pelaksana);
+                    }else{
+                        $pelaksana = $request->pelaksana;
+                    }
+                    foreach ($pelaksana as $item => $nama) {
+                        $this->PelaksanaKelitbanganRepository->create([
+                            'kelitbangan_id' => $request->id,
                             'nama'       => $nama,
                         ]);
                     }
+
                 }else{
                     return $this->respondInternalError($rr= null,'Pelaksana Dibutuhkan!');
                 }
-                if (count($request->attachment) > 0){
-                    foreach ($request->attachment as $item => $att) {
-                        $this->AttachmentRepository->create([
-                            'inovasi_id' => $request->id,
-                            'nama'       => $att['nama'],
-                            'url'        => $att['url']
-                        ]);
+                if(isset($request->attachment)){
+                    if (count($request->attachment) > 0){
+                        foreach ($request->attachment as $item => $att) {
+                            $this->AttachmentRepository->create([
+                                'inovasi_id' => $request->id,
+                                'nama'       => $att['nama'],
+                                'url'        => $att['url']
+                            ]);
+                        }
                     }
                 }
                 DB::commit();
