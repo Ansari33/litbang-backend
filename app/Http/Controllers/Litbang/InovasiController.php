@@ -296,7 +296,7 @@ class InovasiController extends APIController
                         $pelaksana = $request->pelaksana;
                     }
                     foreach ($pelaksana as $item => $nama) {
-                        $this->PelaksanaKelitbanganRepository->create([
+                        $this->PelaksanaInovasiRepository->create([
                             'kelitbangan_id' => $request->id,
                             'nama'       => $nama,
                         ]);
