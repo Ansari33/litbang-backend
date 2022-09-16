@@ -175,13 +175,15 @@ class AgendaController extends APIController
             );
             if ($result->count()) {
 //                return $this->respondInternalError($rr= null,$request->pelaksana);
-                if (count($request->attachment) > 0){
-                    foreach ($request->attachment as $item => $att) {
-                        $this->AttachmentRepository->create([
-                            'agenda_id' => $request->id,
-                            'nama'       => $att['nama'],
-                            'url'        => $att['url']
-                        ]);
+                if (isset($request->attachment)){
+                    if (count($request->attachment) > 0){
+                        foreach ($request->attachment as $item => $att) {
+                            $this->AttachmentRepository->create([
+                                'agenda_id' => $request->id,
+                                'nama'       => $att['nama'],
+                                'url'        => $att['url']
+                            ]);
+                        }
                     }
                 }
                 //else{
@@ -218,15 +220,18 @@ class AgendaController extends APIController
                     ]
                 );
             if ($result) {
-                if (count($request->attachment) > 0){
-                    foreach ($request->attachment as $item => $att) {
-                        $this->AttachmentRepository->create([
-                            'agenda_id' => $request->id,
-                            'nama'       => $att['nama'],
-                            'url'        => $att['url']
-                        ]);
+                if (isset($request->attachment)){
+                    if (count($request->attachment) > 0){
+                        foreach ($request->attachment as $item => $att) {
+                            $this->AttachmentRepository->create([
+                                'agenda_id' => $request->id,
+                                'nama'       => $att['nama'],
+                                'url'        => $att['url']
+                            ]);
+                        }
                     }
                 }
+
 //else{
 //                    return $this->respondInternalError($rr= null,'Pelaksana Dibutuhkan!');
 //                }
