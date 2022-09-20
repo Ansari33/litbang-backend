@@ -12,12 +12,12 @@ class UsulanPenelitianRepository extends BaseRepository
     {
         $validator = Validator::make($request->only(
             'nomor',
-
             'tanggal',
-            'nama',
-            'instansi'
+            'usulan',
+            'pengusul'
         ), [
-
+                'usulan' => 'required',
+                'pengusul' => 'required',
             ]
         );
         return $validator;
@@ -27,10 +27,11 @@ class UsulanPenelitianRepository extends BaseRepository
         $validator = Validator::make($request->only(
             'nomor',
             'tanggal',
-            'instansi',
-            'nama'
+            'usulan',
+            'pengusul'
         ), [
-
+                'usulan' => 'required',
+                'pengusul' => 'required',
 
             ]
         );
