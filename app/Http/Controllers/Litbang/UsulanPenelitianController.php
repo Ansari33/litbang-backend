@@ -233,20 +233,24 @@ class UsulanPenelitianController extends APIController
                 'lokasi'         => $request->lokasi,
                 'faktor_pendukung'       => $request->faktor_pendukung,
                 'faktor_penghambat'      => $request->faktor_penghambat,
+                'external'               => $request->external
 
                 ]
             );
             if ($result->count()) {
-                if (count($request->attachment) > 0){
-                    foreach ($request->attachment as $item => $att) {
-                        $this->AttachmentRepository->create([
-                            'usulan_penelitian_id' => $result->id,
-                            'nama'       => $att['nama'],
-                            'url'        => $att['url'],
-                            'tipe'       => $att['type']
-                        ]);
+                if (isset($request->attachment)){
+                    if (count($request->attachment) > 0){
+                        foreach ($request->attachment as $item => $att) {
+                            $this->AttachmentRepository->create([
+                                'usulan_penelitian_id' => $result->id,
+                                'nama'       => $att['nama'],
+                                'url'        => $att['url'],
+                                'tipe'       => $att['type']
+                            ]);
+                        }
                     }
                 }
+
                 DB::commit();
                 return $this->respondCreated($result, MessageConstant::USULAN_PENELITIAN_CREATE_SUCCESS_MSG);
             } else {
