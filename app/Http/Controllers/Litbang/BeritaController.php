@@ -33,7 +33,7 @@ class BeritaController extends APIController
         ];
        $result = $this->BeritaRepository
             ->relation($relations)
-            ->get();
+            ->get(['id','judul','tanggal']);
 
         return $this->respond($result);
 
