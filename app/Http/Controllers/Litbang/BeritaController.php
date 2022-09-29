@@ -178,16 +178,18 @@ class BeritaController extends APIController
                 ]
             );
             if ($result->count()) {
-
-                if (count($request->attachment) > 0){
-                    foreach ($request->attachment as $item => $it) {
-                        $this->AttachmentRepository->create([
-                            'berita_id' => $result->id,
-                            'nama'      => $it['nama'],
-                            'url'       => $it['url'],
-                        ]);
+                if(isset($request->attachment)){
+                    if (count($request->attachment) > 0){
+                        foreach ($request->attachment as $item => $it) {
+                            $this->AttachmentRepository->create([
+                                'berita_id' => $result->id,
+                                'nama'      => $it['nama'],
+                                'url'       => $it['url'],
+                            ]);
+                        }
                     }
                 }
+
                 DB::commit();
                 return $this->respondCreated($result, MessageConstant::BERITA_CREATE_SUCCESS_MSG);
             } else {
@@ -218,15 +220,18 @@ class BeritaController extends APIController
                     ]
                 );
             if ($result) {
-                if (count($request->attachment) > 0){
-                    foreach ($request->attachment as $item => $it) {
-                        $this->AttachmentRepository->create([
-                            'berita_id' => $request->id,
-                            'nama'      => $it['nama'],
-                            'url'       => $it['url'],
-                        ]);
+                if(isset($request->attachment)){
+                    if (count($request->attachment) > 0){
+                        foreach ($request->attachment as $item => $it) {
+                            $this->AttachmentRepository->create([
+                                'berita_id' => $request->id,
+                                'nama'      => $it['nama'],
+                                'url'       => $it['url'],
+                            ]);
+                        }
                     }
                 }
+
                 DB::commit();
                 return $this->respondCreated($result, MessageConstant::BERITA_UPDATE_SUCCESS_MSG);
             } else {

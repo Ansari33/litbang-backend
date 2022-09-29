@@ -179,16 +179,19 @@ class UsulanInovasiController extends APIController
                 ]
             );
             if ($result->count()) {
-                if (count($request->attachment) > 0){
-                    foreach ($request->attachment as $item => $it) {
-                        $this->AttachmentRepository->create([
-                            'usulan_inovasi_id' => $result->id,
-                            'nama'      => $it['nama'],
-                            'url'       => $it['url'],
-                            'tipe'      => $it['type'],
-                        ]);
+                if(isset($request->attachment)){
+                    if (count($request->attachment) > 0){
+                        foreach ($request->attachment as $item => $it) {
+                            $this->AttachmentRepository->create([
+                                'usulan_inovasi_id' => $result->id,
+                                'nama'      => $it['nama'],
+                                'url'       => $it['url'],
+                                'tipe'      => $it['type'],
+                            ]);
+                        }
                     }
                 }
+
                 DB::commit();
                 return $this->respondCreated($result, MessageConstant::USULAN_INOVASI_CREATE_SUCCESS_MSG);
             } else {
@@ -220,16 +223,19 @@ class UsulanInovasiController extends APIController
                     ]
                 );
             if ($result) {
-                if (count($request->attachment) > 0){
-                    foreach ($request->attachment as $item => $it) {
-                        $this->AttachmentRepository->create([
-                            'usulan_inovasi_id' => $request->id,
-                            'nama'      => $it['nama'],
-                            'url'       => $it['url'],
-                            'tipe'      => $it['type'],
-                        ]);
+                if(isset($request->attachment)){
+                    if (count($request->attachment) > 0){
+                        foreach ($request->attachment as $item => $it) {
+                            $this->AttachmentRepository->create([
+                                'usulan_inovasi_id' => $request->id,
+                                'nama'      => $it['nama'],
+                                'url'       => $it['url'],
+                                'tipe'      => $it['type'],
+                            ]);
+                        }
                     }
                 }
+
                 DB::commit();
                 return $this->respondCreated($result, MessageConstant::USULAN_INOVASI_UPDATE_SUCCESS_MSG);
             } else {
