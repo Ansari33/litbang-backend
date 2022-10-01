@@ -254,9 +254,9 @@ class KelitbanganController extends APIController
                         $attachment = $request->attachment;
                     }
                     if (count($attachment) > 0){
-                        foreach ($request->attachment as $item => $att) {
+                        foreach ($attachment as $item => $att) {
                             $this->AttachmentRepository->create([
-                                'kelitbangan_id' => $request->id,
+                                'kelitbangan_id' => $result->id,
                                 'nama'       => $att['nama'],
                                 'url'        => $att['url'],
                                 'tipe'       => $att['tipe']
@@ -326,7 +326,7 @@ class KelitbanganController extends APIController
                         $attachment = $request->attachment;
                     }
                     if (count($attachment) > 0){
-                        foreach ($request->attachment as $item => $att) {
+                        foreach ($attachment as $item => $att) {
                             $this->AttachmentRepository->create([
                                 'kelitbangan_id' => $request->id,
                                 'nama'       => $att['nama'],
