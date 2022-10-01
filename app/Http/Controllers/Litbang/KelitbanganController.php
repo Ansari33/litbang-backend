@@ -246,11 +246,17 @@ class KelitbanganController extends APIController
                 }else{
                     return $this->respondInternalError($rr= null,'Pelaksana Dibutuhkan!');
                 }
+                $attachment = null;
                 if (isset($request->attachment)){
-                    if (count($request->attachment) > 0){
+                    if (is_string($request->attachment)){
+                        $attachment = json_decode($request->attachment,true);
+                    }else{
+                        $attachment = $request->attachment;
+                    }
+                    if (count($attachment) > 0){
                         foreach ($request->attachment as $item => $att) {
                             $this->AttachmentRepository->create([
-                                'kelitbangan_id' => $result->id,
+                                'kelitbangan_id' => $request->id,
                                 'nama'       => $att['nama'],
                                 'url'        => $att['url'],
                                 'tipe'       => $att['tipe']
