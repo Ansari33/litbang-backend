@@ -509,5 +509,26 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         $api->GET('/terkini','Litbang\SurveyController@terkini');
     });
 
+    /*
+    |--------------------------------------------------------------------------
+    | Auth Pelaporan
+    |--------------------------------------------------------------------------
+    */
+    $api->group(['prefix' => 'pelaporan'], function ($api) {
+        $api->group(['prefix' => 'list'], function ($api) {
+            $api->GET('/','Litbang\SurveyController@list');
+            $api->GET('/datatable','Litbang\SurveyController@listWithDatatable')->middleware('auth:api');
+        });
+        $api->group(['prefix' => 'get'], function ($api) {
+            $api->POST('id','Litbang\SurveyController@getById')->middleware('auth:api');
+        });
+        $api->POST('auth','Litbang\PelaporanController@authorize');
+        $api->POST('create','Litbang\SurveyController@create');
+        $api->POST('update','Litbang\SurveyController@update')->middleware('auth:api');
+        $api->POST('delete','Litbang\SurveyController@delete')->middleware('auth:api');
+
+        $api->GET('/terkini','Litbang\SurveyController@terkini');
+    });
+
 
 });

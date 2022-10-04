@@ -183,5 +183,10 @@ class RepoBindingServiceProvider extends ServiceProvider
             $repository = new \App\Repositories\Litbang\SurveyRepository(new \App\Models\Litbang\Survey );
             return $repository;
         });
+
+        $app->bind('\App\Repositories\Contracts\Litbang\AuthPelaporanInterface', function () {
+            $repository = new \App\Repositories\Litbang\AuthPelaporanRepository(new \App\Models\Litbang\AuthPelaporan);
+            return $repository;
+        });
 	}
 }
