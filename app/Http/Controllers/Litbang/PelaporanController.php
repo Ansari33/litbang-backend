@@ -229,7 +229,7 @@ class PelaporanController extends APIController
         }
     }
 
-    public function authorize(Request $request)
+    public function auth(Request $request)
     {
         $result = $this->AuthPelaporanRepository
             ->where('username',$request->username)

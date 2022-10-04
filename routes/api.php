@@ -522,7 +522,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         $api->group(['prefix' => 'get'], function ($api) {
             $api->POST('id','Litbang\SurveyController@getById')->middleware('auth:api');
         });
-        $api->POST('auth','Litbang\PelaporanController@authorize');
+        $api->POST('auth','Litbang\PelaporanController@auth');
         $api->POST('create','Litbang\SurveyController@create');
         $api->POST('update','Litbang\SurveyController@update')->middleware('auth:api');
         $api->POST('delete','Litbang\SurveyController@delete')->middleware('auth:api');
