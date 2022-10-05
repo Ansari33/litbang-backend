@@ -250,7 +250,7 @@ class PelaporanController extends APIController
             ->where('tipe',$request->tipe)
             ->first();
         if($result){
-            return $this->respond($result);
+            return $this->respondOk($result);
         }else{
             return $this->respondUnauthorized($err = null,'Username / Password Salah, Hubungi Adminstrator');
         }
