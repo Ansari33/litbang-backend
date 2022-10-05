@@ -521,7 +521,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         });
         $api->group(['prefix' => 'get'], function ($api) {
             $api->POST('id','Litbang\SurveyController@getById')->middleware('auth:api');
-            $api->POST('user-by-tipe','Litbang\SurveyController@getUserByTipe')->middleware('auth:api');
+            $api->POST('user-by-tipe','Litbang\PelaporanController@getUserByTipe')->middleware('auth:api');
         });
         $api->POST('auth','Litbang\PelaporanController@auth');
         $api->POST('add-user','Litbang\PelaporanController@addUser')->middleware('auth:api');;
