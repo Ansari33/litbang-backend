@@ -229,7 +229,66 @@ class PelaporanController extends APIController
         }
     }
 
+    public function getUserBytipe(Request $request)
+    {
+        $result = $this->AuthPelaporanRepository
+            ->where('tipe',$request->tipe)
+            ->get();
+        if($result){
+            return $this->respond($result);
+        }else{
+            return $this->respondNotFound($err = null,'Tipe User Pelaporan Tidak Ditemukan!');
+        }
+
+    }
+
     public function auth(Request $request)
+    {
+        $result = $this->AuthPelaporanRepository
+            ->where('username',$request->username)
+            ->where('username',$request->password)
+            ->where('tipe',$request->tipe)
+            ->first();
+        if($result){
+            return $this->respond($result);
+        }else{
+            return $this->respondUnauthorized($err = null,'Username / Password Salah, Hubungi Adminstrator');
+        }
+
+    }
+
+    public function addUser(Request $request)
+    {
+        $result = $this->AuthPelaporanRepository
+            ->create([
+                'username' => $request->username,
+                'password' => $request->password,
+                'tipe' => $request->tipe,
+            ]);
+        if($result){
+            return $this->respond($result);
+        }else{
+            return $this->respondInternalError($err = null,'Tambah Akun Gagal, HUbungi Adminsitrator');
+        }
+
+    }
+
+    public function updateUser(Request $request)
+    {
+        $result = $this->AuthPelaporanRepository
+            ->where('username',$request->username)
+            ->where('username',$request->password)
+            ->where('tipe',$request->tipe)
+            ->first();
+        if($result){
+            return $this->respond($result);
+        }else{
+            return $this->respondUnauthorized($err = null,'Username / Password Salah, Hubungi Adminstrator');
+        }
+
+    }
+
+    public function deleteUser(Request $request)
     {
         $result = $this->AuthPelaporanRepository
             ->where('username',$request->username)
