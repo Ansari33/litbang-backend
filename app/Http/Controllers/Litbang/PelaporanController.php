@@ -249,6 +249,7 @@ class PelaporanController extends APIController
             ->where('username',$request->password)
             ->where('tipe',$request->tipe)
             ->first();
+        return $this->respond($result);
         if($result){
             return $this->respond($result);
         }else{
@@ -268,7 +269,7 @@ class PelaporanController extends APIController
         if($result){
             return $this->respondOk($result);
         }else{
-            return $this->respondInternalError($err = null,'Tambah Akun Gagal, HUbungi Adminsitrator');
+            return $this->respondInternalError($err = null,'Tambah Akun Gagal, Hubungi Adminsitrator');
         }
 
     }
