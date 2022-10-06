@@ -249,6 +249,7 @@ class PelaporanController extends APIController
             ->where('username',$request->password)
             ->where('tipe',$request->tipe)
             ->first();
+        return $request->all();
         return $this->respond($result);
         if($result){
             return $this->respond($result);
