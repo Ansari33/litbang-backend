@@ -28,7 +28,7 @@ class PenggunaController extends APIController
 //        $this->RoutesUserRepository = \App::make('\App\Repositories\Contracts\Pengaturan\RoutesUserInterface');
 //        $this->RoutesRepository = \App::make('\App\Repositories\Contracts\Pengaturan\RoutesInterface');
         $this->PenggunaRepository = \App::make('\App\Repositories\Contracts\Pengguna\PenggunaInterface');
-        $this->AksesAndroidRepository = \App::make('\App\Repositories\Contracts\Litbang\AksesPenggunaInterface');
+        $this->AksesAndroidRepository = \App::make('\App\Repositories\Contracts\Litbang\AksesAndroidInterface');
 //        $this->MenuPenggunaRepository = \App::make('\App\Repositories\Contracts\Pengguna\MenuPenggunaInterface');
     }
 
@@ -44,7 +44,7 @@ class PenggunaController extends APIController
         if ($result) {
             return $this->respond($result);
         } else {
-            return $this->respondNotFound(MessageConstant::PENGGUNA_GET_FAILED_MSG);
+            return $this->respondNotFound('Id Pengguna Tidak Ditemukan!');
         }
     }
 
@@ -54,7 +54,7 @@ class PenggunaController extends APIController
         if ($result) {
             return $this->respond($result);
         } else {
-            return $this->respondUnauthorized(MessageConstant::PENGGUNA_GET_FAILED_MSG);
+            return $this->respondUnauthorized('Id Pengguna Tidak Ditemukan!');
         }
     }
 
@@ -86,7 +86,7 @@ class PenggunaController extends APIController
                     ]);
                 }
                 DB::commit();
-                return $this->respondCreated($result, MessageConstant::PENGGUNA_CREATE_SUCCESS_MSG);
+                return $this->respondCreated($result, 'Pengguna Berhasil Ditambah!');
             } else {
                 DB::rollback();
                 return $this->respondConflict();
@@ -111,7 +111,7 @@ class PenggunaController extends APIController
                     $result->password = Hash::make($request->input('password'));
                 }
                 $result->save();
-                return $this->respond($result, MessageConstant::PENGGUNA_UPDATE_SUCCESS_MSG);
+                return $this->respond($result, 'Pengguna Berhasil Diupdate!');
             } else {
                 return $this->respondNotFound();
             }
@@ -155,7 +155,7 @@ class PenggunaController extends APIController
             if ($result) {
                 $result->password = Hash::make($request->password);
                 $result->save();
-                return $this->respond($result, MessageConstant::PENGGUNA_UPDATE_PASSWORD_SUCCESS_MSG);
+                return $this->respond($result, 'Update Password Berhasil!');
             } else {
                 return $this->respondNotFound();
             }
@@ -167,9 +167,9 @@ class PenggunaController extends APIController
         $result = $this->PenggunaRepository->delete($request->id);
         if ($result) {
             $this->RoutesUserRepository->where('user_id',$request->id)->forceDelete();
-            return $this->respondOk(MessageConstant::PENGGUNA_DELETE_SUCCESS_MSG);
+            return $this->respondOk('Pengguna Berhasil Terhapus!');
         } else {
-            return $this->respondNotFound(MessageConstant::PENGGUNA_DELETE_FAILED_MSG);
+            return $this->respondNotFound('Pengguna Tidak Ditemukan!');
         }
     }
 
