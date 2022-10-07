@@ -24,7 +24,6 @@ class PenggunaRepository extends BaseRepository
             'password',
             'username',
             'full_name',
-            'avatar',
             'status'
         ), [
                 'email' => 'required|unique:acc_users,email,NULL,id,deleted_at,NULL',

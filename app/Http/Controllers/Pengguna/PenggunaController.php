@@ -77,14 +77,14 @@ class PenggunaController extends APIController
             ];
             $result = $this->PenggunaRepository->create($data);
             if ($result->count()) {
-                $all_routes = $this->RoutesRepository->all();
-
-                foreach ($all_routes as $key => $route) {
-                    $add_akses = $this->RoutesUserRepository->create([
-                        'user_id'  => $result->id,
-                        'route_id' => $route['id']
-                    ]);
-                }
+//                $all_routes = $this->RoutesRepository->all();
+//
+//                foreach ($all_routes as $key => $route) {
+//                    $add_akses = $this->RoutesUserRepository->create([
+//                        'user_id'  => $result->id,
+//                        'route_id' => $route['id']
+//                    ]);
+//                }
                 DB::commit();
                 return $this->respondCreated($result, 'Pengguna Berhasil Ditambah!');
             } else {
