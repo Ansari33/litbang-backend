@@ -519,6 +519,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         $api->group(['prefix' => 'list'], function ($api) {
             $api->GET('/','Litbang\SurveyController@list');
             $api->GET('/datatable','Litbang\SurveyController@listWithDatatable')->middleware('auth:api');
+            $api->GET('/inovasi','Litbang\PelaporanControler@listInovasi')->middleware('auth:api');
         });
         $api->group(['prefix' => 'get'], function ($api) {
             $api->POST('id','Litbang\SurveyController@getById')->middleware('auth:api');
