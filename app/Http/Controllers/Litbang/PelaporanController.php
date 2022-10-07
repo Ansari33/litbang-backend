@@ -211,11 +211,23 @@ class PelaporanController extends APIController
             DB::beginTransaction();
             $result = $this->LaporanInovasiRepository->create(
                 [
-                    'nama' =>  $request->nama,
-                    'form_id' => $request->form_id,
-                    'link' =>  $request->link,
-                    'keterangan' => $request->keterangan,
-                    //'tanggal' => $request->tanggal,
+                    'nama_skpd' => $request->nama_skpd,
+                    'nama_unit' => $request->nama_unit,
+                    'nama_inovasi' => $request->nama_inovasi,
+                    'nomor_sk_inovasi' => $request->nomor_sk_inovasi,
+                    'tanggal_sk_inovasi' => $request->tanggal_sk_inovasi,
+                    'jumlah_pelaksana_inovasi' => $request->jumlah_pelaksana_inovasi,
+                    'inisiator_daerah_inovasi'=> $request->inisiator_daerah_inovasi,
+                    'urusan_inovasi_daerah' => $request->urusan_inovasi_daerah,
+                    'waktu_uji_coba' => $request->waktu_uji_coba,
+                    'waktu_diterapkan'=> $request->waktu_diterapkan,
+                    'rancang_bangun' => $request->rancang_bangun,
+                    'tujuan' => $request->tujuan,
+                    'manfaat' =>  $request->manfaat,
+                    'hasil' => $request->hasil,
+                    'jenis_inovasi' => $request->jenis_inovasi,
+                    'bentuk_inovasi' => $request->bentuk_inovasi,
+                    'inovasi_tematik' => $request->inovasi_tematik,
                 ]
             );
             if ($result->count()) {

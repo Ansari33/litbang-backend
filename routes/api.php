@@ -526,8 +526,8 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
             $api->POST('user-by-tipe','Litbang\PelaporanController@getUserByTipe')->middleware('auth:api');
         });
         $api->POST('auth','Litbang\PelaporanController@auth');
-        $api->POST('add-user','Litbang\PelaporanController@addUser')->middleware('auth:api');;
-        $api->POST('create','Litbang\SurveyController@create');
+        $api->POST('add-user','Litbang\PelaporanController@addUser')->middleware('auth:api');
+        $api->POST('create-inovasi','Litbang\PelaporanController@createLaporanInovasi');
         $api->POST('update','Litbang\SurveyController@update')->middleware('auth:api');
         $api->POST('delete','Litbang\SurveyController@delete')->middleware('auth:api');
 
