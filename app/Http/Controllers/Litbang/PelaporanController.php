@@ -18,18 +18,29 @@ class PelaporanController extends APIController
 
     private $SurveyRepository;
     private $AuthPelaporanRepository;
+    private $LaporanInovasiRepository;
     //private $PenggunaRepository;
 
     public function initialize()
     {
         $this->SurveyRepository = \App::make('\App\Repositories\Contracts\Litbang\SurveyInterface');
         $this->AuthPelaporanRepository = \App::make('\App\Repositories\Contracts\Litbang\AuthPelaporanInterface');
+        $this->LaporanInovasiRepository = \App::make('\App\Repositories\Contracts\Litbang\LaporanInovasiInterface');
        // $this->PenggunaRepository = \App::make('\App\Repositories\Contracts\Pengguna\AkunInterface');
     }
 
     public function list(Request $request)
     {
         $result = $this->SurveyRepository->with([
+
+        ])->get();
+        return $this->respond($result);
+
+    }
+
+    public function listInovasi(Request $request)
+    {
+        $result = $this->LaporanInovasiRepository->with([
 
         ])->get();
         return $this->respond($result);
@@ -183,6 +194,34 @@ class PelaporanController extends APIController
 
                 DB::commit();
                 return $this->respondCreated($result, 'Data Survey Tersimpan!');
+            } else {
+                DB::rollBack();
+                return $this->respondConflict();
+            }
+        }
+    }
+
+    public function createLaporanInovasi(Request $request)
+    {
+
+        $validator = $this->LaporanInovasiRepository->validate($request);
+        if ($validator->fails()) {
+            return $this->respondWithValidationErrors($validator->errors()->all(), MessageConstant::VALIDATION_FAILED_MSG);
+        } else {
+            DB::beginTransaction();
+            $result = $this->LaporanInovasiRepository->create(
+                [
+                    'nama' =>  $request->nama,
+                    'form_id' => $request->form_id,
+                    'link' =>  $request->link,
+                    'keterangan' => $request->keterangan,
+                    //'tanggal' => $request->tanggal,
+                ]
+            );
+            if ($result->count()) {
+
+                DB::commit();
+                return $this->respondCreated($result, 'Data Laporan Tersimpan!');
             } else {
                 DB::rollBack();
                 return $this->respondConflict();
