@@ -128,6 +128,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
 		$api->POST('delete','Pengguna\PenggunaController@delete')->middleware('auth:api');
 		$api->POST('route-check','Pengguna\PenggunaController@routeAvailableCheck')->middleware('auth:api');
         $api->POST('android-check','Pengguna\PenggunaController@cekAksesAndroid')->middleware('auth:api');
+        $api->POST('android-get','Pengguna\PenggunaController@getAksesAndroid')->middleware('auth:api');
 	});
 
 	/*

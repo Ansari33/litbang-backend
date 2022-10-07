@@ -223,4 +223,26 @@ class PenggunaController extends APIController
             return $this->respondUnauthorized('Anda Tidak Memiliki Akses');
         }
     }
+
+    public function getAksesAndroid (Request $request){
+        $result = $this->AksesAndroidRepository
+            ->where('user_id',$request->user_id)
+            ->get();
+        if ($result) {
+            return $this->respond($result);
+        }else{
+            return $this->respondUnauthorized('Anda Tidak Memiliki Akses');
+        }
+    }
+
+    public function updateAksesAndroid (Request $request){
+        $result = $this->AksesAndroidRepository
+            ->where('user_id',$request->user_id)
+            ->get();
+        if ($result) {
+            return $this->respond($result);
+        }else{
+            return $this->respondUnauthorized('Anda Tidak Memiliki Akses');
+        }
+    }
 }
