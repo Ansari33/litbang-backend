@@ -215,7 +215,7 @@ class PenggunaController extends APIController
     public function cekAksesAndroid (Request $request){
         $result = $this->AksesAndroidRepository
             ->where('user_id',$request->user_id)
-            ->where('menu',$request->menu)
+            ->where('menu_akses',$request->menu)
             ->first();
         if ($result) {
             return $this->respond($result);
