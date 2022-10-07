@@ -29,7 +29,6 @@ class LaporanInovasiRepository extends BaseRepository
             'bentuk_inovasi',
             'inovasi_tematik'
         ), [
-                'nomor' => 'required',
                 'nama_skpd' => 'required',
                 'nama_unit' => 'required',
                 'nama_inovasi' => 'required',
