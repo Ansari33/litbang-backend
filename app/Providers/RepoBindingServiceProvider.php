@@ -188,5 +188,10 @@ class RepoBindingServiceProvider extends ServiceProvider
             $repository = new \App\Repositories\Litbang\AuthPelaporanRepository(new \App\Models\Litbang\AuthPelaporan);
             return $repository;
         });
+
+        $app->bind('\App\Repositories\Contracts\Litbang\AksesAndroidInterface', function () {
+            $repository = new \App\Repositories\Litbang\AksesAndroidRepository(new \App\Models\Litbang\AksesAndroid);
+            return $repository;
+        });
 	}
 }

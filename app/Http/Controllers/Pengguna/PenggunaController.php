@@ -20,6 +20,7 @@ class PenggunaController extends APIController
     private $MenuPenggunaRepository;
     private $RoutesUserRepository;
     private $RoutesRepository;
+    private $AksesAndroidRepository;
 
     public function initialize()
     {
@@ -27,6 +28,7 @@ class PenggunaController extends APIController
 //        $this->RoutesUserRepository = \App::make('\App\Repositories\Contracts\Pengaturan\RoutesUserInterface');
 //        $this->RoutesRepository = \App::make('\App\Repositories\Contracts\Pengaturan\RoutesInterface');
         $this->PenggunaRepository = \App::make('\App\Repositories\Contracts\Pengguna\PenggunaInterface');
+        $this->AksesAndroidRepository = \App::make('\App\Repositories\Contracts\Litbang\AksesPenggunaInterface');
 //        $this->MenuPenggunaRepository = \App::make('\App\Repositories\Contracts\Pengguna\MenuPenggunaInterface');
     }
 
@@ -208,5 +210,17 @@ class PenggunaController extends APIController
         }
 
         //return response()->json($response["data"], $response["statusCode"]);
+    }
+
+    public function cekAksesAndroid (Request $request){
+        $result = $this->AksesAndroidRepository
+            ->where('user_id',$request->user_id)
+            ->where('menu',$request->menu)
+            ->first();
+        if ($result) {
+            return $this->respond($result);
+        }else{
+            return $this->respondUnauthorized('Anda Tidak Memiliki Akses');
+        }
     }
 }
