@@ -224,25 +224,32 @@ class PenggunaController extends APIController
         }
     }
 
-    public function getAksesAndroid (Request $request){
+    public function getAksesAndroid (Request $request)
+    {
         $result = $this->AksesAndroidRepository
-            ->where('user_id',$request->user_id)
+            ->where('user_id', $request->user_id)
             ->get();
         if ($result) {
             return $this->respond($result);
-        }else{
+        } else {
             return $this->respondUnauthorized('Anda Tidak Memiliki Akses');
         }
     }
 
     public function updateAksesAndroid (Request $request){
-        $result = $this->AksesAndroidRepository
+       $this->AksesAndroidRepository
             ->where('user_id',$request->user_id)
-            ->get();
+            ->delete();
+       foreach ($request->akses as $akses => $acc) {
+            $result = $this->AksesAndroidRepository->create([
+                'user_id' => $request->user_id,
+                'menu_akses' => $acc
+            ]);
+       }
         if ($result) {
-            return $this->respond($result);
+            return $this->respondCreated($result);
         }else{
-            return $this->respondUnauthorized('Anda Tidak Memiliki Akses');
+            return $this->respondInternalError('Data Gagal Tersimpan');
         }
     }
 }
