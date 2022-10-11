@@ -239,7 +239,7 @@ class PenggunaController extends APIController
     public function updateAksesAndroid (Request $request){
        $this->AksesAndroidRepository
             ->where('user_id',$request->user_id)
-            ->delete();
+            ->forceDelete();
        $aksesIni = json_decode($request->akses);
        foreach ($aksesIni as $akses => $acc) {
             $result = $this->AksesAndroidRepository->create([
