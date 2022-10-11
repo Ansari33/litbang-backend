@@ -16,7 +16,8 @@ class RegulasiRepository extends BaseRepository
 
         //'judul'
         ), [
-
+                'nama' => 'required',
+                'file' => 'required',
             ]
         );
         return $validator;
@@ -27,7 +28,8 @@ class RegulasiRepository extends BaseRepository
             'nama',
             'file'
         ), [
-
+                'nama' => 'required',
+                'file' => 'required',
             ]
         );
         return $validator;
