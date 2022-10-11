@@ -240,7 +240,8 @@ class PenggunaController extends APIController
        $this->AksesAndroidRepository
             ->where('user_id',$request->user_id)
             ->delete();
-       foreach ($request->akses as $akses => $acc) {
+       $aksesIni = json_decode($request->akses);
+       foreach ($aksesIni as $akses => $acc) {
             $result = $this->AksesAndroidRepository->create([
                 'user_id' => $request->user_id,
                 'menu_akses' => $acc
