@@ -273,6 +273,8 @@ class AttachmentController extends APIController
 
     public function terkini(){
         $result = $this->AttachmentRepository->limit(8)
+            ->where('tipe','image')
+            ->orWhere('tipe','video')
             ->orderBy('created_at','desc')->get();
         return $this->respond($result);
     }
