@@ -360,7 +360,10 @@ class KelitbanganController extends APIController
     }
 
     public function terkini(){
-        $result = $this->KelitbanganRepository->limit(4)->get();
+        $result = $this->KelitbanganRepository
+            ->limit(4)
+            ->orderBy('id','desc')
+            ->get();
         return $this->respond($result);
     }
 }
