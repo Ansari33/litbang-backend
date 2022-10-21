@@ -264,4 +264,20 @@ class UsulanInovasiController extends APIController
             return $this->respondNotFound(MessageConstant::USULAN_INOVASI_GET_FAILED_MSG);
         }
     }
+
+    public function updateStatus(Request $request){
+        try {
+            $this->UsulanInovasiRepository
+                ->where('id',$request->id)
+                ->update(
+                    [
+                        'status'   => $request->status,
+                    ]
+                );
+            return $this->respondOk('Status Berhasil Diubah');
+        }catch (\Exception $ex){
+           return $this->respondInternalError($err = null, $ex->getMessage());
+        }
+
+    }
 }

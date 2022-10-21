@@ -447,6 +447,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         $api->POST('update','Litbang\UsulanInovasiController@update')->middleware('auth:api');
         $api->POST('delete','Litbang\UsulanInovasiController@delete')->middleware('auth:api');
         $api->GET('terkini','Litbang\UsulanInovasiController@terkini');
+        $api->POST('update-status','Litbang\UsulanInovasiController@updateStatus')->middleware('auth:api');
     });
 
 
