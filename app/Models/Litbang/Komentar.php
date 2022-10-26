@@ -9,21 +9,21 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Auth;
 use App\Helpers\ModelsConstant;
 
-class Berita extends Model
+class Komentar extends Model
 {
     use LogsActivity;
     use SoftDeletes;
 
-    protected $table = 'berita';
+    protected $table = 'komentar';
     protected $dates = ['deleted_at'];
     protected $guarded = [];
-    protected $hidden = ['created_at','created_by','updated_at', 'updated_by', 'deleted_at','deleted_by'];
+    protected $hidden = ['created_by','updated_at', 'updated_by', 'deleted_at','deleted_by'];
 
     protected static $logAttributes = ['*'];
     // protected static $ignoreChangedAttributes = ['created_at','created_by','updated_at', 'updated_by', 'deleted_at','deleted_by'];
     protected static $logOnlyDirty = false;
     protected static $submitEmptyLogs = true;
-    protected static $logName = 'Agenda';
+    protected static $logName = 'Komentar';
 
     protected static function boot() {
         parent::boot();
@@ -39,19 +39,17 @@ class Berita extends Model
         });
 
         static::deleting(function($model) {
-//           $model->attachment->each->delete();
+            $model->attachment->each->delete();
 //            $user = Auth::user();
 //            $model->deleted_by = $user->id;
 //            $model->save();
         });
     }
 
-
-    public function attachment() {
-        return $this->hasMany('App\Models\Litbang\Attachment','berita_id','id');
-    }
-
-    public function komentar() {
-        return $this->hasMany('App\Models\Litbang\Komentar','berita_id','id');
+//    public function instansi_data() {
+//        return $this->belongsTo('App\Models\Litbang\Instansi','instansi','id');
+//    }
+    public function balasan() {
+        return $this->hasMany('App\Models\Litbang\BalasanKomentar','komentar_id','id');
     }
 }

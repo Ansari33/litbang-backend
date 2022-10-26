@@ -198,5 +198,15 @@ class RepoBindingServiceProvider extends ServiceProvider
             $repository = new \App\Repositories\Litbang\LaporanInovasiRepository(new \App\Models\Litbang\LaporanInovasi);
             return $repository;
         });
+
+        $app->bind('\App\Repositories\Contracts\Litbang\KomentarInterface', function () {
+            $repository = new \App\Repositories\Litbang\KomentarRepository(new \App\Models\Litbang\Komentar);
+            return $repository;
+        });
+
+        $app->bind('\App\Repositories\Contracts\Litbang\BalasanKomentarInterface', function () {
+            $repository = new \App\Repositories\Litbang\BalasanKomentarRepository(new \App\Models\Litbang\BalasanKomentar);
+            return $repository;
+        });
 	}
 }

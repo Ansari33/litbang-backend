@@ -373,6 +373,10 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         $api->POST('update','Litbang\BeritaController@update')->middleware('auth:api');
         $api->POST('delete','Litbang\BeritaController@delete')->middleware('auth:api');
         $api->GET('terkini','Litbang\BeritaController@terkini');
+
+        $api->POST('komentar','Litbang\BeritaController@tambahKomentar');
+        $api->POST('balas-komentar','Litbang\BeritaController@balasKomentar');
+        //$api->POST('delete','Litbang\BeritaController@delete')->middleware('auth:api');
     });
 
     /*

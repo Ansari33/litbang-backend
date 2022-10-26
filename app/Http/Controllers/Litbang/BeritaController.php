@@ -18,12 +18,16 @@ class BeritaController extends APIController
 {
     private $BeritaRepository;
     private $AttachmentRepository;
+    private $KomentarRepository;
+    private $BalasanKomentarRepository;
     //private $PenggunaRepository;
 
     public function initialize()
     {
         $this->BeritaRepository = \App::make('\App\Repositories\Contracts\Litbang\BeritaInterface');
         $this->AttachmentRepository = \App::make('\App\Repositories\Contracts\Litbang\AttachmentInterface');
+        $this->KomentarRepository = \App::make('\App\Repositories\Contracts\Litbang\KomentarInterface');
+        $this->BalasanKomentarRepository = \App::make('\App\Repositories\Contracts\Litbang\BalasanKomentarInterface');
     }
 
     public function list(Request $request)
@@ -91,7 +95,8 @@ class BeritaController extends APIController
 
     public function getById(Request $request)
     {
-        $result = $this->BeritaRepository->with(['attachment'])->find($request->id);
+        $result = $this->BeritaRepository->with(['attachment'])
+            ->with(['komentar.balasan'])->find($request->id);
         if ($result) {
             $result->before = $this->BeritaRepository->whereOpt('id','<',$request->id)->first();
             $result->after  = $this->BeritaRepository->whereOpt('id','>',$result->id )->first();
@@ -258,5 +263,23 @@ class BeritaController extends APIController
             ->orderBy('created_at','desc')
             ->get();
         return $this->respond($result);
+    }
+
+    public function tambahKomentar(Request $request){
+        $result = $this->KomentarRepository->create([
+            'berita_id' => $request->berita_id,
+            'oleh'      => $request->oleh,
+            'komentar'  => $request->komentar,
+        ]);
+        return $this->respondCreated($result);
+    }
+
+    public function balasKomentar(Request $request){
+        $result = $this->KomentarRepository->create([
+            'komentar_id' => $request->komentar_id,
+            'oleh'      => $request->oleh,
+            'balasan'  => $request->balasan,
+        ]);
+        return $this->respondCreated($result);
     }
 }
