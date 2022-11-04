@@ -164,15 +164,7 @@ class InstansiController extends APIController
         } else {
             $result = $this->InstansiRepository->create(
                 [
-                    'nomor' =>  $request->nomor,
-                    'tanggal' => $request->tanggal,
                     'nama'   => $request->nama,
-                    'tujuan' =>  $request->tujuan,
-                    'manfaat' => $request->manfaat,
-                    'hasil'   => $request->hasil,
-                    'deskripsi' =>  $request->deskripsi,
-                    'kelengkapan' => $request->kelengkapan,
-                    'instansi'   => $request->instansi,
                 ]
             );
             if ($result->count()) {
@@ -194,15 +186,7 @@ class InstansiController extends APIController
                 ->where('id',$request->id)
                 ->update(
                     [
-                        'nomor' =>  $request->nomor,
-                        'tanggal' => $request->tanggal,
                         'nama'   => $request->nama,
-                        'tujuan' =>  $request->tujuan,
-                        'manfaat' => $request->manfaat,
-                        'hasil'   => $request->hasil,
-                        'deskripsi' =>  $request->deskripsi,
-                        'kelengkapan' => $request->kelengkapan,
-                        'instansi'   => $request->instansi,
                     ]
                 );
             if ($result) {

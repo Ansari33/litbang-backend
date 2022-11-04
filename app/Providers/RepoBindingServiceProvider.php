@@ -208,5 +208,10 @@ class RepoBindingServiceProvider extends ServiceProvider
             $repository = new \App\Repositories\Litbang\BalasanKomentarRepository(new \App\Models\Litbang\BalasanKomentar);
             return $repository;
         });
+
+        $app->bind('\App\Repositories\Contracts\Litbang\PrefsetInterface', function () {
+            $repository = new \App\Repositories\Litbang\PrefsetRepository(new \App\Models\Litbang\Prefset);
+            return $repository;
+        });
 	}
 }
