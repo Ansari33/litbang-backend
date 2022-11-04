@@ -13,7 +13,7 @@ class InstansiRepository extends BaseRepository
         $validator = Validator::make($request->only(
             'nama'
         ), [
-                'nama' => 'required|unique:instansi,nama,NULL,id,deleted_at,NULL',
+                'nama' => 'required|unique:master_instansi,nama,NULL,id,deleted_at,NULL',
             ]
         );
         return $validator;
