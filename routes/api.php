@@ -553,7 +553,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
             $api->GET('/inovasi','Litbang\PelaporanController@listInovasi')->middleware('auth:api');
         });
         $api->group(['prefix' => 'get'], function ($api) {
-            $api->GET('/','Litbang\PrefsetController@get')->middleware('auth:api');
+            $api->GET('/','Litbang\PrefsetController@get');
             $api->POST('user-by-tipe','Litbang\PelaporanController@getUserByTipe')->middleware('auth:api');
         });
         $api->POST('update','Litbang\PrefsetController@update')->middleware('auth:api');
