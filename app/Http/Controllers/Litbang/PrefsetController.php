@@ -23,19 +23,19 @@ class PrefsetController extends APIController
     }
 
     public function get(){
-        $result = $this->PrefsetRepository->all();
+        $result = $this->PrefsetRepository->whereOpt('id', '>', 0)->first();
         return $this->respond($result);
     }
 
     public function update(Request $request){
-        $pref = $request->all();
-        foreach ($pref as $item => $value) {
-            $this->PrefsetRepository->whereOpt($item,$item)->update(
-                [
-                    $item => $value,
-                    ]
-            );
-        }
+        $this->PrefsetRepository->where('id',$request->id)
+        ->update([
+            'title' => $request->title,
+            'font'  => $request->font,
+            'profile' => $request->profile,
+            'visi'  => $request->visi,
+            'misi'  => $request->misi
+        ]);
         return $this->respondOk('Pengaturan Tersimpan');
     }
 }
