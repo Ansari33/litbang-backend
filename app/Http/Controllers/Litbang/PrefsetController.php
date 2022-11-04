@@ -23,12 +23,12 @@ class PrefsetController extends APIController
     }
 
     public function get(){
-        $result = $this->PrefsetRepository->whereOpt('id', '>', 0)->first();
+        $result = $this->PrefsetRepository->where('id', 1)->first();
         return $this->respond($result);
     }
 
     public function update(Request $request){
-        $this->PrefsetRepository->where('id',$request->id)
+        $this->PrefsetRepository->where('id',1)
         ->update([
             'title' => $request->title,
             'font'  => $request->font,

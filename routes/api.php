@@ -556,7 +556,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
             $api->GET('/','Litbang\PrefsetController@get')->middleware('auth:api');
             $api->POST('user-by-tipe','Litbang\PelaporanController@getUserByTipe')->middleware('auth:api');
         });
-        $api->POST('update','Litbang\SurveyController@update')->middleware('auth:api');
+        $api->POST('update','Litbang\PrefsetController@update')->middleware('auth:api');
     });
 
 
