@@ -99,11 +99,11 @@ class UsulanPenelitianController extends APIController
         return $datatable = datatables()->of($this->UsulanPenelitianRepository
             ->relation($relations)
             ->get())
-            ->editColumn('tanggal', function ($list) {
-                return $list['tanggal'] == null ? '-' : $list['tanggal'];
-                return '<span class="label  label-success label-inline " style="display: none"> '.Carbon::createFromFormat('Y-m-d',$list['tanggal'])->timestamp.' </span>'.Carbon::createFromFormat('Y-m-d',$list['tanggal'])->format('d M Y');
-                // return Carbon::createFromFormat('Y-m-d',$list['tanggal'])->format('d/m/Y');
-            })
+//            ->editColumn('tanggal', function ($list) {
+//                return $list['tanggal'] == null ? '-' : $list['tanggal'];
+//                return '<span class="label  label-success label-inline " style="display: none"> '.Carbon::createFromFormat('Y-m-d',$list['tanggal'])->timestamp.' </span>'.Carbon::createFromFormat('Y-m-d',$list['tanggal'])->format('d M Y');
+//                // return Carbon::createFromFormat('Y-m-d',$list['tanggal'])->format('d/m/Y');
+//            })
             ->editColumn('usulan', function ($list) {
                 return $list['usulan'] == null ? '-' : $list['usulan'];
             })
@@ -113,8 +113,11 @@ class UsulanPenelitianController extends APIController
             ->editColumn('tanggal', function ($list) {
                 return $list['tanggal'] == null ? '-' : $list['tanggal'];
             })
+            ->editColumn('status', function ($list) {
+                return $list['status'] == null ? '-' : $list['status'];
+            })
             ->addColumn('instansi', function ($list) {
-                return $list['lingkup_data']['nama'];
+                return $list['instansi'] == null ? '-' : $list['lingkup_data']['nama'];
             })
 
             ->addColumn('action', function ($data) {
