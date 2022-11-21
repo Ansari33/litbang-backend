@@ -221,7 +221,6 @@ class InovasiController extends APIController
                 ]
             );
             if ($result->count()) {
-//                return $this->respondInternalError($rr= null,$request->pelaksana);
                 if(isset($request->pelaksana)){
                     if ( is_string($request->pelaksana) ){
                         $pelaksana = json_decode($request->pelaksana);
@@ -229,8 +228,8 @@ class InovasiController extends APIController
                         $pelaksana = $request->pelaksana;
                     }
                     foreach ($pelaksana as $item => $nama) {
-                        $this->PelaksanaKelitbanganRepository->create([
-                            'kelitbangan_id' => $result->id,
+                        $this->PelaksanaInovasiRepository->create([
+                            'inovasi_id' => $result->id,
                             'nama'       => $nama,
                         ]);
                     }
