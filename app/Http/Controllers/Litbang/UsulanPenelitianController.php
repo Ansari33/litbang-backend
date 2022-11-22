@@ -117,7 +117,7 @@ class UsulanPenelitianController extends APIController
                 return $list['status'] == null ? '-' : $list['status'];
             })
             ->addColumn('instansi', function ($list) {
-                return $list['instansi'] == null ? '-' : $list['lingkup_data']['nama'];
+                return $list['lingkup_data'] == null ? '-' : $list['lingkup_data']['nama'];
             })
 
             ->addColumn('action', function ($data) {

@@ -51,7 +51,9 @@ class UsulanInovasiController extends APIController
 //                return '<span class="label  label-success label-inline " style="display: none"> '.Carbon::createFromFormat('Y-m-d',$list['tanggal'])->timestamp.' </span>'.Carbon::createFromFormat('Y-m-d',$list['tanggal'])->format('d M Y');
 //                // return Carbon::createFromFormat('Y-m-d',$list['tanggal'])->format('d/m/Y');
 //            })
-
+            ->addColumn('instansi', function ($list) {
+                return $list['instansi_data'] == null ? '-' : $list['instansi_data']['nama'];
+            })
             ->addColumn('action', function ($data) {
                 $btn_edit   =  '#';
                     //"add_content_tab('pembelian_faktur_pembelian','edit_data_".$data['id']."','pembelian/faktur-pembelian/edit/".$data['id']."', 'Edit Data', '".$data['nomor']."')";

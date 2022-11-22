@@ -92,7 +92,7 @@ class InovasiController extends APIController
 //                // return Carbon::createFromFormat('Y-m-d',$list['tanggal'])->format('d/m/Y');
 //            })
             ->editColumn('instansi', function ($list) {
-                return $list['instansi_data']['nama'];
+                return $list['instansi_data'] == null ? 'Instansi Tidak Ditemukan' : $list['instansi_data']['nama'];
             })
             ->addColumn('action', function ($data) {
                 $btn_edit   =  '#';
