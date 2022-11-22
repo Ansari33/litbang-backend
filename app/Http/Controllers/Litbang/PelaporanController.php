@@ -19,6 +19,7 @@ class PelaporanController extends APIController
     private $SurveyRepository;
     private $AuthPelaporanRepository;
     private $LaporanInovasiRepository;
+    private $LaporanPenelitianRepository;
     //private $PenggunaRepository;
 
     public function initialize()
@@ -26,6 +27,7 @@ class PelaporanController extends APIController
         $this->SurveyRepository = \App::make('\App\Repositories\Contracts\Litbang\SurveyInterface');
         $this->AuthPelaporanRepository = \App::make('\App\Repositories\Contracts\Litbang\AuthPelaporanInterface');
         $this->LaporanInovasiRepository = \App::make('\App\Repositories\Contracts\Litbang\LaporanInovasiInterface');
+        $this->LaporanPenelitianRepository = \App::make('\App\Repositories\Contracts\Litbang\LaporanPenelitianInterface');
        // $this->PenggunaRepository = \App::make('\App\Repositories\Contracts\Pengguna\AkunInterface');
     }
 
@@ -61,6 +63,71 @@ class PelaporanController extends APIController
             ->addColumn('action', function ($data) {
                 $btn_edit   =  '#';
                     //"add_content_tab('pembelian_faktur_pembelian','edit_data_".$data['id']."','pembelian/faktur-pembelian/edit/".$data['id']."', 'Edit Data', '".$data['nomor']."')";
+                $btn_delete = '#';
+                return '
+                      <div class="dropdown dropdown-inline">
+                          <a href="javascript:;" class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="dropdown">
+                              <i class="flaticon2-layers-1 text-muted"></i>
+                          </a>
+                          <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                              <ul class="navi flex-column navi-hover py-2">
+                                  <li class="navi-item" onclick="'.$btn_edit.'">
+                                          <a href="/survey-edit/'.$data['id'].'" target="_blank" class="navi-link">
+                                                  <span class="navi-icon"><i class="flaticon2-edit"></i></span>
+                                                  <span class="navi-text">Edit</span>
+                                          </a>
+                                  </li>
+                                  <li class="navi-item" onclick="'.$btn_edit.'">
+                                          <a href="https://docs.google.com/forms/d/'. $data['form_id'] .'/edit" target="_blank" class="navi-link">
+                                                  <span class="navi-icon"><i class="flaticon2-file"></i></span>
+                                                  <span class="navi-text">Buka Form</span>
+                                          </a>
+                                  </li>
+                                  <li class="navi-item" onclick="'.$btn_edit.'">
+                                          <a href="/survey-hasil/'. $data['form_id'] .'/" target="_blank" class="navi-link">
+                                                  <span class="navi-icon"><i class="flaticon2-chart"></i></span>
+                                                  <span class="navi-text">Hasil</span>
+                                          </a>
+                                  </li>
+                                  <li class="navi-item" onclick="deleteSurvey('.$data['id'].')">
+                                          <a href="#" class="navi-link">
+                                                  <span class="navi-icon"><i class="flaticon2-trash"></i></span>
+                                                  <span class="navi-text">Hapus</span>
+                                          </a>
+                                  </li>
+                          </ul>
+                          </div>
+                      </div>
+                    ';
+
+            })
+            ->rawColumns(['link','action'])
+            ->toJson();
+    }
+
+    public function listPenelitian(Request $request)
+    {
+        $result = $this->LaporanPenelitianRepository->with([
+
+        ])->get();
+        return $this->respond($result);
+
+    }
+
+    public function listPenelitianWithDatatable(Request $request)
+    {
+        $relations = [
+
+        ];
+        return $datatable = datatables()->of($this->SurveyRepository
+            ->relation($relations)
+            ->get())
+            ->addColumn('link', function ($data) {
+                return '<a href="https://docs.google.com/forms/d/'. $data['form_id'] .'/edit" target="_blank" class="btn btn-primary btn-sm ml-2">Buka Form</a>';
+            })
+            ->addColumn('action', function ($data) {
+                $btn_edit   =  '#';
+                //"add_content_tab('pembelian_faktur_pembelian','edit_data_".$data['id']."','pembelian/faktur-pembelian/edit/".$data['id']."', 'Edit Data', '".$data['nomor']."')";
                 $btn_delete = '#';
                 return '
                       <div class="dropdown dropdown-inline">
@@ -228,6 +295,34 @@ class PelaporanController extends APIController
                     'jenis_inovasi' => $request->jenis_inovasi,
                     'bentuk_inovasi' => $request->bentuk_inovasi,
                     'inovasi_tematik' => $request->inovasi_tematik,
+                ]
+            );
+            if ($result->count()) {
+
+                DB::commit();
+                return $this->respondCreated($result, 'Data Laporan Tersimpan!');
+            } else {
+                DB::rollBack();
+                return $this->respondConflict();
+            }
+        }
+    }
+
+    public function createLaporanPenelitian(Request $request)
+    {
+
+        $validator = $this->LaporanPenelitianRepository->validate($request);
+        if ($validator->fails()) {
+            return $this->respondWithValidationErrors($validator->errors()->all(), MessageConstant::VALIDATION_FAILED_MSG);
+        } else {
+            DB::beginTransaction();
+            $result = $this->LaporanPenelitianRepository->create(
+                [
+                    'penulis' => $request->penulis,
+                    'judul' => $request->judul,
+                    'tahun' => $request->tahun,
+                    //'nomor_sk_inovasi' => $request->nomor_sk_inovasi,
+
                 ]
             );
             if ($result->count()) {

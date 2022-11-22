@@ -527,6 +527,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
             $api->GET('/','Litbang\SurveyController@list');
             $api->GET('/datatable','Litbang\SurveyController@listWithDatatable')->middleware('auth:api');
             $api->GET('/inovasi','Litbang\PelaporanController@listInovasi')->middleware('auth:api');
+            $api->GET('/penelitian','Litbang\PelaporanController@listPenelitian')->middleware('auth:api');
         });
         $api->group(['prefix' => 'get'], function ($api) {
             $api->POST('id','Litbang\SurveyController@getById')->middleware('auth:api');
@@ -535,6 +536,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         $api->POST('auth','Litbang\PelaporanController@auth');
         $api->POST('add-user','Litbang\PelaporanController@addUser')->middleware('auth:api');
         $api->POST('create-inovasi','Litbang\PelaporanController@createLaporanInovasi');
+        $api->POST('create-penelitian','Litbang\PelaporanController@createLaporanPenelitian');
         $api->POST('update','Litbang\SurveyController@update')->middleware('auth:api');
         $api->POST('delete','Litbang\SurveyController@delete')->middleware('auth:api');
 

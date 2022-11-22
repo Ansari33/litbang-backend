@@ -199,6 +199,11 @@ class RepoBindingServiceProvider extends ServiceProvider
             return $repository;
         });
 
+        $app->bind('\App\Repositories\Contracts\Litbang\LaporanPenelitianInterface', function () {
+            $repository = new \App\Repositories\Litbang\LaporanPenelitianRepository(new \App\Models\Litbang\LaporanPenelitian);
+            return $repository;
+        });
+
         $app->bind('\App\Repositories\Contracts\Litbang\KomentarInterface', function () {
             $repository = new \App\Repositories\Litbang\KomentarRepository(new \App\Models\Litbang\Komentar);
             return $repository;

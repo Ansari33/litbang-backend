@@ -29,7 +29,7 @@ class UsulanPenelitianController extends APIController
     public function list(Request $request)
     {
         $relations = [
-//            'instansi_data'
+            'lingkup_data'
         ];
          $result = $this->UsulanPenelitianRepository
             ->relation($relations)
