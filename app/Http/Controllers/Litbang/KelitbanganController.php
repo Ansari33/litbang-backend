@@ -141,6 +141,71 @@ class KelitbanganController extends APIController
             ->toJson();
     }
 
+    public function listWithDatatableByTanggal(Request $request)
+    {
+        $relations = [
+            'lingkup_data',
+            'documents',
+            'attachment'
+        ];
+//        return $this->KelitbanganRepository->relation($relations)
+//            ->get();
+        //return 'Tanggal Awal ='.$request->tanggal_awal.' Tanggal Akhir ='.$request->tanggal_akhir;
+        return $datatable = datatables()->of($this->KelitbanganRepository
+            ->relation($relations)
+            ->where('tanggal','>=',$request->tanggal_awal)
+            ->where('tanggal','<=',$request->tanggal_akhir)
+            ->get())
+//            ->editColumn('tanggal', function ($list) {
+//                return '<span class="label  label-success label-inline " style="display: none"> '.Carbon::createFromFormat('Y-m-d',$list['tanggal'])->timestamp.' </span>'.Carbon::createFromFormat('Y-m-d',$list['tanggal'])->format('d M Y');
+//                // return Carbon::createFromFormat('Y-m-d',$list['tanggal'])->format('d/m/Y');
+//            })
+            ->editColumn('lingkup', function ($list) {
+                return $list['lingkup_data'] == null ? 'Instansi Tidak Ditemukan' : $list['lingkup_data']['nama'];
+            })
+            ->addColumn('dokumen', function ($list) {
+                //return $list['documents'];
+                $docs = '';
+                foreach ($list['documents'] as $dc => $doc){
+                    $docs .= '<a href="/download-regulasi/'.$doc['nama'].'" style="color:inherit;">'.$doc['nama'].'</a>';
+                }
+                return $docs;
+            })
+            ->addColumn('action', function ($data) {
+                $btn_edit   =  '#';
+                //"add_content_tab('pembelian_faktur_pembelian','edit_data_".$data['id']."','pembelian/faktur-pembelian/edit/".$data['id']."', 'Edit Data', '".$data['nomor']."')";
+                $btn_delete = '#';
+                //"destroy(".$data['id'].", '".$data['nomor']."','pembelian/faktur-pembelian','tbl_pembelian_faktur_pembelian')";
+
+                return '
+                      <div class="dropdown dropdown-inline">
+                          <a href="javascript:;" class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="dropdown">
+                              <i class="flaticon2-layers-1 text-muted"></i>
+                          </a>
+                          <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                              <ul class="navi flex-column navi-hover py-2">
+                                  <li class="navi-item" onclick="'.$btn_edit.'">
+                                          <a href="/kelitbangan-edit/'.$data['id'].'" target="_blank" class="navi-link">
+                                                  <span class="navi-icon"><i class="flaticon2-edit"></i></span>
+                                                  <span class="navi-text">Edit</span>
+                                          </a>
+                                  </li>
+                                  <li class="navi-item" onclick="deleteKelitbangan('.$data['id'].')">
+                                          <a href="#" class="navi-link">
+                                                  <span class="navi-icon"><i class="flaticon2-trash"></i></span>
+                                                  <span class="navi-text">Hapus</span>
+                                          </a>
+                                  </li>
+                          </ul>
+                          </div>
+                      </div>
+                    ';
+
+            })
+            ->rawColumns(['dokumen','action'])
+            ->toJson();
+    }
+
     public function getById(Request $request)
     {
         $result = $this->KelitbanganRepository->with(['pelaksana','attachment'])->find($request->id);

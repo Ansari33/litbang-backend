@@ -218,6 +218,100 @@ class SuratController extends APIController
             ->toJson();
     }
 
+    public function listSuratKeluarWithDatatableByTanggal(Request $request)
+    {
+        $relations = [
+
+        ];
+        return $datatable = datatables()->of($this->SuratKeluarRepository
+            ->relation($relations)
+            ->get())
+            ->editColumn('file_surat', function ($data) {
+                $asset = $data['nomor_urut'].'.pdf';
+                return '<a href="/open-file/'.$asset.'"><i class="flaticon2-file"></i></a>';
+            })
+            ->addColumn('action', function ($data) {
+                $btn_edit   =  '#';
+                //"add_content_tab('pembelian_faktur_pembelian','edit_data_".$data['id']."','pembelian/faktur-pembelian/edit/".$data['id']."', 'Edit Data', '".$data['nomor']."')";
+                $btn_delete = '#';
+                //"destroy(".$data['id'].", '".$data['nomor']."','pembelian/faktur-pembelian','tbl_pembelian_faktur_pembelian')";
+
+                return '
+                      <div class="dropdown dropdown-inline">
+                          <a href="javascript:;" class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="dropdown">
+                              <i class="flaticon2-layers-1 text-muted"></i>
+                          </a>
+                          <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                              <ul class="navi flex-column navi-hover py-2">
+                                  <li class="navi-item" onclick="'.$btn_edit.'">
+                                          <a href="/surat-keluar-edit/'.$data['id'].'" target="_blank" class="navi-link">
+                                                  <span class="navi-icon"><i class="flaticon2-edit"></i></span>
+                                                  <span class="navi-text">Edit</span>
+                                          </a>
+                                  </li>
+                                  <li class="navi-item" onclick="deleteSuratKeluar('.$data['id'].')">
+                                          <a href="javascript:;" class="navi-link">
+                                                  <span class="navi-icon"><i class="flaticon2-trash"></i></span>
+                                                  <span class="navi-text">Hapus</span>
+                                          </a>
+                                  </li>
+                          </ul>
+                          </div>
+                      </div>
+                    ';
+
+            })
+            ->rawColumns(['tanggal','file_surat','action'])
+            ->toJson();
+    }
+
+    public function listSuratMasukWithDatatableByTanggal(Request $request)
+    {
+        $relations = [
+
+        ];
+        return $datatable = datatables()->of($this->SuratMasukRepository
+            ->relation($relations)
+            ->get())
+            ->editColumn('file_surat', function ($data) {
+                $asset = $data['surat_masuk'];
+                return '<a href="/download-surat-masuk/'.$asset.'"><i class="flaticon2-file"></i></a>';
+            })
+            ->addColumn('action', function ($data) {
+                $btn_edit   =  '#';
+                //"add_content_tab('pembelian_faktur_pembelian','edit_data_".$data['id']."','pembelian/faktur-pembelian/edit/".$data['id']."', 'Edit Data', '".$data['nomor']."')";
+                $btn_delete = '#';
+                //"destroy(".$data['id'].", '".$data['nomor']."','pembelian/faktur-pembelian','tbl_pembelian_faktur_pembelian')";
+
+                return '
+                      <div class="dropdown dropdown-inline">
+                          <a href="javascript:;" class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="dropdown">
+                              <i class="flaticon2-layers-1 text-muted"></i>
+                          </a>
+                          <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                              <ul class="navi flex-column navi-hover py-2">
+                                  <li class="navi-item" onclick="'.$btn_edit.'">
+                                          <a href="/surat-masuk-edit/'.$data['id'].'" target="_blank" class="navi-link">
+                                                  <span class="navi-icon"><i class="flaticon2-edit"></i></span>
+                                                  <span class="navi-text">Edit</span>
+                                          </a>
+                                  </li>
+                                  <li class="navi-item" onclick="deleteSuratMasuk('.$data['id'].')">
+                                          <a href="javascript:;" class="navi-link">
+                                                  <span class="navi-icon"><i class="flaticon2-trash"></i></span>
+                                                  <span class="navi-text">Hapus</span>
+                                          </a>
+                                  </li>
+                          </ul>
+                          </div>
+                      </div>
+                    ';
+
+            })
+            ->rawColumns(['tanggal','file_surat','action'])
+            ->toJson();
+    }
+
     public function getByIdSuratKeluar(Request $request)
     {
         $result = $this->SuratKeluarRepository->with([])->find($request->id);

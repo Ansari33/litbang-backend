@@ -291,6 +291,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         $api->group(['prefix' => 'list'], function ($api) {
             $api->GET('/','Litbang\KelitbanganController@list');
             $api->GET('/datatable','Litbang\KelitbanganController@listWithDatatable')->middleware('auth:api');
+            $api->POST('/datatable-tanggal','Litbang\KelitbanganController@listWithDatatableByTanggal')->middleware('auth:api');
         });
         $api->group(['prefix' => 'get'], function ($api) {
             $api->POST('id','Litbang\KelitbanganController@getById')    ;
@@ -310,6 +311,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         $api->group(['prefix' => 'list'], function ($api) {
             $api->GET('/','Litbang\InovasiController@list');
             $api->GET('/datatable','Litbang\InovasiController@listWithDatatable')->middleware('auth:api');
+            $api->POST('/datatable-tanggal','Litbang\InovasiController@listWithDatatableByTanggal')->middleware('auth:api');
         });
         $api->group(['prefix' => 'get'], function ($api) {
             $api->POST('id','Litbang\InovasiController@getById');
@@ -347,6 +349,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         $api->group(['prefix' => 'list'], function ($api) {
             $api->GET('/','Litbang\AgendaController@list');
             $api->GET('/datatable','Litbang\AgendaController@listWithDatatable')->middleware('auth:api');
+            $api->POST('/datatable-tanggal','Litbang\AgendaController@listWithDatatableByTanggal')->middleware('auth:api');
         });
         $api->group(['prefix' => 'get'], function ($api) {
             $api->POST('id','Litbang\AgendaController@getById')->middleware('auth:api');
@@ -365,6 +368,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         $api->group(['prefix' => 'list'], function ($api) {
             $api->GET('/','Litbang\BeritaController@list');
             $api->GET('/datatable','Litbang\BeritaController@listWithDatatable')->middleware('auth:api');
+            $api->POST('/datatable-tanggal','Litbang\BeritaController@listWithDatatableByTanggal')->middleware('auth:api');
         });
         $api->group(['prefix' => 'get'], function ($api) {
             $api->POST('id','Litbang\BeritaController@getById');
@@ -389,6 +393,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
             $api->GET('/','Litbang\UsulanPenelitianController@list');
             $api->GET('/external','Litbang\UsulanPenelitianController@listExternal');
             $api->GET('/datatable','Litbang\UsulanPenelitianController@listWithDatatable')->middleware('auth:api');
+            $api->POST('/datatable-tanggal','Litbang\UsulanPenelitianController@listWithDatatableByTanggal')->middleware('auth:api');
         });
         $api->group(['prefix' => 'get'], function ($api) {
             $api->POST('id','Litbang\UsulanPenelitianController@getById');
@@ -443,6 +448,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         $api->group(['prefix' => 'list'], function ($api) {
             $api->GET('/','Litbang\UsulanInovasiController@list');
             $api->GET('/datatable','Litbang\UsulanInovasiController@listWithDatatable')->middleware('auth:api');
+            $api->POST('/datatable-tanggal','Litbang\UsulanInovasiController@listWithDatatableByTanggal')->middleware('auth:api');
         });
         $api->group(['prefix' => 'get'], function ($api) {
             $api->POST('id','Litbang\UsulanInovasiController@getById');
