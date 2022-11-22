@@ -96,7 +96,7 @@ class KelitbanganController extends APIController
 //                // return Carbon::createFromFormat('Y-m-d',$list['tanggal'])->format('d/m/Y');
 //            })
             ->editColumn('lingkup', function ($list) {
-                return $list['lingkup_data']['nama'];
+                return $list['lingkup_data'] == null ? 'Instansi Tidak Ditemukan' : $list['lingkup_data']['nama'];
             })
             ->addColumn('dokumen', function ($list) {
                 //return $list['documents'];
