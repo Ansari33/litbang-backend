@@ -18,13 +18,14 @@ class SuratController extends APIController
 {
     private $SuratKeluarRepository;
     private $SuratMasukRepository;
+    private $JenisSuratRepository;
 
 
     public function initialize()
     {
         $this->SuratKeluarRepository = \App::make('\App\Repositories\Contracts\Litbang\SuratKeluarInterface');
         $this->SuratMasukRepository = \App::make('\App\Repositories\Contracts\Litbang\SuratMasukInterface');
-
+        $this->JenisSuratRepository = \App::make('\App\Repositories\Contracts\Litbang\JenisSuratInterface');
     }
 
     public function list(Request $request)
@@ -127,7 +128,7 @@ class SuratController extends APIController
     public function listSuratKeluarWithDatatable(Request $request)
     {
         $relations = [
-
+            'klasifikasi_data'
         ];
         return $datatable = datatables()->of($this->SuratKeluarRepository
             ->relation($relations)
@@ -135,6 +136,10 @@ class SuratController extends APIController
             ->editColumn('file_surat', function ($data) {
                 $asset = $data['surat_keluar'];
                 return '<a href="/open-file/'.$asset.'"><i class="flaticon2-file"></i></a>';
+            })
+            ->addColumn('klasifikasi', function ($data) {
+
+                return  $data['klasifikasi_data'] == null ? 'Tidak Ditemukan' : $data['klasifikasi_data']['jenis'];
             })
             ->addColumn('action', function ($data) {
                 $btn_edit   =  '#';
@@ -174,7 +179,7 @@ class SuratController extends APIController
     public function listSuratMasukWithDatatable(Request $request)
     {
         $relations = [
-
+            'klasifikasi_data'
         ];
         return $datatable = datatables()->of($this->SuratMasukRepository
             ->relation($relations)
@@ -182,6 +187,9 @@ class SuratController extends APIController
             ->editColumn('file_surat', function ($data) {
                 $asset = $data['surat_masuk'];
                 return '<a href="/download-surat-masuk/'.$asset.'"><i class="flaticon2-file"></i></a>';
+            })
+            ->addColumn('klasifikasi', function ($data) {
+                return  $data['klasifikasi_data'] == null ? 'Tidak Ditemukan' : $data['klasifikasi_data']['jenis'];
             })
             ->addColumn('action', function ($data) {
                 $btn_edit   =  '#';
@@ -221,7 +229,7 @@ class SuratController extends APIController
     public function listSuratKeluarWithDatatableByTanggal(Request $request)
     {
         $relations = [
-
+            'klasifikasi_data'
         ];
         return $datatable = datatables()->of($this->SuratKeluarRepository
             ->relation($relations)
@@ -231,6 +239,9 @@ class SuratController extends APIController
             ->editColumn('file_surat', function ($data) {
                 $asset = $data['surat_keluar'];
                 return '<a href="/open-file/'.$asset.'"><i class="flaticon2-file"></i></a>';
+            })
+            ->addColumn('klasifikasi', function ($data) {
+                return  $data['klasifikasi_data'] == null ? 'Tidak Ditemukan' : $data['klasifikasi_data']['jenis'];
             })
             ->addColumn('action', function ($data) {
                 $btn_edit   =  '#';
@@ -270,7 +281,7 @@ class SuratController extends APIController
     public function listSuratMasukWithDatatableByTanggal(Request $request)
     {
         $relations = [
-
+            'klasifikasi_data'
         ];
         return $datatable = datatables()->of($this->SuratMasukRepository
             ->relation($relations)
@@ -280,6 +291,9 @@ class SuratController extends APIController
             ->editColumn('file_surat', function ($data) {
                 $asset = $data['surat_masuk'];
                 return '<a href="/download-surat-masuk/'.$asset.'"><i class="flaticon2-file"></i></a>';
+            })
+            ->addColumn('klasifikasi', function ($data) {
+                return  $data['klasifikasi_data'] == null ? 'Tidak Ditemukan' : $data['klasifikasi_data']['jenis'];
             })
             ->addColumn('action', function ($data) {
                 $btn_edit   =  '#';
@@ -486,6 +500,128 @@ class SuratController extends APIController
         $result = $this->SuratMasukRepository->delete($request->id);
         if ($result) {
             return $this->respondOk('Surat Berhasil Terhapus!');
+        } else {
+            return $this->respondNotFound(MessageConstant::INOVASI_DELETE_FAILED_MSG);
+        }
+    }
+
+    public function listJenisSurat(Request $request)
+    {
+        $result = $this->JenisSuratRepository->all();
+        return $this->respond($result);
+    }
+
+    public function listJenisSuratWithDatatable(Request $request)
+    {
+        $relations = [
+
+        ];
+        return $datatable = datatables()->of($this->JenisSuratRepository
+            ->relation($relations)
+            ->get())
+            ->addColumn('action', function ($data) {
+                $btn_edit   =  '#';
+                //"add_content_tab('pembelian_faktur_pembelian','edit_data_".$data['id']."','pembelian/faktur-pembelian/edit/".$data['id']."', 'Edit Data', '".$data['nomor']."')";
+                $btn_delete = '#';
+                //"destroy(".$data['id'].", '".$data['nomor']."','pembelian/faktur-pembelian','tbl_pembelian_faktur_pembelian')";
+
+                return '
+                      <div class="dropdown dropdown-inline">
+                          <a href="javascript:;" class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="dropdown">
+                              <i class="flaticon2-layers-1 text-muted"></i>
+                          </a>
+                          <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                              <ul class="navi flex-column navi-hover py-2">
+                                  <li class="navi-item" onclick="'.$btn_edit.'">
+                                          <a href="/jenis-surat-edit/'.$data['id'].'" target="_blank" class="navi-link">
+                                                  <span class="navi-icon"><i class="flaticon2-edit"></i></span>
+                                                  <span class="navi-text">Edit</span>
+                                          </a>
+                                  </li>
+                                  <li class="navi-item" onclick="deleteJenisSurat('.$data['id'].')">
+                                          <a href="javascript:;" class="navi-link">
+                                                  <span class="navi-icon"><i class="flaticon2-trash"></i></span>
+                                                  <span class="navi-text">Hapus</span>
+                                          </a>
+                                  </li>
+                          </ul>
+                          </div>
+                      </div>
+                    ';
+
+            })
+            ->rawColumns(['tanggal','file_surat','action'])
+            ->toJson();
+    }
+
+    public function createJenisSurat(Request $request)
+    {
+
+        $validator = $this->JenisSuratRepository->validate($request);
+        if ($validator->fails()) {
+            return $this->respondWithValidationErrors($validator->errors()->all(), MessageConstant::VALIDATION_FAILED_MSG);
+        } else {
+            DB::beginTransaction();
+
+            $result = $this->JenisSuratRepository->create(
+                [
+                    'jenis'           => $request->jenis,#$this->getNumbering()['data'],
+                    'keterangan'        => $request->keterangan,
+                ]
+            );
+            if ($result->count()) {
+
+                DB::commit();
+                return $this->respondCreated($result, 'Jenis Surat Ditambahkan!');
+            } else {
+                DB::rollBack();
+                return $this->respondConflict();
+            }
+        }
+    }
+
+    public function getByIdJenisSurat(Request $request)
+    {
+        $result = $this->JenisSuratRepository->with([])->find($request->id);
+        if ($result) {
+            return $this->respond($result);
+        } else {
+            return $this->respondNotFound(MessageConstant::INOVASI_GET_FAILED_MSG);
+        }
+    }
+
+    public function updateJenisSurat(Request $request)
+    {
+
+        $validator = $this->JenisSuratRepository->validate($request);
+        if ($validator->fails()) {
+            return $this->respondWithValidationErrors($validator->errors()->all(), MessageConstant::VALIDATION_FAILED_MSG);
+        } else {
+            DB::beginTransaction();
+
+            $result = $this->JenisSuratRepository
+                ->where('id',$request->id)
+                ->update(
+                    [
+                        'jenis'           => $request->jenis,#$this->getNumbering()['data'],
+                        'keterangan'        => $request->keterangan,
+                    ]
+                );
+            if ($result) {
+                DB::commit();
+                return $this->respondCreated($result, 'Jenis Surat Berhasil Diupdate!');
+            } else {
+                DB::rollBack();
+                return $this->respondNotFound();
+            }
+        }
+    }
+
+    public function deleteJenisSurat(Request $request)
+    {
+        $result = $this->JenisSuratRepository->delete($request->id);
+        if ($result) {
+            return $this->respondOk('Jenis Surat Berhasil Terhapus!');
         } else {
             return $this->respondNotFound(MessageConstant::INOVASI_DELETE_FAILED_MSG);
         }

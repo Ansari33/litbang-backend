@@ -9,12 +9,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Auth;
 use App\Helpers\ModelsConstant;
 
-class SuratKeluar extends Model
+class JenisSurat extends Model
 {
     use LogsActivity;
     use SoftDeletes;
 
-    protected $table = 'surat_keluar';
+    protected $table = 'jenis_surat';
     protected $dates = ['deleted_at'];
     protected $guarded = [];
     protected $hidden = ['created_at','created_by','updated_at', 'updated_by', 'deleted_at','deleted_by'];
@@ -23,7 +23,7 @@ class SuratKeluar extends Model
     // protected static $ignoreChangedAttributes = ['created_at','created_by','updated_at', 'updated_by', 'deleted_at','deleted_by'];
     protected static $logOnlyDirty = false;
     protected static $submitEmptyLogs = true;
-    protected static $logName = 'Surat Keluar';
+    protected static $logName = 'Jenis Surat';
 
     protected static function boot() {
         parent::boot();
@@ -39,14 +39,11 @@ class SuratKeluar extends Model
         });
 
         static::deleting(function($model) {
+
 //            $user = Auth::user();
 //            $model->deleted_by = $user->id;
 //            $model->save();
         });
-    }
-
-    public function klasifikasi_data() {
-        return $this->belongsTo('App\Models\Litbang\JenisSurat','klasifikasi_surat_id','id');
     }
 
 }

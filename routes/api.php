@@ -442,6 +442,22 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
 
     });
 
+    $api->group(['prefix' => 'jenis-surat'], function ($api) {
+        $api->group(['prefix' => 'list'], function ($api) {
+            $api->GET('/','Litbang\SuratController@listJenisSurat');
+            $api->GET('/datatable','Litbang\SuratController@listJenisSuratWithDatatable')->middleware('auth:api');
+        });
+        $api->group(['prefix' => 'get'], function ($api) {
+            $api->POST('id','Litbang\SuratController@getByIdJenisSurat')->middleware('auth:api');
+        });
+        $api->POST('create','Litbang\SuratController@createJenisSurat')->middleware('auth:api');
+        $api->POST('update','Litbang\SuratController@updateJenisSurat')->middleware('auth:api');
+        $api->POST('delete','Litbang\SuratController@deleteJenisSurat')->middleware('auth:api');
+
+        $api->GET('numbering','Litbang\UsulanPenelitianController@getNumbering');
+
+    });
+
     /*
     |--------------------------------------------------------------------------
     | Usulan Inovasi

@@ -218,5 +218,10 @@ class RepoBindingServiceProvider extends ServiceProvider
             $repository = new \App\Repositories\Litbang\PrefsetRepository(new \App\Models\Litbang\Prefset);
             return $repository;
         });
+
+        $app->bind('\App\Repositories\Contracts\Litbang\JenisSuratInterface', function () {
+            $repository = new \App\Repositories\Litbang\JenisSuratRepository(new \App\Models\Litbang\JenisSurat);
+            return $repository;
+        });
 	}
 }

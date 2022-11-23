@@ -45,4 +45,8 @@ class SuratMasuk extends Model
         });
     }
 
+    public function klasifikasi_data() {
+        return $this->belongsTo('App\Models\Litbang\JenisSurat','klasifikasi_surat_id','id');
+    }
+
 }
