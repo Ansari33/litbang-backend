@@ -414,6 +414,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         $api->group(['prefix' => 'list'], function ($api) {
             $api->GET('/','Litbang\SuratKeluarController@list');
             $api->GET('/datatable','Litbang\SuratController@listSuratKeluarWithDatatable')->middleware('auth:api');
+            $api->POST('/datatable-tanggal','Litbang\SuratController@listSuratKeluarWithDatatableByTanggal')->middleware('auth:api');
         });
         $api->group(['prefix' => 'get'], function ($api) {
             $api->POST('id','Litbang\SuratController@getByIdSuratKeluar')->middleware('auth:api');
@@ -428,6 +429,8 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         $api->group(['prefix' => 'list'], function ($api) {
             $api->GET('/','Litbang\SuratKeluarController@list');
             $api->GET('/datatable','Litbang\SuratController@listSuratMasukWithDatatable')->middleware('auth:api');
+            $api->POST('/datatable-tanggal','Litbang\SuratController@listSuratMasukWithDatatableByTanggal')->middleware('auth:api');
+
         });
         $api->group(['prefix' => 'get'], function ($api) {
             $api->POST('id','Litbang\SuratController@getByIdSuratMasuk')->middleware('auth:api');

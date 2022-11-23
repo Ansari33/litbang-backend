@@ -133,7 +133,7 @@ class SuratController extends APIController
             ->relation($relations)
             ->get())
             ->editColumn('file_surat', function ($data) {
-                $asset = $data['nomor_urut'].'.pdf';
+                $asset = $data['surat_keluar'];
                 return '<a href="/open-file/'.$asset.'"><i class="flaticon2-file"></i></a>';
             })
             ->addColumn('action', function ($data) {
@@ -225,9 +225,11 @@ class SuratController extends APIController
         ];
         return $datatable = datatables()->of($this->SuratKeluarRepository
             ->relation($relations)
+            ->where('tanggal_surat','>=',$request->tanggal_awal)
+            ->where('tanggal_surat','<=',$request->tanggal_akhir)
             ->get())
             ->editColumn('file_surat', function ($data) {
-                $asset = $data['nomor_urut'].'.pdf';
+                $asset = $data['surat_keluar'];
                 return '<a href="/open-file/'.$asset.'"><i class="flaticon2-file"></i></a>';
             })
             ->addColumn('action', function ($data) {
@@ -272,6 +274,8 @@ class SuratController extends APIController
         ];
         return $datatable = datatables()->of($this->SuratMasukRepository
             ->relation($relations)
+            ->where('tanggal_penerimaan','>=',$request->tanggal_awal)
+            ->where('tanggal_penerimaan','<=',$request->tanggal_akhir)
             ->get())
             ->editColumn('file_surat', function ($data) {
                 $asset = $data['surat_masuk'];
