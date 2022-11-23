@@ -393,4 +393,9 @@ class InovasiController extends APIController
             ->get();
         return $this->respond($result);
     }
+
+    public function getAutoNomor(){
+        $data = $this->InovasiRepository->withTrashed()->get();
+        return MainRepository::generateCode($data,'INOV-');
+    }
 }

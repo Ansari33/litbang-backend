@@ -411,8 +411,6 @@ class KelitbanganController extends APIController
         }
     }
 
-
-
     public function delete(Request $request)
     {
 
@@ -432,5 +430,10 @@ class KelitbanganController extends APIController
             ->orderBy('id','desc')
             ->get();
         return $this->respond($result);
+    }
+
+    public function getAutoNomor(){
+        $data = $this->KelitbanganRepository->withTrashed()->get();
+        return MainRepository::generateCode($data,'KEL-');
     }
 }

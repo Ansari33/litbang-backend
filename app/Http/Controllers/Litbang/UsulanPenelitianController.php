@@ -400,12 +400,8 @@ class UsulanPenelitianController extends APIController
         }
     }
 
-    public function getNumbering()
-    {
-        $kode = MainRepository::numberKodeGenerator([
-            'repo'  => $this->UsulanPenelitianRepository,
-            'modul' => MessageConstant::PENOMORAN_PENELITIAN
-        ]);
-        return $this->respond($kode);
+    public function getAutoNomor(){
+        $data = $this->UsulanPenelitianRepository->withTrashed()->get();
+        return MainRepository::generateCode($data,'PEN-');
     }
 }

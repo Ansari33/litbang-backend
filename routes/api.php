@@ -300,6 +300,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         $api->POST('update','Litbang\KelitbanganController@update')->middleware('auth:api');
         $api->POST('delete','Litbang\KelitbanganController@delete')->middleware('auth:api');
         $api->GET('terkini','Litbang\KelitbanganController@terkini');
+        $api->GET('nomor','Litbang\KelitbanganController@getAutoNomor');
     });
 
     /*
@@ -320,6 +321,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         $api->POST('update','Litbang\InovasiController@update')->middleware('auth:api');
         $api->POST('delete','Litbang\InovasiController@delete')->middleware('auth:api');
         $api->GET('terkini','Litbang\InovasiController@terkini');
+        $api->GET('nomor','Litbang\InovasiController@getAutoNomor');
     });
 
     /*
@@ -402,6 +404,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         $api->POST('update','Litbang\UsulanPenelitianController@update')->middleware('auth:api');
         $api->POST('delete','Litbang\UsulanPenelitianController@delete')->middleware('auth:api');
         $api->GET('numbering','Litbang\UsulanPenelitianController@getNumbering');
+        $api->GET('nomor','Litbang\UsulanPenelitianController@getAutoNomor');
 
     });
 
@@ -423,6 +426,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         $api->POST('update','Litbang\SuratController@updateSuratKeluar')->middleware('auth:api');
         $api->POST('delete','Litbang\SuratController@deleteSuratKeluar')->middleware('auth:api');
         $api->GET('numbering','Litbang\UsulanPenelitianController@getNumbering');
+        $api->GET('nomor','Litbang\SuratController@getAutoNomorSk');
 
     });
     $api->group(['prefix' => 'surat-masuk'], function ($api) {
@@ -439,6 +443,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         $api->POST('update','Litbang\SuratController@updateSuratMasuk')->middleware('auth:api');
         $api->POST('delete','Litbang\SuratController@deleteSuratMasuk')->middleware('auth:api');
         $api->GET('numbering','Litbang\UsulanPenelitianController@getNumbering');
+        $api->GET('nomor','Litbang\SuratController@getAutoNomorSm');
 
     });
 
@@ -477,6 +482,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         $api->POST('delete','Litbang\UsulanInovasiController@delete')->middleware('auth:api');
         $api->GET('terkini','Litbang\UsulanInovasiController@terkini');
         $api->POST('update-status','Litbang\UsulanInovasiController@updateStatus')->middleware('auth:api');
+        $api->GET('nomor','Litbang\UsulanInovasiController@getAutoNomor');
     });
 
 

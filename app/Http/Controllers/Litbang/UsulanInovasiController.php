@@ -334,4 +334,9 @@ class UsulanInovasiController extends APIController
         }
 
     }
+
+    public function getAutoNomor(){
+        $data = $this->UsulanInovasiRepository->withTrashed()->get();
+        return MainRepository::generateCode($data,'U-INOV-');
+    }
 }

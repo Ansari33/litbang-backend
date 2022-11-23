@@ -627,12 +627,13 @@ class SuratController extends APIController
         }
     }
 
-    public function getNumbering()
-    {
-        $kode = MainRepository::numberKodeGenerator([
-            'repo'  => $this->UsulanPenelitianRepository,
-            'modul' => MessageConstant::PENOMORAN_PENELITIAN
-        ]);
-        return $this->respond($kode);
+    public function getAutoNomorSk(){
+        $data = $this->SuratKeluarRepository->withTrashed()->get();
+        return MainRepository::generateCode($data,'SK-');
+    }
+
+    public function getAutoNomorSm(){
+        $data = $this->SuratMasukRepository->withTrashed()->get();
+        return MainRepository::generateCode($data,'SM-');
     }
 }

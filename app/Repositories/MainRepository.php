@@ -672,6 +672,8 @@ class MainRepository extends BaseRepository
         ## Modul
         ## Repo
 
+        #return  self::generateCode(data,$prefix);
+
         $prefix = '';
         $PenomoranRepository = \App::make('\App\Repositories\Contracts\Litbang\PenomoranInterface');
         $penomoran = $PenomoranRepository->where('modul',$data['modul'])->first();
