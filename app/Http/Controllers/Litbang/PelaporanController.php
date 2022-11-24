@@ -321,6 +321,7 @@ class PelaporanController extends APIController
                     'penulis' => $request->penulis,
                     'judul' => $request->judul,
                     'tahun' => $request->tahun,
+                    'dokumen' => $request->dokumen,
                     //'nomor_sk_inovasi' => $request->nomor_sk_inovasi,
 
                 ]
