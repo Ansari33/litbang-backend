@@ -303,7 +303,7 @@ class UsulanPenelitianController extends APIController
 
             $result = $this->UsulanPenelitianRepository->create(
                 [
-                'nomor'          => $this->getNumbering()['data'],
+                'nomor'          => $this->getAutoNomor(),
                 'tanggal'        => $request->tanggal,
                 'usulan'         => $request->usulan,
                 'pengusul'       => $request->pengusul,
