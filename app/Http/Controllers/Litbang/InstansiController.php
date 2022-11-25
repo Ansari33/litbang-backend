@@ -27,7 +27,7 @@ class InstansiController extends APIController
     public function list(Request $request)
     {
         $relations = [
-
+            //'instansi_data'
         ];
         $result = $this->InstansiRepository
             ->relation($relations)

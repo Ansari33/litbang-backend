@@ -81,7 +81,7 @@ class UsulanPenelitianController extends APIController
     public function listExternal(Request $request)
     {
         $relations = [
-//            'instansi_data'
+            'lingkup_data'
         ];
         $result = $this->UsulanPenelitianRepository
             ->relation($relations)
