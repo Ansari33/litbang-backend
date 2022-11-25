@@ -279,6 +279,9 @@ class InovasiController extends APIController
                         $pelaksana = $request->pelaksana;
                     }
                     foreach ($pelaksana as $item => $nama) {
+                        if ($nama == null or $nama == ''){
+                            return $this->respondInternalError($rr= null,'Nama Pelaksana Dibutuhkan!');
+                        }
                         $this->PelaksanaInovasiRepository->create([
                             'inovasi_id' => $result->id,
                             'nama'       => $nama,
@@ -346,6 +349,9 @@ class InovasiController extends APIController
                         $pelaksana = $request->pelaksana;
                     }
                     foreach ($pelaksana as $item => $nama) {
+                        if ($nama == null or $nama == ''){
+                            return $this->respondInternalError($rr= null,'Nama Pelaksana Dibutuhkan!');
+                        }
                         $this->PelaksanaInovasiRepository->create([
                             'inovasi_id' => $request->id,
                             'nama'       => $nama,

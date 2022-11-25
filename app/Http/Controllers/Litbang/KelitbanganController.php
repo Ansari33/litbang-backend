@@ -302,6 +302,9 @@ class KelitbanganController extends APIController
                         $pelaksana = $request->pelaksana;
                     }
                     foreach ($pelaksana as $item => $nama) {
+                        if ($nama == null or $nama == ''){
+                            return $this->respondInternalError($rr= null,'Nama Pelaksana Dibutuhkan!');
+                        }
                         $this->PelaksanaKelitbanganRepository->create([
                             'kelitbangan_id' => $result->id,
                             'nama'       => $nama,
@@ -367,6 +370,7 @@ class KelitbanganController extends APIController
                 );
             if ($result) {
                 if(isset($request->pelaksana)){
+
                     if ( is_string($request->pelaksana) ){
                         $pelaksana = json_decode($request->pelaksana);
                     }else{
@@ -374,6 +378,9 @@ class KelitbanganController extends APIController
                     }
                    // return $this->respondInternalError($rr= null,$pelaksana);
                     foreach ($pelaksana as $item => $nama) {
+                        if ($nama == null or $nama == ''){
+                            return $this->respondInternalError($rr= null,'Nama Pelaksana Dibutuhkan!');
+                        }
                         $this->PelaksanaKelitbanganRepository->create([
                             'kelitbangan_id' => $request->id,
                             'nama'       => $nama,
