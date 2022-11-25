@@ -229,7 +229,8 @@ class UsulanInovasiController extends APIController
                     'tujuan' => $request->tujuan,
                     'status'   => 'Mengajukan',
                     'instansi'  =>  $request->instansi,
-                    'nomor_kontak' => $request->nomor_kontak
+                    'nomor_kontak' => $request->nomor_kontak,
+                    'email' => $request->email,
                 ]
             );
             if ($result->count()) {
@@ -270,10 +271,16 @@ class UsulanInovasiController extends APIController
                 ->where('id',$request->id)
                 ->update(
                     [
-                        'waktu' =>  $request->waktu,
+                        'nomor'    =>  $request->nomor,
                         'tanggal' => $request->tanggal,
-                        'nama'   => $request->nama,
-                        'tempat' =>  $request->tempat,
+                        'usulan'   => $request->usulan,
+                        'pengusul'  =>  $request->pengusul,
+                        'latar_belakang'    =>  $request->latar_belakang,
+                        'tujuan' => $request->tujuan,
+                        'status'   => $request->status,
+                        'instansi'  =>  $request->instansi,
+                        'nomor_kontak' => $request->nomor_kontak,
+                        'email' => $request->email,
                     ]
                 );
             if ($result) {
