@@ -592,5 +592,24 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         $api->POST('update','Litbang\PrefsetController@update')->middleware('auth:api');
     });
 
+    /*
+    |--------------------------------------------------------------------------
+    | Surat Rekomendasi
+    |--------------------------------------------------------------------------
+    */
+    $api->group(['prefix' => 'surat-rekomendasi'], function ($api) {
+        $api->group(['prefix' => 'list'], function ($api) {
+            $api->GET('/','Litbang\SuratRekomendasiController@list');
+            $api->GET('/datatable','Litbang\SuratRekomendasiController@listWithDatatable')->middleware('auth:api');
+            $api->POST('/datatable-tanggal','Litbang\SuratRekomendasiController@listWithDatatableByTanggal')->middleware('auth:api');
+        });
+        $api->group(['prefix' => 'get'], function ($api) {
+            $api->POST('id','Litbang\SuratRekomendasiController@getById')->middleware('auth:api');
+        });
+        $api->POST('create','Litbang\SuratRekomendasiController@create');
+        $api->POST('update','Litbang\SuratRekomendasiController@update')->middleware('auth:api');
+        $api->POST('delete','Litbang\SuratRekomendasiController@delete')->middleware('auth:api');
+    });
+
 
 });
