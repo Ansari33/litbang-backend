@@ -57,7 +57,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
 	*/
 
 	$api->group(['prefix' => 'dashboard'], function ($api) {
-		$api->GET('/', 'Dashboard\DashboardController@list');
+		$api->GET('/', 'Litbang\DashboardController@list');
 		$api->POST('request', 'Dashboard\DashboardController@getDataPerRequest')->middleware('auth:api');
 		$api->GET('beban-per-minggu', 'Dashboard\DashboardController@bebanDanLainPerMinggu')->middleware('auth:api');
 		$api->GET('beban-per-bulan', 'Dashboard\DashboardController@bebanDanLainPerBulan')->middleware('auth:api');

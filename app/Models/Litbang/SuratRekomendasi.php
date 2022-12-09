@@ -45,8 +45,8 @@ class SuratRekomendasi extends Model
         });
     }
 
-//    public function klasifikasi_data() {
-//        return $this->belongsTo('App\Models\Litbang\JenisSurat','klasifikasi_surat_id','id');
-//    }
+    public function attachment() {
+        return $this->hasMany('App\Models\Litbang\Attachment','surat_rekomendasi_id','id');
+    }
 
 }

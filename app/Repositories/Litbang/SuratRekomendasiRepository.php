@@ -11,12 +11,13 @@ class SuratRekomendasiRepository extends BaseRepository
     public function validate($request)
     {
         $validator = Validator::make($request->only(
-            'nomor',
-            'tanggal',
-            'nama',
-            'instansi'
+            'judul',
+            'pengusul',
+            'institusi'
         ), [
-
+                'judul' => 'required',
+                'pengusul' => 'required',
+                'institusi' => 'required',
             ]
         );
         return $validator;

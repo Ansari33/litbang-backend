@@ -13,28 +13,56 @@ use Spatie\Activitylog\Models\Activity;
 use Auth;
 use App\Repositories\MainRepository;
 
-class SuratRekomendasiController extends APIController
+class DashboardController extends APIController
 {
+    private $AgendaRepository;
+    private $BeritaRepository;
+    private $KelitbanganRepository;
+    private $InovasiRepository;
+    private $UsulanPenelitianRepository;
+    private $UsulanInovasiRepository;
+    private $SurveyRepository;
+    private $SuratMasukRepository;
+    private $SuratKeluarRepository;
+    private $JenisSuratRepository;
+    private $RegulasiRepository;
     private $SuratRekomendasiRepository;
-    private $AttachmentRepository;
-    private $PelaksanaAgendaRepository;
-    //private $PenggunaRepository;
 
     public function initialize()
     {
+        $this->AgendaRepository = \App::make('\App\Repositories\Contracts\Litbang\AgendaInterface');
+        $this->BeritaRepository = \App::make('\App\Repositories\Contracts\Litbang\BeritaInterface');
+        $this->InovasiRepository = \App::make('\App\Repositories\Contracts\Litbang\InovasiInterface');
+        $this->KelitbanganRepository = \App::make('\App\Repositories\Contracts\Litbang\KelitbanganInterface');
+        $this->RegulasiRepository = \App::make('\App\Repositories\Contracts\Litbang\RegulasiInterface');
+        $this->SuratKeluarRepository = \App::make('\App\Repositories\Contracts\Litbang\SuratKeluarInterface');
+        $this->SuratMasukRepository = \App::make('\App\Repositories\Contracts\Litbang\SuratMasukInterface');
+        $this->JenisSuratRepository = \App::make('\App\Repositories\Contracts\Litbang\JenisSuratInterface');
         $this->SuratRekomendasiRepository = \App::make('\App\Repositories\Contracts\Litbang\SuratRekomendasiInterface');
-        $this->AttachmentRepository = \App::make('\App\Repositories\Contracts\Litbang\AttachmentInterface');
-        //$this->PelaksanaAgendaRepository = \App::make('\App\Repositories\Contracts\Litbang\PelaksanaInovasiInterface');
-       // $this->PenggunaRepository = \App::make('\App\Repositories\Contracts\Pengguna\AkunInterface');
+        $this->SurveyRepository = \App::make('\App\Repositories\Contracts\Litbang\SurveyInterface');
+        $this->UsulanInovasiRepository = \App::make('\App\Repositories\Contracts\Litbang\UsulanInovasiInterface');
+        $this->UsulanPenelitianRepository = \App::make('\App\Repositories\Contracts\Litbang\UsulanPenelitianInterface');
+
     }
 
     public function list(Request $request)
     {
         $relations = [
         ];
-        $result = $this->SuratRekomendasiRepository
-            ->relation($relations)
-            ->get();
+        $result = [];
+        $result['agenda'] = $this->AgendaRepository->relation($relations)->get()->count();
+        $result['berita'] = $this->BeritaRepository->relation($relations)->get()->count();
+        $result['inovasi'] = $this->InovasiRepository->relation($relations)->get()->count();
+        $result['kelitbangan'] = $this->KelitbanganRepository->relation($relations)->get()->count();
+        $result['regulasi'] = $this->RegulasiRepository->relation($relations)->get()->count();
+        $result['surat_masuk'] = $this->SuratMasukRepository->relation($relations)->get()->count();
+        $result['surat_keluar'] = $this->SuratKeluarRepository->relation($relations)->get()->count();
+        $result['jenis_surat'] = $this->JenisSuratRepository->relation($relations)->get()->count();
+        $result['usulan_inovasi'] = $this->UsulanInovasiRepository->relation($relations)->get()->count();
+        $result['penelitian'] = $this->UsulanPenelitianRepository->relation($relations)->get()->count();
+        $result['survey'] = $this->SurveyRepository->relation($relations)->get()->count();
+        $result['surat_rekomendasi'] = $this->SuratRekomendasiRepository->relation($relations)->get()->count();
+
         return $this->respond($result);
 
     }
@@ -44,7 +72,7 @@ class SuratRekomendasiController extends APIController
         $relations = [
 
         ];
-        return $datatable = datatables()->of($this->SuratRekomendasiRepository
+        return $datatable = datatables()->of($this->AgendaRepository
             ->relation($relations)
             ->get())
 //            ->editColumn('tanggal', function ($list) {
@@ -66,7 +94,7 @@ class SuratRekomendasiController extends APIController
                           <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
                               <ul class="navi flex-column navi-hover py-2">
                                   <li class="navi-item" onclick="'.$btn_edit.'">
-                                          <a href="/surat-rekomendasi-edit/'.$data['id'].'" target="_blank" class="navi-link">
+                                          <a href="/agenda-edit/'.$data['id'].'" target="_blank" class="navi-link">
                                                   <span class="navi-icon"><i class="flaticon2-edit"></i></span>
                                                   <span class="navi-text">Edit</span>
                                           </a>
@@ -91,7 +119,7 @@ class SuratRekomendasiController extends APIController
         $relations = [
 
         ];
-        return $datatable = datatables()->of($this->SuratRekomendasiRepository
+        return $datatable = datatables()->of($this->AgendaRepository
             ->relation($relations)
             ->where('tanggal','>=',$request->tanggal_awal)
             ->where('tanggal','<=',$request->tanggal_akhir)
@@ -115,7 +143,7 @@ class SuratRekomendasiController extends APIController
                           <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
                               <ul class="navi flex-column navi-hover py-2">
                                   <li class="navi-item" onclick="'.$btn_edit.'">
-                                          <a href="/surat-rekomendasi-edit/'.$data['id'].'" target="_blank" class="navi-link">
+                                          <a href="/agenda-edit/'.$data['id'].'" target="_blank" class="navi-link">
                                                   <span class="navi-icon"><i class="flaticon2-edit"></i></span>
                                                   <span class="navi-text">Edit</span>
                                           </a>
@@ -137,7 +165,7 @@ class SuratRekomendasiController extends APIController
 
     public function getById(Request $request)
     {
-        $result = $this->SuratRekomendasiRepository->with(['attachment'])->find($request->id);
+        $result = $this->AgendaRepository->with(['attachment'])->find($request->id);
         if ($result) {
             return $this->respond($result);
         } else {
@@ -208,37 +236,38 @@ class SuratRekomendasiController extends APIController
     public function create(Request $request)
     {
 
-        $validator = $this->SuratRekomendasiRepository->validate($request);
+        $validator = $this->AgendaRepository->validate($request);
         if ($validator->fails()) {
             return $this->respondWithValidationErrors($validator->errors()->all(), MessageConstant::VALIDATION_FAILED_MSG);
         } else {
             DB::beginTransaction();
 
-            $result = $this->SuratRekomendasiRepository->create(
+            $result = $this->AgendaRepository->create(
                 [
-                    'judul'    =>  $request->judul,
-                    'pengusul' => $request->pengusul,
-                    'institusi'   => $request->institusi,
-                    'email'  =>  $request->email,
-                    'no_hp'  =>  $request->no_hp,
+                    'nama'    =>  $request->nama,
+                    'tanggal' => $request->tanggal,
+                    'waktu'   => $request->waktu,
+                    'tempat'  =>  $request->tempat,
                 ]
             );
             if ($result->count()) {
-
+//                return $this->respondInternalError($rr= null,$request->pelaksana);
                 if (isset($request->attachment)){
                     if (count($request->attachment) > 0){
                         foreach ($request->attachment as $item => $att) {
                             $this->AttachmentRepository->create([
-                                'surat_rekomendasi_id' => $result->id,
+                                'agenda_id' => $request->id,
                                 'nama'       => $att['nama'],
                                 'url'        => $att['url']
                             ]);
                         }
                     }
                 }
-
+                //else{
+//                    return $this->respondInternalError($rr= null,'Pelaksana Dibutuhkan!');
+//                }
                 DB::commit();
-                return $this->respondCreated($result, 'Permintaan Berhasil Dikirim!');
+                return $this->respondCreated($result, MessageConstant::AGENDA_CREATE_SUCCESS_MSG);
             } else {
                 DB::rollBack();
                 return $this->respondConflict();
@@ -249,23 +278,22 @@ class SuratRekomendasiController extends APIController
     public function update(Request $request)
     {
 
-        $validator = $this->SuratRekomendasiRepository->validateUpdate($request);
+        $validator = $this->AgendaRepository->validateUpdate($request);
         if ($validator->fails()) {
             return $this->respondWithValidationErrors($validator->errors()->all(), MessageConstant::VALIDATION_FAILED_MSG);
         } else {
             DB::beginTransaction();
-//            $deleteAttachment = $this->AttachmentRepository
-//                ->where('agenda_id',$request->id)
-//                ->delete();
-            $result = $this->SuratRekomendasiRepository
+            $deleteAttachment = $this->AttachmentRepository
+                ->where('agenda_id',$request->id)
+                ->delete();
+            $result = $this->AgendaRepository
                 ->where('id',$request->id)
                 ->update(
                     [
-                        'judul'    =>  $request->judul,
-                        'pengusul' => $request->pengusul,
-                        'institusi'   => $request->institusi,
-                        'email'  =>  $request->email,
-                        'no_hp'  =>  $request->no_hp,
+                        'waktu' =>  $request->waktu,
+                        'tanggal' => $request->tanggal,
+                        'nama'   => $request->nama,
+                        'tempat' =>  $request->tempat,
                     ]
                 );
             if ($result) {
@@ -285,7 +313,7 @@ class SuratRekomendasiController extends APIController
 //                    return $this->respondInternalError($rr= null,'Pelaksana Dibutuhkan!');
 //                }
                 DB::commit();
-                return $this->respondCreated($result, 'Rekomendasi Diupdate!');
+                return $this->respondCreated($result, MessageConstant::AGENDA_UPDATE_SUCCESS_MSG);
             } else {
                 DB::rollBack();
                 return $this->respondNotFound();
@@ -295,9 +323,9 @@ class SuratRekomendasiController extends APIController
 
     public function delete(Request $request)
     {
-        $result = $this->SuratRekomendasiRepository->delete($request->id);
+        $result = $this->AgendaRepository->delete($request->id);
         if ($result) {
-            return $this->respondOk('Rekomendasi Dihapus!');
+            return $this->respondOk(MessageConstant::AGENDA_DELETE_SUCCESS_MSG);
         } else {
             return $this->respondNotFound(MessageConstant::INOVASI_DELETE_FAILED_MSG);
         }
