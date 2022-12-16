@@ -15,7 +15,6 @@ use Auth;
 use App\Repositories\MainRepository;
 use App\Mail\EmailNotif;
 use App\Notifications\StatusNotif;
-use Twilio\Rest\Client as TwilioClient;
 use Illuminate\Support\Facades\Notification;
 use App\Events\SampleEvent;
 
