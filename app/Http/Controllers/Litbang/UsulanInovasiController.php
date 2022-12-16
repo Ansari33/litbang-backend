@@ -352,10 +352,10 @@ class UsulanInovasiController extends APIController
                 'cc' => ['ansari.putra33@yahoo.com','tesvpn54@gmail.com'],
                 'status' => $request->status,
             ]);
-            $notif->notify(new StatusNotif());
-            Notification::send($notif, new StatusNotif());
+            #$notif->notify(new StatusNotif());
+            #Notification::send($notif, new StatusNotif());
 
-            event(new SampleEvent());
+            #event(new SampleEvent());
 
 
 //            $curl = curl_init();
