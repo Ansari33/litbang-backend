@@ -355,7 +355,7 @@ class UsulanInovasiController extends APIController
             #$notif->notify(new StatusNotif());
             #Notification::send($notif, new StatusNotif());
 
-            #event(new SampleEvent());
+            event(new SampleEvent());
 
 
 //            $curl = curl_init();
