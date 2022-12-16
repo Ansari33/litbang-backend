@@ -7,11 +7,17 @@ use App\Http\Controllers\APIController;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Validator;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\Models\Activity;
 use Auth;
 use App\Repositories\MainRepository;
+use App\Mail\EmailNotif;
+use App\Notifications\StatusNotif;
+use Twilio\Rest\Client as TwilioClient;
+use Illuminate\Support\Facades\Notification;
+use App\Events\SampleEvent;
 
 class UsulanInovasiController extends APIController
 {
@@ -327,7 +333,10 @@ class UsulanInovasiController extends APIController
     }
 
     public function updateStatus(Request $request){
+
         try {
+            $usulan = $this->UsulanInovasiRepository->find($request->id);
+
             $this->UsulanInovasiRepository
                 ->where('id',$request->id)
                 ->update(
@@ -335,6 +344,30 @@ class UsulanInovasiController extends APIController
                         'status'   => $request->status,
                     ]
                 );
+
+            $notif = new StatusNotif();
+            $notif->setEmail([
+                'penerima' => ['litbanga88@gmail.com' => 'Litbang'],
+                'email_pengirim' => 'putraansari05@gmail.com',
+                'nama_pengirim' => 'Ansari',
+                'cc' => ['ansari.putra33@yahoo.com','tesvpn54@gmail.com'],
+                'status' => $request->status,
+            ]);
+            $notif->notify(new StatusNotif());
+            Notification::send($notif, new StatusNotif());
+
+            event(new SampleEvent());
+
+
+//            $curl = curl_init();
+//            $token = "iSag4w3nrJN6vt4nYtz6iuYBdZk9qi6YvPb5dLN4piloSITOZ5Vy1XaZ2gUrEO8l";
+//            $phone = "6282342623617";
+//            $message = "test....";
+//            curl_setopt($curl, CURLOPT_URL, "https://jogja.wablas.com/api/send-message?phone=$phone&message=$message&token=$token");
+//            $result = curl_exec($curl);
+//            curl_close($curl);
+
+
             return $this->respondOk('Status Berhasil Diubah');
         }catch (\Exception $ex){
            return $this->respondInternalError($err = null, $ex->getMessage());
@@ -345,5 +378,14 @@ class UsulanInovasiController extends APIController
     public function getAutoNomor(){
         $data = $this->UsulanInovasiRepository->withTrashed()->get();
         return MainRepository::generateCode($data,'U-INOV-');
+    }
+
+    public function setNotif(StatusNotif  $notif){
+        $notif->setEmail([
+            'penerima' => ['litbanga88@gmail.com' => 'Litbang'],
+            'email_pengirim' => 'putraansari05@gmail.com',
+            'nama_pengirim' => 'Ansari',
+        ]);
+        $notif->notify(new StatusNotif());
     }
 }
