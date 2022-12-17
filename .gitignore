@@ -1,2 +1,14 @@
 
 .env
+vendor/composer/autoload_classmap.php
+vendor
+.env
+vendor/composer/installed.php
+vendor/composer/installed.json
+vendor/composer/autoload_static.php
+vendor/composer/autoload_psr4.php
+vendor/composer/autoload_files.php
+vendor/composer/autoload_classmap.php
+.env
+composer.json
+composer.lock
