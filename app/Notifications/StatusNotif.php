@@ -45,9 +45,9 @@ class StatusNotif extends Notification
     {
         return (new MailMessage)
             ->from($notifiable->e_mail['email_pengirim'],$notifiable->e_mail['nama_pengirim'])
-            ->bcc($notifiable->e_mail['cc'])
+            #->bcc($notifiable->e_mail['cc'])
             ->line('Usulan Inovasi Anda '.$notifiable->e_mail['status'])
-            ->action('Notification Action', url('/'))
+            ->action('Usulan Inovasi', env('WEB_URL').'forum-inovasi')
             ->line('Thank you for using our application!');
     }
 

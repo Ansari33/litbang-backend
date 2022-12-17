@@ -349,13 +349,13 @@ class UsulanInovasiController extends APIController
                 'penerima' => ['litbanga88@gmail.com' => 'Litbang'],
                 'email_pengirim' => 'putraansari05@gmail.com',
                 'nama_pengirim' => 'Ansari',
-                'cc' => ['ansari.putra33@yahoo.com','tesvpn54@gmail.com'],
+                #'cc' => ['ansari.putra33@yahoo.com','tesvpn54@gmail.com'],
                 'status' => $request->status,
             ]);
-            #$notif->notify(new StatusNotif());
+            $notif->notify(new StatusNotif());
             #Notification::send($notif, new StatusNotif());
 
-            event(new SampleEvent());
+            #event(new SampleEvent());
 
 
 //            $curl = curl_init();
