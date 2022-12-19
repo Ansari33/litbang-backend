@@ -344,15 +344,15 @@ class UsulanInovasiController extends APIController
                     ]
                 );
 
-            $notif = new StatusNotif();
-            $notif->setEmail([
-                'penerima' => ['litbanga88@gmail.com' => 'Litbang'],
-                'email_pengirim' => 'putraansari05@gmail.com',
-                'nama_pengirim' => 'Ansari',
-                #'cc' => ['ansari.putra33@yahoo.com','tesvpn54@gmail.com'],
-                'status' => $request->status,
-            ]);
-            $notif->notify(new StatusNotif());
+            #$notif = new StatusNotif();
+            #$notif->setEmail([
+            #    'penerima' => ['litbanga88@gmail.com' => 'Litbang'],
+            #    'email_pengirim' => 'putraansari05@gmail.com',
+            #    'nama_pengirim' => 'Ansari',
+            #    #'cc' => ['ansari.putra33@yahoo.com','tesvpn54@gmail.com'],
+            #    'status' => $request->status,
+            #]);
+            #$notif->notify(new StatusNotif());
             #Notification::send($notif, new StatusNotif());
 
             #event(new SampleEvent());
