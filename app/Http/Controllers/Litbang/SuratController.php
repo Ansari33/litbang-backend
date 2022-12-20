@@ -537,7 +537,8 @@ class SuratController extends APIController
 
             $result = $this->JenisSuratRepository->create(
                 [
-                    'jenis'           => $request->jenis,#$this->getNumbering()['data'],
+                    'jenis'           => $request->jenis,
+                    'kode'              => $request->kode,#$this->getNumbering()['data'],
                     'keterangan'        => $request->keterangan,
                 ]
             );
@@ -575,7 +576,8 @@ class SuratController extends APIController
                 ->where('id',$request->id)
                 ->update(
                     [
-                        'jenis'           => $request->jenis,#$this->getNumbering()['data'],
+                        'jenis'           => $request->jenis,
+                        'kode'              => $request->kode,#$this->getNumbering()['data'],
                         'keterangan'        => $request->keterangan,
                     ]
                 );
