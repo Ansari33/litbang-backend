@@ -336,7 +336,7 @@ class SuratController extends APIController
                     'nomor_urut'           => $request->nomor_urut,#$this->getNumbering()['data'],
                     'tanggal_surat'        => $request->tanggal_surat,
                     'nomor_surat'          => $request->nomor_surat,
-                    'klasifikasi_surat_ID' => $request->klasifikasi,
+                    'klasifikasi_surat_id' => $request->klasifikasi,
                     'surat_keluar'         => $request->surat_keluar,
                     'tujuan'               => $request->tujuan,
                     'isi_perihal_singkat'  => $request->isi_perihal_singkat,
@@ -345,7 +345,7 @@ class SuratController extends APIController
             if ($result->count()) {
 
                 DB::commit();
-                return $this->respondCreated($result, MessageConstant::USULAN_PENELITIAN_CREATE_SUCCESS_MSG);
+                return $this->respondCreated($result, 'Surat Keluar Berhasil Dibuat!');
             } else {
                 DB::rollBack();
                 return $this->respondConflict();
@@ -380,7 +380,7 @@ class SuratController extends APIController
             if ($result->count()) {
 
                 DB::commit();
-                return $this->respondCreated($result, MessageConstant::USULAN_PENELITIAN_CREATE_SUCCESS_MSG);
+                return $this->respondCreated($result, 'Surat Masuk Berhasil Disimpan!');
             } else {
                 DB::rollBack();
                 return $this->respondConflict();
