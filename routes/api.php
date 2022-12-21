@@ -292,15 +292,24 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
             $api->GET('/','Litbang\KelitbanganController@list');
             $api->GET('/datatable','Litbang\KelitbanganController@listWithDatatable')->middleware('auth:api');
             $api->POST('/datatable-tanggal','Litbang\KelitbanganController@listWithDatatableByTanggal')->middleware('auth:api');
+
+            $api->GET('/bidang','Litbang\BidangKelitbanganController@list');
+            $api->GET('/bidang-datatable','Litbang\BidangKelitbanganController@listWithDataTable');
+            $api->POST('/by-bidang','Litbang\KelitbanganController@listWithDatatableByBidang');
         });
         $api->group(['prefix' => 'get'], function ($api) {
-            $api->POST('id','Litbang\KelitbanganController@getById')    ;
+            $api->POST('id','Litbang\KelitbanganController@getById');
+
+            $api->POST('bidang','Litbang\BidangKelitbanganController@getById');
          });
         $api->POST('create','Litbang\KelitbanganController@create')->middleware('auth:api');
         $api->POST('update','Litbang\KelitbanganController@update')->middleware('auth:api');
         $api->POST('delete','Litbang\KelitbanganController@delete')->middleware('auth:api');
         $api->GET('terkini','Litbang\KelitbanganController@terkini');
         $api->GET('nomor','Litbang\KelitbanganController@getAutoNomor');
+
+        $api->POST('create-bidang','Litbang\BidangKelitbanganController@create')->middleware('auth:api');
+        $api->POST('update-bidang','Litbang\BidangKelitbanganController@update')->middleware('auth:api');
     });
 
     /*

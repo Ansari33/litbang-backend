@@ -48,7 +48,7 @@ class Kelitbangan extends Model
     }
 
     public function lingkup_data() {
-        return $this->belongsTo('App\Models\Litbang\Instansi','lingkup','id');
+        return $this->belongsTo('App\Models\Litbang\BidangKelitbangan','lingkup','id');
     }
 
     public function pelaksana() {
