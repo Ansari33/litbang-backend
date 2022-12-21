@@ -224,7 +224,7 @@ class UsulanPenelitianController extends APIController
 
     public function getById(Request $request)
     {
-        $result = $this->UsulanPenelitianRepository->with([])->find($request->id);
+        $result = $this->UsulanPenelitianRepository->with(['attachment'])->find($request->id);
         if ($result) {
             return $this->respond($result);
         } else {
