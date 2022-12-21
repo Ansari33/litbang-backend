@@ -107,7 +107,7 @@ class SuratController extends APIController
             ->get())
             ->editColumn('file_surat', function ($data) {
                 $asset = $data['surat_keluar'];
-                return '<a href="/files-attachment/surat-keluar/"'.$asset.'><i class="flaticon2-file"></i></a>';
+                return '<a href="/files-attachment/surat-keluar/'.$asset.'"><i class="flaticon2-file"></i></a>';
             })
             ->addColumn('klasifikasi', function ($data) {
 
@@ -158,7 +158,7 @@ class SuratController extends APIController
             ->get())
             ->editColumn('file_surat', function ($data) {
                 $asset = $data['surat_masuk'];
-                return '<a href="/files-attachment/surat-masuk'.$asset.'"><i class="flaticon2-file"></i></a>';
+                return '<a href="/files-attachment/surat-masuk/'.$asset.'"><i class="flaticon2-file"></i></a>';
             })
             ->addColumn('klasifikasi', function ($data) {
                 return  $data['klasifikasi_data'] == null ? 'Tidak Ditemukan' : $data['klasifikasi_data']['jenis'];
