@@ -235,7 +235,7 @@ class KelitbanganController extends APIController
                 }
                 return $docs;
             })
-            ->addColumn('rangkuman', function ($list) {
+            ->editColumn('rangkuman', function ($list) {
                 //return $list['documents'];
 
                 $docs = '<a href="/files-attachment/rangkuman-kelitbangan/'.$list['rangkuman'].'" style="color:inherit;">'.$list['rangkuman'].'</a>';
@@ -272,7 +272,7 @@ class KelitbanganController extends APIController
                     ';
 
             })
-            ->rawColumns(['dokumen','action'])
+            ->rawColumns(['dokumen','rangkuman','action'])
             ->toJson();
     }
 
