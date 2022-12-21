@@ -43,7 +43,7 @@ class RegulasiController extends APIController
             ->relation($relations)
             ->get())
             ->editColumn('file', function ($data) {
-                return '<a href="/download-regulasi/'.$data['file'].'" style="color:inherit;">'.$data['file'].'</a>';
+                return '<a href="/files-attachment/regulasi/'.$data['file'].'" style="color:inherit;">'.$data['file'].'</a>';
             })
             ->addColumn('action', function ($data) {
                 $btn_edit   =  '#';
