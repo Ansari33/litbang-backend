@@ -312,6 +312,26 @@ class KelitbanganController extends APIController
 
     }
 
+    public function listByBidangWithLimitJudul(Request $request)
+    {
+        $relations = [
+            'lingkup_data',
+            'documents',
+            'attachment'
+        ];
+//        return $this->KelitbanganRepository->relation($relations)
+//            ->get();
+        //return 'Tanggal Awal ='.$request->tanggal_awal.' Tanggal Akhir ='.$request->tanggal_akhir;
+        $result = $this->KelitbanganRepository
+            ->relation($relations)
+            ->where('lingkup',$request->bidang)
+            ->where('judul','like','%'.$request->judul.'%')
+            ->skip(intval($request->page) * 20)->take(20)
+            ->get();
+        return $this->respond($result);
+
+    }
+
     public function getById(Request $request)
     {
         $result = $this->KelitbanganRepository->with(['pelaksana','attachment'])->find($request->id);
