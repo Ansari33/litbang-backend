@@ -296,6 +296,9 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
             $api->GET('/bidang','Litbang\BidangKelitbanganController@list');
             $api->GET('/bidang-datatable','Litbang\BidangKelitbanganController@listWithDataTable');
             $api->POST('/by-bidang','Litbang\KelitbanganController@listWithDatatableByBidang');
+
+            $api->POST('/by-bidang-api','Litbang\KelitbanganController@listByBidang');
+            $api->POST('/by-bidang-limit','Litbang\KelitbanganController@listByBidangWithLimit');
         });
         $api->group(['prefix' => 'get'], function ($api) {
             $api->POST('id','Litbang\KelitbanganController@getById');

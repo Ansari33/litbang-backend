@@ -276,6 +276,41 @@ class KelitbanganController extends APIController
             ->toJson();
     }
 
+    public function listByBidang(Request $request)
+    {
+        $relations = [
+            'lingkup_data',
+            'documents',
+            'attachment'
+        ];
+//        return $this->KelitbanganRepository->relation($relations)
+//            ->get();
+        //return 'Tanggal Awal ='.$request->tanggal_awal.' Tanggal Akhir ='.$request->tanggal_akhir;
+        return $this->KelitbanganRepository
+            ->relation($relations)
+            ->where('lingkup',$request->bidang)
+            ->get();
+
+    }
+
+    public function listByBidangWithLimit(Request $request)
+    {
+        $relations = [
+            'lingkup_data',
+            'documents',
+            'attachment'
+        ];
+//        return $this->KelitbanganRepository->relation($relations)
+//            ->get();
+        //return 'Tanggal Awal ='.$request->tanggal_awal.' Tanggal Akhir ='.$request->tanggal_akhir;
+        return $this->KelitbanganRepository
+            ->relation($relations)
+            ->where('lingkup',$request->bidang)
+            ->skip(intval($request->page) * 20)->take(20)
+            ->get();
+
+    }
+
     public function getById(Request $request)
     {
         $result = $this->KelitbanganRepository->with(['pelaksana','attachment'])->find($request->id);
