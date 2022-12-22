@@ -231,14 +231,14 @@ class KelitbanganController extends APIController
                 //return $list['documents'];
                 $docs = '';
                 foreach ($list['documents'] as $dc => $doc){
-                    $docs .= '<a href="/files-attachment/laporan-kelitbangan/'.$doc['nama'].'" style="color:inherit;">'.$doc['nama'].'</a>';
+                    $docs .= '<a href="/files-attachment/laporan-kelitbangan/'.$doc['nama'].'" style="color:inherit;" target="_blank">'.$doc['nama'].'</a>';
                 }
                 return $docs;
             })
             ->editColumn('rangkuman', function ($list) {
                 //return $list['documents'];
 
-                $docs = '<a href="/files-attachment/rangkuman-kelitbangan/'.$list['rangkuman'].'" style="color:inherit;">'.$list['rangkuman'].'</a>';
+                $docs = '<a href="/files-attachment/rangkuman-kelitbangan/'.$list['rangkuman'].'" style="color:inherit;" target="_blank">'.$list['rangkuman'].'</a>';
                 return $docs;
             })
             ->addColumn('action', function ($data) {
