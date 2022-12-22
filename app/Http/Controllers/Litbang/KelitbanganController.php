@@ -303,11 +303,12 @@ class KelitbanganController extends APIController
 //        return $this->KelitbanganRepository->relation($relations)
 //            ->get();
         //return 'Tanggal Awal ='.$request->tanggal_awal.' Tanggal Akhir ='.$request->tanggal_akhir;
-        return $this->KelitbanganRepository
+        $result = $this->KelitbanganRepository
             ->relation($relations)
             ->where('lingkup',$request->bidang)
             ->skip(intval($request->page) * 20)->take(20)
             ->get();
+        return $this->respond($result);
 
     }
 
