@@ -438,6 +438,8 @@ class KelitbanganController extends APIController
                         'lingkup' =>  $request->lingkup,
                         'abstrak' => $request->abstrak,
                         'tindak_lanjut'   => $request->tindak_lanjut,
+                        'tipe' => $request->tipe,
+                        'rangkuman' => $request->rangkuman,
                     ]
                 );
             if ($result) {
