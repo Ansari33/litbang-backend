@@ -298,7 +298,7 @@ class KelitbanganController extends APIController
         $relations = [
             'lingkup_data',
             'documents',
-            'attachment'
+            'attachment','pelaksana'
         ];
 //        return $this->KelitbanganRepository->relation($relations)
 //            ->get();
@@ -317,7 +317,8 @@ class KelitbanganController extends APIController
         $relations = [
             'lingkup_data',
             'documents',
-            'attachment'
+            'attachment',
+            'pelaksana'
         ];
 //        return $this->KelitbanganRepository->relation($relations)
 //            ->get();
