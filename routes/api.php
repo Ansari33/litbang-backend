@@ -431,6 +431,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
             $api->GET('/','Litbang\SuratController@listSuratKeluar');
             $api->GET('/datatable','Litbang\SuratController@listSuratKeluarWithDatatable')->middleware('auth:api');
             $api->POST('/datatable-tanggal','Litbang\SuratController@listSuratKeluarWithDatatableByTanggal')->middleware('auth:api');
+            $api->POST('/by-nomor','Litbang\SuratController@listSuratKeluarByNomor');
         });
         $api->group(['prefix' => 'get'], function ($api) {
             $api->POST('id','Litbang\SuratController@getByIdSuratKeluar')->middleware('auth:api');
