@@ -53,7 +53,20 @@ class SuratController extends APIController
 
     }
 
-    public function listSuratMasuk()
+    public function listSuratMasuk(Request $request)
+    {
+        $relations = [
+//            'instansi_data'
+        ];
+        $result = $this->SuratMasukRepository
+            ->relation($relations)
+            ->where('nomor_surat','like','%'.$request->nomor.'%')
+            ->get();
+        return $this->respond($result);
+
+    }
+
+    public function listSuratMasukByNomor()
     {
         $relations = [
 //            'instansi_data'
