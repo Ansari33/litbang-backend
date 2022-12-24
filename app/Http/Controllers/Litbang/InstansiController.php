@@ -165,6 +165,9 @@ class InstansiController extends APIController
             $result = $this->InstansiRepository->create(
                 [
                     'nama'   => $request->nama,
+                    'email'   => $request->email,
+                    'alamat'   => $request->alamat,
+                    'telepon'   => $request->telepon,
                 ]
             );
             if ($result->count()) {
@@ -187,6 +190,9 @@ class InstansiController extends APIController
                 ->update(
                     [
                         'nama'   => $request->nama,
+                        'email'   => $request->email,
+                        'alamat'   => $request->alamat,
+                        'telepon'   => $request->telepon,
                     ]
                 );
             if ($result) {
