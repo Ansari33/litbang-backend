@@ -151,7 +151,7 @@ class SuratController extends APIController
     public function listSuratMasukWithDatatable(Request $request)
     {
         $relations = [
-            'klasifikasi_data'
+            'klasifikasi_data','pengirim_data'
         ];
         return $datatable = datatables()->of($this->SuratMasukRepository
             ->relation($relations)
@@ -159,6 +159,9 @@ class SuratController extends APIController
             ->editColumn('file_surat', function ($data) {
                 $asset = $data['surat_masuk'];
                 return '<a href="/files-attachment/surat-masuk/'.$asset.'"><i class="flaticon2-file"></i></a>';
+            })
+            ->editColumn('pengirim', function ($data) {
+                return $data['pengirim_data'] == null ? '-' : $data['pengirim_data']['nama'];
             })
             ->addColumn('klasifikasi', function ($data) {
                 return  $data['klasifikasi_data'] == null ? 'Tidak Ditemukan' : $data['klasifikasi_data']['jenis'];
@@ -253,7 +256,7 @@ class SuratController extends APIController
     public function listSuratMasukWithDatatableByTanggal(Request $request)
     {
         $relations = [
-            'klasifikasi_data'
+            'klasifikasi_data','pengirim_data'
         ];
         return $datatable = datatables()->of($this->SuratMasukRepository
             ->relation($relations)
@@ -263,6 +266,9 @@ class SuratController extends APIController
             ->editColumn('file_surat', function ($data) {
                 $asset = $data['surat_masuk'];
                 return '<a href="/files-attchment/surat-masuk/'.$asset.'"><i class="flaticon2-file"></i></a>';
+            })
+            ->editColumn('pengirim', function ($data) {
+                return $data['pengirim_data'] == null ? '-' : $data['pengirim_data']['nama'];
             })
             ->addColumn('klasifikasi', function ($data) {
                 return  $data['klasifikasi_data'] == null ? 'Tidak Ditemukan' : $data['klasifikasi_data']['jenis'];
@@ -314,7 +320,7 @@ class SuratController extends APIController
 
     public function getByIdSuratMasuk(Request $request)
     {
-        $result = $this->SuratMasukRepository->with([])->find($request->id);
+        $result = $this->SuratMasukRepository->with(['pengirim_data'])->find($request->id);
         if ($result) {
             return $this->respond($result);
         } else {

@@ -326,6 +326,7 @@ class KelitbanganController extends APIController
             ->relation($relations)
             ->where('lingkup',$request->bidang)
             ->where('judul','like','%'.$request->judul.'%')
+
             ->skip(intval($request->page) * 20)->take(20)
             ->get();
         return $this->respond($result);
