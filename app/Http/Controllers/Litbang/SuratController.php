@@ -341,7 +341,7 @@ class SuratController extends APIController
                 [
                     'nomor_urut'           => $request->nomor_urut,#$this->getNumbering()['data'],
                     'tanggal_surat'        => $request->tanggal_surat,
-                    'nomor_surat'          => $request->nomor_surat,
+                    'nomor_surat'          => $request->kode.$request->nomor_surat ,
                     'klasifikasi_surat_id' => $request->klasifikasi,
                     'surat_keluar'         => $request->surat_keluar,
                     'tujuan'               => $request->tujuan,
@@ -409,8 +409,8 @@ class SuratController extends APIController
                 [
                     'nomor_urut'           => $request->nomor_urut,#$this->getNumbering()['data'],
                     'tanggal_surat'        => $request->tanggal_surat,
-                    'nomor_surat'          => $request->nomor_surat,
-                    'klasifikasi_surat_ID' => $request->klasifikasi,
+                    'nomor_surat'          => $request->kode.$request->nomor_surat ,
+                    'klasifikasi_surat_id' => $request->klasifikasi,
                     'surat_keluar'         => $request->surat_keluar,
                     'tujuan'               => $request->tujuan,
                     'isi_perihal_singkat'  => $request->isi_perihal_singkat,
