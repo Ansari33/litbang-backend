@@ -243,6 +243,7 @@ class BeritaController extends APIController
                                 'berita_id' => $result->id,
                                 'nama'      => $it['nama'],
                                 'url'       => $it['url'],
+                                'tipe'       => $it['tipe'],
                             ]);
                         }
                     }
@@ -285,6 +286,7 @@ class BeritaController extends APIController
                                 'berita_id' => $request->id,
                                 'nama'      => $it['nama'],
                                 'url'       => $it['url'],
+                                'tipe'       => $it['tipe'],
                             ]);
                         }
                     }
