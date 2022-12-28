@@ -314,6 +314,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
 
         $api->POST('create-bidang','Litbang\BidangKelitbanganController@create')->middleware('auth:api');
         $api->POST('update-bidang','Litbang\BidangKelitbanganController@update')->middleware('auth:api');
+        $api->POST('delete-bidang','Litbang\BidangKelitbanganController@delete')->middleware('auth:api');
     });
 
     /*

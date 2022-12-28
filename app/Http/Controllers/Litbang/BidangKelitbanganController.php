@@ -124,7 +124,7 @@ class BidangKelitbanganController extends APIController
                                                   <span class="navi-text">Edit</span>
                                           </a>
                                   </li>
-                                  <li class="navi-item" onclick="deleteKelitbangan('.$data['id'].')">
+                                  <li class="navi-item" onclick="deleteBidangKelitbangan('.$data['id'].')">
                                           <a href="#" class="navi-link">
                                                   <span class="navi-icon"><i class="flaticon2-trash"></i></span>
                                                   <span class="navi-text">Hapus</span>
@@ -268,7 +268,6 @@ class BidangKelitbanganController extends APIController
 
         $result = $this->BidangKelitbanganRepository->delete($request->id);
         if ($result) {
-
             $this->KelitbanganRepository->where('lingkup',$request->id)->delete();
             return $this->respondOk(MessageConstant::KELITBANGAN_DELETE_SUCCESS_MSG);
         } else {
