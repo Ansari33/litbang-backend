@@ -59,7 +59,7 @@ class BidangKelitbanganController extends APIController
                                                   <span class="navi-text">Edit</span>
                                           </a>
                                   </li>
-                                  <li class="navi-item" onclick="deleteKelitbangan('.$data['id'].')">
+                                  <li class="navi-item" onclick="deleteBidangKelitbangan('.$data['id'].')">
                                           <a href="#" class="navi-link">
                                                   <span class="navi-icon"><i class="flaticon2-trash"></i></span>
                                                   <span class="navi-text">Hapus</span>
