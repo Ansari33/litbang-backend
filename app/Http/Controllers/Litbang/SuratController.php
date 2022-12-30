@@ -363,12 +363,15 @@ class SuratController extends APIController
             return $this->respondWithValidationErrors($validator->errors()->all(), MessageConstant::VALIDATION_FAILED_MSG);
         } else {
             DB::beginTransaction();
+            $klasifikasi = $this->JenisSuratRepository->find($request->klasifikasi);
+            $kode = '000-';
+            if($klasifikasi){ $kode = $klasifikasi->kode.'-';}
 
             $result = $this->SuratKeluarRepository->create(
                 [
                     'nomor_urut'           => $request->nomor_urut,#$this->getNumbering()['data'],
                     'tanggal_surat'        => $request->tanggal_surat,
-                    'nomor_surat'          => $request->kode.$request->nomor_surat ,
+                    'nomor_surat'          => $kode.$request->nomor_surat ,
                     'klasifikasi_surat_id' => $request->klasifikasi,
                     'surat_keluar'         => $request->surat_keluar,
                     'tujuan'               => $request->tujuan,
@@ -430,13 +433,17 @@ class SuratController extends APIController
         } else {
             DB::beginTransaction();
 
+            $klasifikasi = $this->JenisSuratRepository->find($request->klasifikasi);
+            $kode = '000-';
+            if($klasifikasi){ $kode = $klasifikasi->kode.'-';}
+
             $result = $this->SuratKeluarRepository
                 ->where('id',$request->id)
                 ->update(
                 [
                     'nomor_urut'           => $request->nomor_urut,#$this->getNumbering()['data'],
                     'tanggal_surat'        => $request->tanggal_surat,
-                    'nomor_surat'          => $request->kode.$request->nomor_surat ,
+                    'nomor_surat'          => $kode.$request->nomor_surat ,
                     'klasifikasi_surat_id' => $request->klasifikasi,
                     'surat_keluar'         => $request->surat_keluar,
                     'tujuan'               => $request->tujuan,
