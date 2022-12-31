@@ -417,6 +417,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         $api->POST('create','Litbang\UsulanPenelitianController@create');
         $api->POST('update','Litbang\UsulanPenelitianController@update')->middleware('auth:api');
         $api->POST('delete','Litbang\UsulanPenelitianController@delete')->middleware('auth:api');
+        $api->POST('set-status','Litbang\UsulanPenelitianController@setStatus')->middleware('auth:api');
         $api->GET('numbering','Litbang\UsulanPenelitianController@getNumbering');
         $api->GET('nomor','Litbang\UsulanPenelitianController@getAutoNomor');
 
