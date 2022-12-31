@@ -48,7 +48,7 @@ class UsulanPenelitian extends Model
     }
 
     public function lingkup_data() {
-        return $this->belongsTo('App\Models\Litbang\Instansi','instansi','id');
+        return $this->belongsTo('App\Models\Litbang\BidangKelitbangan','instansi','id');
     }
 
     public function pelaksana() {
