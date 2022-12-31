@@ -393,27 +393,23 @@ class UsulanPenelitianController extends APIController
     public function setStatus(Request $request)
     {
 
-        $validator = $this->UsulanPenelitianRepository->validateUpdate($request);
-        if ($validator->fails()) {
-            return $this->respondWithValidationErrors($validator->errors()->all(), MessageConstant::VALIDATION_FAILED_MSG);
-        } else {
-            DB::beginTransaction();
-            $result = $this->UsulanPenelitianRepository
-                ->where('id',$request->id)
-                ->update(
-                    [
-                        'status'         => $request->status,
-                    ]
-                );
-            if ($result) {
+        DB::beginTransaction();
+        $result = $this->UsulanPenelitianRepository
+            ->where('id',$request->id)
+            ->update(
+                [
+                    'status'         => $request->status,
+                ]
+            );
+        if ($result) {
 
-                DB::commit();
-                return $this->respondCreated($result, 'Status Berhasil Diupdate!');
-            } else {
-                DB::rollBack();
-                return $this->respondNotFound();
-            }
+            DB::commit();
+            return $this->respondCreated($result, 'Status Berhasil Diupdate!');
+        } else {
+            DB::rollBack();
+            return $this->respondNotFound();
         }
+
     }
 
     public function delete(Request $request)
