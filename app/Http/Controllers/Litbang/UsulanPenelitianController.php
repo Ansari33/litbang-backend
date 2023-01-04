@@ -415,6 +415,7 @@ class UsulanPenelitianController extends APIController
     public function delete(Request $request)
     {
         $result = $this->UsulanPenelitianRepository->delete($request->id);
+        $this->AttachmentRepository->where('usulan_penelitian_id', $request->id)->delete();
         if ($result) {
             return $this->respondOk(MessageConstant::USULAN_PENELITIAN_DELETE_SUCCESS_MSG);
         } else {
