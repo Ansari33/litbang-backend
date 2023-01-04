@@ -48,7 +48,7 @@ class Inovasi extends Model
     }
 
     public function instansi_data() {
-        return $this->belongsTo('App\Models\Litbang\Instansi','instansi','id');
+        return $this->belongsTo('App\Models\Litbang\BidangKelitbangan','instansi','id');
     }
     public function pelaksana() {
         return $this->hasMany('App\Models\Litbang\PelaksanaInovasi','inovasi_id','id');
