@@ -665,4 +665,44 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         $api->POST('delete','Litbang\JenisLayananIncubatorController@delete')->middleware('auth:api');
     });
 
+    /*
+    |--------------------------------------------------------------------------
+    | Informasi Publik
+    |--------------------------------------------------------------------------
+    */
+    $api->group(['prefix' => 'informasi-publik'], function ($api) {
+        $api->group(['prefix' => 'list'], function ($api) {
+            $api->GET('/','Litbang\InformasiPublikController@list');
+            $api->GET('/datatable','Litbang\InformasiPublikController@listWithDatatable')->middleware('auth:api');
+            $api->POST('/datatable-tanggal','Litbang\InformasiPublikController@listWithDatatableByTanggal')->middleware('auth:api');
+        });
+        $api->group(['prefix' => 'get'], function ($api) {
+            $api->POST('id','Litbang\InformasiPublikController@getById')->middleware('auth:api');
+            $api->POST('kategori','Litbang\InformasiPublikController@getByKategori');
+        });
+        $api->POST('create','Litbang\InformasiPublikController@create');
+        $api->POST('update','Litbang\InformasiPublikController@update')->middleware('auth:api');
+        $api->POST('delete','Litbang\InformasiPublikController@delete')->middleware('auth:api');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Kategori Informasi Publik
+    |--------------------------------------------------------------------------
+    */
+    $api->group(['prefix' => 'kategori-informasi-publik'], function ($api) {
+        $api->group(['prefix' => 'list'], function ($api) {
+            $api->GET('/','Litbang\KategoriInformasiPublikController@list');
+            $api->GET('/datatable','Litbang\KategoriInformasiPublikController@listWithDatatable')->middleware('auth:api');
+            $api->POST('/datatable-tanggal','Litbang\KategoriInformasiPublikController@listWithDatatableByTanggal')->middleware('auth:api');
+        });
+        $api->group(['prefix' => 'get'], function ($api) {
+            $api->POST('id','Litbang\KategoriInformasiPublikController@getById')->middleware('auth:api');
+            $api->POST('jenis','Litbang\KategoriInformasiPublikController@getByJenis')->middleware('auth:api');
+        });
+        $api->POST('create','Litbang\KategoriInformasiPublikController@create');
+        $api->POST('update','Litbang\KategoriInformasiPublikController@update')->middleware('auth:api');
+        $api->POST('delete','Litbang\KategoriInformasiPublikController@delete')->middleware('auth:api');
+    });
+
 });

@@ -244,6 +244,16 @@ class RepoBindingServiceProvider extends ServiceProvider
             return $repository;
         });
 
+        $app->bind('\App\Repositories\Contracts\Litbang\InformasiPublikInterface', function () {
+            $repository = new \App\Repositories\Litbang\InformasiPublikRepository(new \App\Models\Litbang\InformasiPublik);
+            return $repository;
+        });
+
+        $app->bind('\App\Repositories\Contracts\Litbang\KategoriInformasiPublikInterface', function () {
+            $repository = new \App\Repositories\Litbang\KategoriInformasiPublikRepository(new \App\Models\Litbang\KategoriInformasiPublik);
+            return $repository;
+        });
+
 
 	}
 }
