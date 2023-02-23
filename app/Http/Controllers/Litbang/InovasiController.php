@@ -269,6 +269,7 @@ class InovasiController extends APIController
                     'deskripsi' =>  $request->deskripsi,
                     'kelengkapan' => $request->kelengkapan,
                     'instansi'   => $request->instansi,
+                    'rancang_bangun' => $request->rancang_bangun,
                 ]
             );
             if ($result->count()) {
@@ -339,6 +340,7 @@ class InovasiController extends APIController
                         'deskripsi' =>  $request->deskripsi,
                         'kelengkapan' => $request->kelengkapan,
                         'instansi'   => $request->instansi,
+                        'rancang_bangun' => $request->rancang_bangun
                     ]
                 );
             if ($result) {

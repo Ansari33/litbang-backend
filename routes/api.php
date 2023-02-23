@@ -627,5 +627,42 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         $api->POST('delete','Litbang\SuratRekomendasiController@delete')->middleware('auth:api');
     });
 
+    /*
+    |--------------------------------------------------------------------------
+    | Layanan Incubator
+    |--------------------------------------------------------------------------
+    */
+    $api->group(['prefix' => 'layanan-incubator'], function ($api) {
+        $api->group(['prefix' => 'list'], function ($api) {
+            $api->GET('/','Litbang\LayananIncubatorController@list');
+            $api->GET('/datatable','Litbang\LayananIncubatorController@listWithDatatable')->middleware('auth:api');
+            $api->POST('/datatable-tanggal','Litbang\LayananIncubatorController@listWithDatatableByTanggal')->middleware('auth:api');
+        });
+        $api->group(['prefix' => 'get'], function ($api) {
+            $api->POST('id','Litbang\LayananIncubatorController@getById')->middleware('auth:api');
+        });
+        $api->POST('create','Litbang\LayananIncubatorController@create');
+        $api->POST('update','Litbang\LayananIncubatorController@update')->middleware('auth:api');
+        $api->POST('delete','Litbang\LayananIncubatorController@delete')->middleware('auth:api');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Jenis Layanan Incubator
+    |--------------------------------------------------------------------------
+    */
+    $api->group(['prefix' => 'jenis-layanan-incubator'], function ($api) {
+        $api->group(['prefix' => 'list'], function ($api) {
+            $api->GET('/','Litbang\JenisLayananIncubatorController@list');
+            $api->GET('/datatable','Litbang\JenisLayananIncubatorController@listWithDatatable')->middleware('auth:api');
+            $api->POST('/datatable-tanggal','Litbang\JenisLayananIncubatorController@listWithDatatableByTanggal')->middleware('auth:api');
+        });
+        $api->group(['prefix' => 'get'], function ($api) {
+            $api->POST('id','Litbang\JenisLayananIncubatorController@getById')->middleware('auth:api');
+        });
+        $api->POST('create','Litbang\JenisLayananIncubatorController@create');
+        $api->POST('update','Litbang\JenisLayananIncubatorController@update')->middleware('auth:api');
+        $api->POST('delete','Litbang\JenisLayananIncubatorController@delete')->middleware('auth:api');
+    });
 
 });

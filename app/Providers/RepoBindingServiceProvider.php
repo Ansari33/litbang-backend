@@ -234,6 +234,16 @@ class RepoBindingServiceProvider extends ServiceProvider
             return $repository;
         });
 
+        $app->bind('\App\Repositories\Contracts\Litbang\LayananIncubatorInterface', function () {
+            $repository = new \App\Repositories\Litbang\LayananIncubatorRepository(new \App\Models\Litbang\LayananIncubator);
+            return $repository;
+        });
+
+        $app->bind('\App\Repositories\Contracts\Litbang\JenisLayananIncubatorInterface', function () {
+            $repository = new \App\Repositories\Litbang\JenisLayananIncubatorRepository(new \App\Models\Litbang\JenisLayananIncubator);
+            return $repository;
+        });
+
 
 	}
 }
