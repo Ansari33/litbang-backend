@@ -698,7 +698,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         });
         $api->group(['prefix' => 'get'], function ($api) {
             $api->POST('id','Litbang\KategoriInformasiPublikController@getById')->middleware('auth:api');
-            $api->POST('jenis','Litbang\KategoriInformasiPublikController@getByJenis')->middleware('auth:api');
+            $api->POST('jenis','Litbang\KategoriInformasiPublikController@getByJenis');
         });
         $api->POST('create','Litbang\KategoriInformasiPublikController@create');
         $api->POST('update','Litbang\KategoriInformasiPublikController@update')->middleware('auth:api');
