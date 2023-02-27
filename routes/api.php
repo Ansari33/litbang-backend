@@ -705,4 +705,24 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'],function ($api) {
         $api->POST('delete','Litbang\KategoriInformasiPublikController@delete')->middleware('auth:api');
     });
 
+    /*
+    |--------------------------------------------------------------------------
+    | Profil
+    |--------------------------------------------------------------------------
+    */
+    $api->group(['prefix' => 'profil'], function ($api) {
+        $api->group(['prefix' => 'list'], function ($api) {
+            $api->GET('/','Litbang\ProfilController@list');
+            $api->GET('/datatable','Litbang\ProfilController@listWithDatatable')->middleware('auth:api');
+            $api->POST('/datatable-tanggal','Litbang\ProfilController@listWithDatatableByTanggal')->middleware('auth:api');
+        });
+        $api->group(['prefix' => 'get'], function ($api) {
+            $api->POST('id','Litbang\ProfilController@getById');
+            $api->POST('jenis','Litbang\ProfilController@getByJenis');
+        });
+        $api->POST('create','Litbang\ProfilController@create');
+        $api->POST('update','Litbang\ProfilController@update')->middleware('auth:api');
+        $api->POST('delete','Litbang\ProfilController@delete')->middleware('auth:api');
+    });
+
 });

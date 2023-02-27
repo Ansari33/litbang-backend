@@ -255,5 +255,11 @@ class RepoBindingServiceProvider extends ServiceProvider
         });
 
 
+        $app->bind('\App\Repositories\Contracts\Litbang\ProfilInterface', function () {
+            $repository = new \App\Repositories\Litbang\ProfilRepository(new \App\Models\Litbang\Profil);
+            return $repository;
+        });
+
+
 	}
 }

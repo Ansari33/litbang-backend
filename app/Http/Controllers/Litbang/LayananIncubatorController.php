@@ -223,7 +223,21 @@ class LayananIncubatorController extends APIController
                     'instansi' => $request->instansi,
                     'nomor_pengaju'   => $request->nomor_pengaju,
                     'email_pengaju'  =>  $request->email_pengaju,
-                    'rancang_bangun'  =>  $request->rancang_bangun,
+                    'ide_gagasan'  =>  $request->ide_gagasan,
+
+                    ## Profil
+                    'dasar_hukum'    =>  $request->dasar_hukum,
+                    'permasalahan'  => $request->permasalahan,
+                    'isu_strategis' => $request->isu_strategis,
+                    'metode'   => $request->metode,
+                    'keunggulan'  =>  $request->keunggulan,
+                    'cara_kerja'    =>  $request->cara_kerja,
+                    'tujuan' => $request->tujuan,
+                    'manfaat'   => $request->manfaat,
+                    'kaitan_dengan_sdgs'  =>  $request->kaitan_dengan_sdgs,
+                    'proses'  =>  $request->proses,
+                    'kecepatan'  =>  $request->kecepatan,
+                    'hasil'  =>  $request->hasil,
                 ]
             );
             if ($result->count()) {
