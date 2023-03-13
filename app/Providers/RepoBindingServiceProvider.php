@@ -260,6 +260,21 @@ class RepoBindingServiceProvider extends ServiceProvider
             return $repository;
         });
 
+        $app->bind('\App\Repositories\Contracts\Litbang\IndikatorAwalInkubatorInterface', function () {
+            $repository = new \App\Repositories\Litbang\IndikatorAwalInkubatorRepository(new \App\Models\Litbang\IndikatorAwalInkubator);
+            return $repository;
+        });
+
+        $app->bind('\App\Repositories\Contracts\Litbang\IndikatorAkhirInkubatorInterface', function () {
+            $repository = new \App\Repositories\Litbang\IndikatorAkhirInkubatorRepository(new \App\Models\Litbang\IndikatorAkhirInkubator);
+            return $repository;
+        });
+
+        $app->bind('\App\Repositories\Contracts\Litbang\FileIndikatorInkubatorInterface', function () {
+            $repository = new \App\Repositories\Litbang\FileIndikatorInkubatorRepository(new \App\Models\Litbang\FileIndikatorInkubator);
+            return $repository;
+        });
+
 
 	}
 }

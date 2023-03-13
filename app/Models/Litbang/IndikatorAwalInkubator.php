@@ -9,12 +9,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Auth;
 use App\Helpers\ModelsConstant;
 
-class LayananIncubator extends Model
+class IndikatorAwalInkubator extends Model
 {
     use LogsActivity;
     use SoftDeletes;
 
-    protected $table = 'layanan_incubator';
+    protected $table = 'indikator_awal_inkubator';
     protected $dates = ['deleted_at'];
     protected $guarded = [];
     protected $hidden = ['created_at','created_by','updated_at', 'updated_by', 'deleted_at','deleted_by'];
@@ -51,15 +51,5 @@ class LayananIncubator extends Model
 //    }
     public function attachment() {
         return $this->hasMany('App\Models\Litbang\Attachment','agenda_id','id');
-    }
-
-    public function indikator_awal() {
-        return $this->hasOne('App\Models\Litbang\IndikatorAwalInkubator','layanan_incubator_id','id');
-    }
-    public function indikator_akhir() {
-        return $this->hasOne('App\Models\Litbang\IndikatorAkhirInkubator','layanan_incubator_id','id');
-    }
-    public function file_indikator() {
-        return $this->hasOne('App\Models\Litbang\FileIndikatorInkubator','layanan_incubator_id','id');
     }
 }

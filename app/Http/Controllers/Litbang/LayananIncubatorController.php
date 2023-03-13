@@ -18,12 +18,20 @@ class LayananIncubatorController extends APIController
     private $LayananIncubatorRepository;
     private $JenisLayananIncubatorRepository;
     private $PelaksanaLayananIncubatorRepository;
+
+    private $IndikatorAwalInkubatorRepository;
+    private $IndikatorAkhirInkubatorRepository;
+    private $FileIndikatorInkubatorRepository;
     //private $PenggunaRepository;
 
     public function initialize()
     {
         $this->LayananIncubatorRepository = \App::make('\App\Repositories\Contracts\Litbang\LayananIncubatorInterface');
         $this->JenisLayananIncubatorRepository = \App::make('\App\Repositories\Contracts\Litbang\JenisLayananIncubatorInterface');
+
+        $this->IndikatorAwalInkubatorRepository = \App::make('\App\Repositories\Contracts\Litbang\IndikatorAwalInkubatorInterface');
+        $this->IndikatorAkhirInkubatorRepository = \App::make('\App\Repositories\Contracts\Litbang\IndikatorAkhirInkubatorInterface');
+        $this->FileIndikatorInkubatorRepository = \App::make('\App\Repositories\Contracts\Litbang\FileIndikatorInkubatorInterface');
     }
 
     public function list(Request $request)
@@ -135,7 +143,7 @@ class LayananIncubatorController extends APIController
 
     public function getById(Request $request)
     {
-        $result = $this->LayananIncubatorRepository->with(['attachment'])->find($request->id);
+        $result = $this->LayananIncubatorRepository->with(['attachment','indikator_awal','indikator_akhir','file_indikator'])->find($request->id);
         if ($result) {
             return $this->respond($result);
         } else {
@@ -224,6 +232,7 @@ class LayananIncubatorController extends APIController
                     'nomor_pengaju'   => $request->nomor_pengaju,
                     'email_pengaju'  =>  $request->email_pengaju,
                     'ide_gagasan'  =>  $request->ide_gagasan,
+                    'latar_belakang' => $request->latar_belakang,
 
                     ## Profil
                     'dasar_hukum'    =>  $request->dasar_hukum,
@@ -234,13 +243,87 @@ class LayananIncubatorController extends APIController
                     'cara_kerja'    =>  $request->cara_kerja,
                     'tujuan' => $request->tujuan,
                     'manfaat'   => $request->manfaat,
-                    'kaitan_dengan_sdgs'  =>  $request->kaitan_dengan_sdgs,
+                    'sdgs'  =>  $request->kaitan_dengan_sdgs,
                     'proses'  =>  $request->proses,
                     'kecepatan'  =>  $request->kecepatan,
                     'hasil'  =>  $request->hasil,
                 ]
             );
             if ($result->count()) {
+
+                if($request->nindikator == 1){
+                    $this->IndikatorAwalInkubatorRepository->create([
+                        'layanan_incubator_id' => $result->id,
+                        'regulasi' => $request->regulasi,
+                        'sdm' => $request->ketersediaan_sdm,
+                        'anggaran' => $request->dukungan_anggaran,
+                        'bimtek' => $request->bimtek,
+                        'program' => $request->program_kegiatan,
+                        'aktor' => $request->keterlibatan_aktor,
+                        'pelaksana' => $request->pelaksana,
+                        'jejaring' => $request->jejaring,
+                        'sosialisasi' => $request->sosialisasi,
+                        'pedoman' => $request->pedoman_teknis,
+                        'informasi' => $request->kemudahan_informasi,
+                        'penciptaan' => $request->kecepatan_penciptaan,
+                        'proses' => $request->proses,
+                        'layanan' => $request->penyelesaian_layanan,
+                        'online' => $request->online_sistem,
+                        'replikasi' => $request->replikasi,
+                        'it' => $request->penggunaan_it,
+                        'kemanfaatan' => $request->kemanfaatan,
+                        'monitoring' => $request->monitoring_evaluasi,
+                        'kualitas' => $request->kualitas
+                    ]);
+
+                    $this->IndikatorAkhirInkubatorRepository->create([
+                        'layanan_incubator_id' => $result->id,
+                        'regulasi' => 0,
+                        'sdm' => 0,
+                        'anggaran' => 0,
+                        'bimtek' => 0,
+                        'program' => 0,
+                        'aktor' => 0,
+                        'pelaksana' => 0,
+                        'jejaring' => 0,
+                        'sosialisasi' => 0,
+                        'pedoman' => 0,
+                        'informasi' => 0,
+                        'penciptaan' => 0,
+                        'proses' => 0,
+                        'layanan' => 0,
+                        'online' => 0,
+                        'replikasi' => 0,
+                        'it' => 0,
+                        'kemanfaatan' => 0,
+                        'monitoring' => 0,
+                        'kualitas' => 0
+                    ]);
+
+                    $this->FileIndikatorInkubatorRepository->create([
+                        'layanan_incubator_id' => $result->id,
+                        'regulasi' => $request->indikator['regulasi'],
+                        'sdm' => $request->indikator['sdm'],
+                        'anggaran' => $request->indikator['anggaran'],
+                        'bimtek' => $request->indikator['bimtek'],
+                        'program' => $request->indikator['program'],
+                        'aktor' => $request->indikator['aktor'],
+                        'pelaksana' => $request->indikator['pelaksana'],
+                        'jejaring' => $request->indikator['jejaring'],
+                        'sosialisasi' => $request->indikator['sosialisasi'],
+                        'pedoman' => $request->indikator['pedoman'],
+                        'informasi' => $request->indikator['informasi'],
+                        'penciptaan' => $request->indikator['penciptaan'],
+                        'proses' => $request->indikator['proses'],
+                        'layanan' => $request->indikator['penyelesaian'],
+                        'online' => $request->indikator['online'],
+                        'replikasi' => $request->indikator['replikasi'],
+                        'it' => $request->indikator['it'],
+                        'kemanfaatan' => $request->indikator['kemanfaatan'],
+                        'monitoring' => $request->indikator['monitoring'],
+                        'kualitas' => $request->indikator['kualitas']
+                    ]);
+                }
                 DB::commit();
                 return $this->respondCreated($result, 'Pengajuan Layanan Berhasil');
             } else {
